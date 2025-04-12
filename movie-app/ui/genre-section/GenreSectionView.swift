@@ -10,13 +10,27 @@ import SwiftUI
 class GenreSectionViewModel: ObservableObject {
     @Published var genres: [Genre] = []
     
-    func loadGenres() {
-        self.genres = [
-            Genre(id:1, name: "Adventure"),
-            Genre(id:2, name: "Sci-fi"),
-            Genre(id:3, name: "Fantasy"),
-            Genre(id:4, name: "Comedy"),
-        ]
+    private var movieService: MovieServiceProtocol = MovieService()
+    
+    func fetchGenres() async{
+       do {
+           let request = FetchGenreRequest()
+           let genres = try await movieService.fetchGenres(req: request)
+//         visszahozza a programot a main threadre, hogy ne blokkolja a UI-t
+           DispatchQueue.main.async {
+               self.genres = genres
+           }
+       }
+       catch
+       {
+           print("Error fetching genres: \(error)")
+       }
+//        self.genres = [
+//            Genre(id:1, name: "Adventure"),
+//            Genre(id:2, name: "Sci-fi"),
+//            Genre(id:3, name: "Fantasy"),
+//            Genre(id:4, name: "Comedy"),
+//        ]
     }
 }
 
@@ -56,10 +70,14 @@ struct GenreSectionView: View {
                     .listStyle(.plain)
                     .navigationTitle("genreSection.title")
                     .background(Color.clear)
-                }
-                .onAppear {
-                    viewModel.loadGenres()
-                }
+                }            }
+            .listStyle(.plain)
+            .navigationTitle(Environment.name == .dev ? "DEV":"PROD")
+        }
+        .onAppear {
+//          háttérben fut le az async metódus
+            Task{
+                await viewModel.fetchGenres()
             }
         }
     }
