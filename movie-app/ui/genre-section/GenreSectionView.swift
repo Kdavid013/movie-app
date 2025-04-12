@@ -25,29 +25,42 @@ struct GenreSectionView: View {
     @StateObject private var viewModel = GenreSectionViewModel()
     
     var body: some View {
-        NavigationView {
-            List(viewModel.genres){ genre in
-                ZStack{
-                    NavigationLink(destination: Color.gray){
-                        EmptyView()
-                    }
-                    .opacity(0)
-                    HStack {
-                        Text(genre.name)
-                            .font(Fonts.title)
-                            .foregroundStyle(.primary)
-                        Spacer()
-                        Image(.rightArrow)
-                    }
+        ZStack{
+            HStack{
+                Spacer()
+                VStack{
+                    Image(.circle)
+                    Spacer()
                 }
-                .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
             }
-            .listStyle(.plain)
-            .navigationTitle("genreSection.title")
-        }
-        .onAppear {
-            viewModel.loadGenres()
+            HStack{
+                NavigationView {
+                    List(viewModel.genres){ genre in
+                        ZStack{
+                            NavigationLink(destination: Color.gray){
+                                EmptyView()
+                            }
+                            .opacity(0)
+                            HStack {
+                                Text(genre.name)
+                                    .font(Fonts.title)
+                                    .foregroundStyle(.primary)
+                                Spacer()
+                                Image(.rightArrow)
+                            }
+                            
+                        }.background(Color.clear)
+                            .listRowBackground(Color.clear)
+                            .listRowSeparator(.hidden)
+                    }
+                    .listStyle(.plain)
+                    .navigationTitle("genreSection.title")
+                    .background(Color.clear)
+                }
+                .onAppear {
+                    viewModel.loadGenres()
+                }
+            }
         }
     }
 }
