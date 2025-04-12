@@ -102,3 +102,4 @@ codesigndoc_exports
 # Add these lines to your .gitignore file
 Config.plist
 *.xcuserstate
+**/xcuserdata/*/UserInterfaceState.xcuserstate
