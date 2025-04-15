@@ -15,7 +15,7 @@ class GenreSectionViewModel: ObservableObject {
     func fetchGenres() async{
        do {
            let request = FetchGenreRequest()
-           let genres = try await movieService.fetchGenres(req: request)
+           let genres = Environment.name  == .tv ? try await movieService.fetchTVGenres(req: request) : try await movieService.fetchGenres(req: request)
 //         visszahozza a programot a main threadre, hogy ne blokkolja a UI-t
            DispatchQueue.main.async {
                self.genres = genres
@@ -68,11 +68,10 @@ struct GenreSectionView: View {
                             .listRowSeparator(.hidden)
                     }
                     .listStyle(.plain)
-                    .navigationTitle("genreSection.title")
+                    .navigationTitle(Environment.name == .tv ? "TV app":"genreSection.title")
                     .background(Color.clear)
                 }            }
             .listStyle(.plain)
-            .navigationTitle(Environment.name == .dev ? "DEV":"PROD")
         }
         .onAppear {
 //          háttérben fut le az async metódus
