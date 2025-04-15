@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		4AF60ABC2DAA65DF0099935A /* CombineMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 4AF60ABB2DAA65DF0099935A /* CombineMoya */; };
 		4AF60ABE2DAA65DF0099935A /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 4AF60ABD2DAA65DF0099935A /* Moya */; };
+		4AF60BFE2DAE85520099935A /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 4AF60BFD2DAE85520099935A /* Swinject */; };
+		4AF60C012DAE857B0099935A /* InjectPropertyWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 4AF60C002DAE857B0099935A /* InjectPropertyWrapper */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,8 +43,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4AF60C012DAE857B0099935A /* InjectPropertyWrapper in Frameworks */,
 				4AF60ABE2DAA65DF0099935A /* Moya in Frameworks */,
 				4AF60ABC2DAA65DF0099935A /* CombineMoya in Frameworks */,
+				4AF60BFE2DAE85520099935A /* Swinject in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +91,8 @@
 			packageProductDependencies = (
 				4AF60ABB2DAA65DF0099935A /* CombineMoya */,
 				4AF60ABD2DAA65DF0099935A /* Moya */,
+				4AF60BFD2DAE85520099935A /* Swinject */,
+				4AF60C002DAE857B0099935A /* InjectPropertyWrapper */,
 			);
 			productName = "movie-app";
 			productReference = 4AA4088F2DA53D56003FF56D /* movie-app.app */;
@@ -119,6 +125,8 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				4AF60ABA2DAA65DF0099935A /* XCRemoteSwiftPackageReference "Moya" */,
+				4AF60BFC2DAE85520099935A /* XCRemoteSwiftPackageReference "Swinject" */,
+				4AF60BFF2DAE857B0099935A /* XCRemoteSwiftPackageReference "InjectPropertyWrapper" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4AA408902DA53D56003FF56D /* Products */;
@@ -734,6 +742,22 @@
 				minimumVersion = 15.0.3;
 			};
 		};
+		4AF60BFC2DAE85520099935A /* XCRemoteSwiftPackageReference "Swinject" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Swinject/Swinject";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.9.1;
+			};
+		};
+		4AF60BFF2DAE857B0099935A /* XCRemoteSwiftPackageReference "InjectPropertyWrapper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/egeniq/InjectPropertyWrapper";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -746,6 +770,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4AF60ABA2DAA65DF0099935A /* XCRemoteSwiftPackageReference "Moya" */;
 			productName = Moya;
+		};
+		4AF60BFD2DAE85520099935A /* Swinject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4AF60BFC2DAE85520099935A /* XCRemoteSwiftPackageReference "Swinject" */;
+			productName = Swinject;
+		};
+		4AF60C002DAE857B0099935A /* InjectPropertyWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4AF60BFF2DAE857B0099935A /* XCRemoteSwiftPackageReference "InjectPropertyWrapper" */;
+			productName = InjectPropertyWrapper;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
