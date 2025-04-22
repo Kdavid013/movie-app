@@ -33,7 +33,7 @@ extension MoviesApi: TargetType {
         case .fetchMovies:
             return "discover/movie"
         case .searchMovies:
-            return "/search/movie"
+            return "search/movie"
         }
     }
     

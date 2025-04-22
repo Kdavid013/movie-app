@@ -49,7 +49,7 @@ struct SearchView: View {
         VStack{
             HStack{
                 Image(.search)
-                TextField("search.textfield.placeholder", text: .constant(""))
+                TextField("search.textfield.placeholder", text:  $viewModel.searchText)
                     .padding([.top,.bottom],21)
                     .font(Fonts.paragraph)
             }
@@ -70,12 +70,14 @@ struct SearchView: View {
                 Spacer()
             }else{
                 ScrollView{
-                    VStack(spacing:16){
+                    VStack(spacing:10){
                         ForEach(viewModel.movies){
                             movie in MovieCellView(movie: movie)
                                 .frame(height: 277)
                         }
                     }
+                    .padding(.horizontal,16)
+                    .padding(.top, 16)
                 }
             }
         }
