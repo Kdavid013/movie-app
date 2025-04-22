@@ -7,3 +7,5 @@
 */
 
 "genreSection.title" = "Filmek alkalmazás";
+"search.textfield.placeholder" = "Filmek, Rendező, Szinész, Szinésznő";
+"search.empty.title" = "Kezdj el gépelni a kereséshez";

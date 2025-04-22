@@ -75,6 +75,7 @@ struct GenreSectionView: View {
                             .listRowBackground(Color.clear)
                             .listRowSeparator(.hidden)
                     }
+                    .accessibilityLabel("testCollectionView")
                     .listStyle(.plain)
                     .navigationTitle(Environment.name == .tv ? "TV app":"genreSection.title")
                     .background(Color.clear)

@@ -104,6 +104,7 @@ struct MovieCellView: View {
                         }
                     }
                     .frame(height: 100)
+                    .frame(maxHeight: 180)
                     .frame(maxWidth: .infinity)
                     .cornerRadius(12)
                 }
