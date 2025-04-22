@@ -7,7 +7,7 @@
 
 import Foundation
 
-class MockMoviesService: MovieServiceProtocol {
+class MockMoviesService {
     
     func fetchGenres(req: FetchGenreRequest) async throws -> [Genre] {
         return [

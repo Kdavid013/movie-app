@@ -12,6 +12,8 @@ struct movie_appApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
+    @State var selectedTab: TabType = Tabtype.genre
+    
     var body: some Scene {
         WindowGroup {
             MainTabView()

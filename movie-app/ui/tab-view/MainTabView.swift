@@ -7,6 +7,19 @@
 
 import SwiftUI
 
+enum TabType: String,CaseIterable {
+    case genre
+    case search
+    case favorite
+    case settings
+}
+
+struct TabIcon: Identifiable{
+    var id: String = UUID().uuidString
+    let tab : TabType
+    let image: Image
+}
+
 struct MainTabView: View {
     var body: some View {
         TabView {

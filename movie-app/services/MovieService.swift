@@ -15,6 +15,7 @@ protocol MovieServiceProtocol{
     func fetchGenres(req:FetchGenreRequest) async throws -> [Genre]
     func fetchTVGenres(req:FetchGenreRequest) async throws -> [Genre]
     func fetchMovies(req:FetchMoviesRequest) async throws -> [Movie]
+    func searchMovies(req:SearchMovieRequest) async throws -> [Movie]
 }
 
 // konvenció protokol neve végén protocol
@@ -103,4 +104,23 @@ class MovieService: MovieServiceProtocol {
                     }
                 }
     }
+    func searchMovies(req: SearchMovieRequest) async throws -> [Movie] {
+            return try await withCheckedThrowingContinuation { continuation in
+                moya.request(MultiTarget(MoviesApi.searchMovies(req: req))) { result in
+                    switch result {
+                    case .success(let response):
+                        do {
+                            let decodedResponse = try JSONDecoder().decode(MoviePageResponse.self, from: response.data)
+                            let movies = decodedResponse.results.map { Movie(dto: $0) }
+                            continuation.resume(returning: movies)
+                        } catch {
+                            continuation.resume(throwing: error)
+                        }
+                    case .failure(let error):
+                        continuation.resume(throwing: error)
+                    }
+                }
+            }
+        }
+    
 }

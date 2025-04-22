@@ -13,7 +13,31 @@ import InjectPropertyWrapper
 //}
 
 class SearchViewModel:  ObservableObject{
+    @Published var movies: [Movie] = []
+    @Published var searchText: String = ""
     
+    @Inject
+    private var service: MovieServiceProtocol
+    
+    func searchMovies() async {
+        
+        guard !searchText.isEmpty else {
+            DispatchQueue.main.async {
+                self.movies = []
+            }
+            return
+        }
+        
+        do {
+            let request = SearchMovieRequest(query: searchText)
+            let movies = try await service.searchMovies(req: request)
+            DispatchQueue.main.async {
+                self.movies = movies
+            }
+        } catch {
+            print("Error fetching genres: \(error)")
+        }
+    }
 }
 
 struct SearchView: View {
@@ -33,15 +57,32 @@ struct SearchView: View {
             .background(Color.white.opacity(0.5),in: RoundedRectangle(cornerRadius: 50).stroke(style: StrokeStyle(lineWidth: 2)))
             .background(Color.white.opacity(0.15),in: RoundedRectangle(cornerRadius: 50))
             .padding(.horizontal, 10)
-            Spacer()
-            Text("search.empty.title")
-                .font(Fonts.title)
-            Spacer()
-        }.padding(10)
+            .onChange(of: viewModel.searchText){
+                _ in Task{
+                    await viewModel.searchMovies()
+                }
+            }
+            
+            if viewModel.movies.isEmpty {
+                Spacer()
+                Text("search.empty.title")
+                    .font(Fonts.title)
+                Spacer()
+            }else{
+                ScrollView{
+                    VStack(spacing:16){
+                        ForEach(viewModel.movies){
+                            movie in MovieCellView(movie: movie)
+                                .frame(height: 277)
+                        }
+                    }
+                }
+            }
+        }
         }
     }
 
 
 #Preview {
-    SearchView()
+    MainTabView()
 }
