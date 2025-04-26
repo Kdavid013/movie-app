@@ -19,7 +19,14 @@ class ServiceAssembly: Assembly {
                 session: Session(configuration: configuration,
                                  startRequestsImmediately: false),
                 plugins: [
-                    NetworkLoggerPlugin()
+                    NetworkLoggerPlugin(
+                        configuration: NetworkLoggerPlugin.Configuration(
+                            output: { _, items in
+                                items.forEach { item in
+                                    print("Response: \(item)")
+                                }
+                            },
+                            logOptions: .verbose))
                 ])
         }.inObjectScope(.container)
         

@@ -9,3 +9,7 @@
 "genreSection.title" = "Movie app";
 "search.textfield.placeholder" = "Movies, Director, Actor, Actress, etc.";
 "search.empty.title" = "Type something to search";
+"alert.api.title" = "API error";
+"alert.dismiss.button" = "Close";
+"alert.unexpected.title" = "Váraltahn hiba";
+"alert.unexpected.text" = "Something went wrong. Please try again later.";

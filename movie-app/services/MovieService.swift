@@ -9,118 +9,101 @@ import Foundation
 import Moya
 import InjectPropertyWrapper
 
-protocol MovieServiceProtocol{
-//    async - aszinkron hivás jelzése a forditónak, await kulcsszó
-//    throws - dob hibát, try catch phrasebe kell beletenni
-    func fetchGenres(req:FetchGenreRequest) async throws -> [Genre]
-    func fetchTVGenres(req:FetchGenreRequest) async throws -> [Genre]
-    func fetchMovies(req:FetchMoviesRequest) async throws -> [Movie]
-    func searchMovies(req:SearchMovieRequest) async throws -> [Movie]
+struct MovieAPIErrorResponse: Decodable {
+    let statusCode: Int
+    let statusMessage: String
+    let success: Bool
+    
+    enum CodingKeys: String, CodingKey {
+        case statusCode = "status_code"
+        case statusMessage = "status_message"
+        case success = "success"
+    }
 }
 
-// konvenció protokol neve végén protocol
+protocol MovieServiceProtocol {
+    func fetchGenres(req: FetchGenreRequest) async throws -> [Genre]
+    func fetchTVGenres(req: FetchGenreRequest) async throws -> [Genre]
+    func fetchMovies(req: FetchMoviesRequest) async throws -> [Movie]
+    func searchMovies(req: SearchMovieRequest) async throws -> [Movie]
+}
+
 class MovieService: MovieServiceProtocol {
     
     @Inject
     var moya: MoyaProvider<MultiTarget>!
     
-    func fetchGenres(req:FetchGenreRequest) async throws -> [Genre] {
-        return try await withCheckedThrowingContinuation { continuation in
-//            a fetch genre request api végpontja van átadva
-                moya.request(MultiTarget(MoviesApi.fetchGenres(req: req))) { result in
-//            result része response = válasz, moyaerror = ha errort ad
-                        switch result {
-//                      ha  sikeres response a paraméter, responset json decoderrel dekodoljuk
-                        case .success(let response):
-                            do {
-                                let decodedResponse = try JSONDecoder().decode(GenreListResponse.self, from: response.data)
-                                
-//                                var genres = [Genre]()
-//                                for genreResponse in decodedResponse.genres {
-//                                    genres.append(Genre(dto: genreResponse))
-//                                }
-                                
-                                let genres = decodedResponse.genres.map{ genreResponse in
-                                    Genre(dto: genreResponse)
-                                }
-                                
-                                continuation.resume(returning: genres)
-                            } catch {
-                                continuation.resume(throwing: error)
-                            }
-                        case .failure(let error):
-                            continuation.resume(throwing: error)
-                        }
-                    }
-                }
+    func fetchGenres(req: FetchGenreRequest) async throws -> [Genre] {
+        try await requestAndTransform(
+            target: MultiTarget(MoviesApi.fetchGenres(req: req)),
+            decodeTo: GenreListResponse.self,
+            transform: { $0.genres.map(Genre.init(dto:)) }
+        )
+    }
+    
+    func fetchTVGenres(req: FetchGenreRequest) async throws -> [Genre] {
+        try await requestAndTransform(
+            target: MultiTarget(MoviesApi.fetchTVGenres(req: req)),
+            decodeTo: GenreListResponse.self,
+            transform: { $0.genres.map(Genre.init(dto:)) }
+        )
     }
     
     func fetchMovies(req: FetchMoviesRequest) async throws -> [Movie] {
-            return try await withCheckedThrowingContinuation { continuation in
-                moya.request(MultiTarget(MoviesApi.fetchMovies(req: req))) { result in
-                    switch result {
-                    case .success(let response):
-                        do {
-                            let decodedResponse = try JSONDecoder().decode(MoviePageResponse.self, from: response.data)
-                            let movies = decodedResponse.results.map { Movie(dto: $0) }
-                            continuation.resume(returning: movies)
-                        } catch {
-                            continuation.resume(throwing: error)
-                        }
-                    case .failure(let error):
-                        continuation.resume(throwing: error)
-                    }
-                }
-            }
-        }
-    
-    func fetchTVGenres(req:FetchGenreRequest) async throws -> [Genre] {
-        return try await withCheckedThrowingContinuation { continuation in
-//            a fetch genre request api végpontja van átadva
-                moya.request(MultiTarget(MoviesApi.fetchTVGenres(req: req))) { result in
-//            result része response = válasz, moyaerror = ha errort ad
-                        switch result {
-//                      ha  sikeres response a paraméter, responset json decoderrel dekodoljuk
-                        case .success(let response):
-                            do {
-                                let decodedResponse = try JSONDecoder().decode(GenreListResponse.self, from: response.data)
-                                
-//                                var genres = [Genre]()
-//                                for genreResponse in decodedResponse.genres {
-//                                    genres.append(Genre(dto: genreResponse))
-//                                }
-                                
-                                let genres = decodedResponse.genres.map{ genreResponse in
-                                    Genre(dto: genreResponse)
-                                }
-                                
-                                continuation.resume(returning: genres)
-                            } catch {
-                                continuation.resume(throwing: error)
-                            }
-                        case .failure(let error):
-                            continuation.resume(throwing: error)
-                        }
-                    }
-                }
+        try await requestAndTransform(
+            target: MultiTarget(MoviesApi.fetchMovies(req: req)),
+            decodeTo: MoviePageResponse.self,
+            transform: { $0.results.map(Movie.init(dto:)) }
+        )
     }
+    
     func searchMovies(req: SearchMovieRequest) async throws -> [Movie] {
-            return try await withCheckedThrowingContinuation { continuation in
-                moya.request(MultiTarget(MoviesApi.searchMovies(req: req))) { result in
-                    switch result {
-                    case .success(let response):
+        try await requestAndTransform(
+            target: MultiTarget(MoviesApi.searchMovies(req: req)),
+            decodeTo: MoviePageResponse.self,
+            transform: { (moviePageResponse: MoviePageResponse) in
+                moviePageResponse.results.map(Movie.init(dto:))
+            }
+        )
+    }
+    
+    private func requestAndTransform<ResponseType: Decodable, Output>(
+        target: MultiTarget,
+        decodeTo: ResponseType.Type,
+        transform: @escaping (ResponseType) -> Output
+    ) async throws -> Output {
+        try await withCheckedThrowingContinuation { continuation in
+            moya.request(target) { result in
+                switch result {
+                case .success(let response):
+                    // Státuszkód ellenőrzése
+                    switch response.statusCode {
+                    case 200..<300:
                         do {
-                            let decodedResponse = try JSONDecoder().decode(MoviePageResponse.self, from: response.data)
-                            let movies = decodedResponse.results.map { Movie(dto: $0) }
-                            continuation.resume(returning: movies)
+                            // Ha nincs logikai hiba, dekódoljuk a választ
+                            let decoded = try JSONDecoder().decode(decodeTo, from: response.data)
+                            let output = transform(decoded)
+                            continuation.resume(returning: output)
                         } catch {
-                            continuation.resume(throwing: error)
+                            continuation.resume(throwing: MovieError.unexpectedError)
                         }
-                    case .failure(let error):
-                        continuation.resume(throwing: error)
-                    }
+                    case 400..<500:                       
+                            continuation.resume(throwing: MovieError.clientError)
+                    default:
+                           if let apiError = try? JSONDecoder().decode(MovieAPIErrorResponse.self, from: response.data) {
+                                if apiError.statusCode == 7 {
+                                    continuation.resume(throwing: MovieError.invalidApiKeyError(message: apiError.statusMessage))
+                                } else {
+                                    continuation.resume(throwing: MovieError.unexpectedError)
+                                }
+                                return
+                            }
+                    }                   
+
+                case .failure:
+                    continuation.resume(throwing: MovieError.unexpectedError)
                 }
             }
         }
-    
+    }
 }
