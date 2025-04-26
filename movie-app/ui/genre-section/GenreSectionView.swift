@@ -8,12 +8,16 @@
 import SwiftUI
 import InjectPropertyWrapper
 
+protocol ErrorViewModelProtocol{
+}
+
 protocol GenreSectionViewModelProtocol: ObservableObject {
     
 }
 
 class GenreSectionViewModel: GenreSectionViewModelProtocol{
     @Published var genres: [Genre] = []
+    @Published var alertModel: AlertModel? = nil
     
 //    private var movieService: MovieServiceProtocol = MovieService()
     @Inject var movieService: MovieServiceProtocol
@@ -27,16 +31,46 @@ class GenreSectionViewModel: GenreSectionViewModelProtocol{
                self.genres = genres
            }
        }
-       catch
+       catch let error as MovieError
        {
-           print("Error fetching genres: \(error)")
+           DispatchQueue.main.async {
+               self.alertModel = self.toAlertModel(error)
+           }
+       } catch{
+           DispatchQueue.main.async {
+               self.alertModel = self.toAlertModel(error)
+           }
        }
-//        self.genres = [
-//            Genre(id:1, name: "Adventure"),
-//            Genre(id:2, name: "Sci-fi"),
-//            Genre(id:3, name: "Fantasy"),
-//            Genre(id:4, name: "Comedy"),
-//        ]
+    }
+    
+    private func toAlertModel(_ error: Error) -> AlertModel{
+        guard let error = error as? MovieError else{
+            return AlertModel(
+             title: "alert.unexpected.title",
+             message: "alert.unexpected.text",
+             dismissButtonTitle: "alert.dismiss.button"
+            )
+        }
+        switch error {
+        case .invalidApiKeyError(let message):
+            return AlertModel(
+             title: "alert.api.title",
+             message: message,
+             dismissButtonTitle: "alert.dismiss.button"
+            )
+        case .clientError:
+            return AlertModel(
+             title: "Client Error",
+             message: error.localizedDescription,
+             dismissButtonTitle: "alert.dismiss.button"
+            )
+        default:
+            return AlertModel(
+             title: "alert.unexpected.title",
+             message: "alert.unexpected.text",
+             dismissButtonTitle: "alert.dismiss.button"
+            )
+        }
     }
 }
 
@@ -82,6 +116,16 @@ struct GenreSectionView: View {
             Task{
                 await viewModel.fetchGenres()
             }
+        }
+        .alert(item: $viewModel.alertModel){
+            model in
+            return Alert(
+                title: Text(LocalizedStringKey(model.title)),
+                message: Text(LocalizedStringKey(model.message)),
+                dismissButton: .default(Text(LocalizedStringKey(model.dismissButtonTitle))){
+                    viewModel.alertModel = nil
+                }
+            )
         }
     }
 }

@@ -14,6 +14,7 @@ protocol MovieListViewModelProtocol: ObservableObject{
 
 class MovieListViewModel: MovieListViewModelProtocol {
     @Published var movies: [Movie] = []
+    
 //    private let service = MovieService()
     
     @Inject
