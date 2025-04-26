@@ -63,22 +63,17 @@ struct GenreSectionView: View {
                             }
                             .opacity(0)
                             
-                            HStack {
-                                Text(genre.name)
-                                    .font(Fonts.title)
-                                    .foregroundStyle(.primary)
-                                Spacer()
-                                Image(.rightArrow)
-                            }
-                            
-                        }.background(Color.clear)
-                            .listRowBackground(Color.clear)
-                            .listRowSeparator(.hidden)
+                            GenreSectionCell(genre: genre)
+                        }
+                        .background(Color.clear)
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
                     }
                     .accessibilityLabel("testCollectionView")
                     .listStyle(.plain)
                     .navigationTitle(Environment.name == .tv ? "TV app":"genreSection.title")
                     .background(Color.clear)
+                    .padding(.bottom,LayoutConst.largePadding)
                 }            }
             .listStyle(.plain)
         }

@@ -49,16 +49,17 @@ struct SearchView: View {
         VStack{
             HStack{
                 Image(.search)
-                TextField("search.textfield.placeholder", text:  $viewModel.searchText)
+                    .frame(width: 24,height: 24)
+                TextField("search.textfield.placeholder", text:  $viewModel.searchText
+                )
                     .padding([.top,.bottom],21)
                     .font(Fonts.paragraph)
             }
             .padding(.horizontal, 15)
-            .background(Color.white.opacity(0.5),in: RoundedRectangle(cornerRadius: 50).stroke(style: StrokeStyle(lineWidth: 2)))
-            .background(Color.white.opacity(0.15),in: RoundedRectangle(cornerRadius: 50))
+            .background(Color.invertedMain,in: RoundedRectangle(cornerRadius: 50).stroke(style: StrokeStyle(lineWidth: 2)))
+            .background(Color.invertedMain,in: RoundedRectangle(cornerRadius: 50))
             .padding(.horizontal, 10)
-            .onChange(of: viewModel.searchText){
-                _ in Task{
+            .onChange(of: viewModel.searchText){ Task{
                     await viewModel.searchMovies()
                 }
             }
@@ -67,17 +68,18 @@ struct SearchView: View {
                 Spacer()
                 Text("search.empty.title")
                     .font(Fonts.title)
+                    .foregroundStyle(.invertedMain)
                 Spacer()
             }else{
                 ScrollView{
                     VStack(spacing:10){
                         ForEach(viewModel.movies){
-                            movie in MovieCellView(movie: movie)
+                            movie in MovieCell(movie: movie)
                                 .frame(height: 277)
                         }
                     }
-                    .padding(.horizontal,16)
-                    .padding(.top, 16)
+                    .padding(.horizontal,LayoutConst.normalPadding)
+                    .padding(.top, LayoutConst.normalPadding)
                 }
             }
         }
