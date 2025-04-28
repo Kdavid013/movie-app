@@ -10,7 +10,7 @@ import SwiftUI
 enum TabType: String,CaseIterable {
     case genre
     case search
-    case favorite
+    case favorites
     case settings
 }
 
@@ -21,22 +21,53 @@ struct TabIcon: Identifiable{
 }
 
 struct MainTabView: View {
+    
+    @Binding var selectedTab: TabType
+    @State var icons: [TabIcon] = {
+        var tabs: [TabIcon] = []
+        for tab in TabType.allCases {
+            tabs.append(TabIcon(tab: tab, image: Image(tab.rawValue)))
+        }
+        return tabs
+    }()
+    
     var body: some View {
-        TabView {
-            NavigationView {
+        ZStack(alignment: .bottom){
+            TabView(selection: $selectedTab) {
                 GenreSectionView()
-            }
-            
-            .tabItem {
-                Image(.home)
-            }
-            
-            NavigationView{
+                    .tag(TabType.genre)
+                    .background(Color.tabBarBackground)
+                    .ignoresSafeArea()
                 SearchView()
+                    .tag(TabType.search)
+                    .background(Color.tabBarBackground)
+                    .ignoresSafeArea()
+                GenreSectionView()
+                    .tag(TabType.favorites)
+                    .background(Color.tabBarBackground)
+                    .ignoresSafeArea()
+                GenreSectionView()
+                    .tag(TabType.settings)
+                    .background(Color.tabBarBackground)
+                    .ignoresSafeArea()
             }
-            .tabItem {
-                Image(.searchtab)
+            .background(.clear)
+            .padding(.bottom,LayoutConst.largePadding)
+            
+            HStack{
+                Spacer()
+                ForEach(icons){ icon in
+                    TabBarItemView(selectedTab: $selectedTab, icon:icon)
+                    Spacer()
+                }
             }
+            .padding(.top, LayoutConst.largePadding)
+            .padding(.bottom, 48.0 - safeArea().bottom)
+            .background(
+                Color.tabBarBackground
+                    .clipShape(RoundedCorner(radius: 30.0, corners:[.topLeft, .topRight]))
+                    .ignoresSafeArea(edges: .bottom)
+            )
         }
     }
 }
