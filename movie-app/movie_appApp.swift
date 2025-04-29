@@ -12,11 +12,11 @@ struct movie_appApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
-//    @State var selectedTab: TabType = Tabtype.genre
+    @State var selectedTab: TabType = TabType.genre
     
     var body: some Scene {
         WindowGroup {
-            MainTabView()
+            MainTabView(selectedTab: $selectedTab)
         }
     }
 }
