@@ -47,12 +47,6 @@ struct GenreSectionView: View {
             }
             .listStyle(.plain)
         }
-        .onAppear {
-            //          háttérben fut le az async metódus
-            Task{
-                await viewModel.fetchGenres()
-            }
-        }
         .alert(item: $viewModel.alertModel){
             model in
             return Alert(
@@ -62,13 +56,13 @@ struct GenreSectionView: View {
                     viewModel.alertModel = nil
                 }
             )
-    }
-    
-     
         }
+        
+        
+    }
 }
 
- 
+
 #Preview {
     GenreSectionView()
 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 enum TabType: String,CaseIterable {
     case genre
-    case search
+    case searchtab
     case favorites
     case settings
 }
@@ -39,7 +39,7 @@ struct MainTabView: View {
                     .background(Color.tabBarBackground)
                     .ignoresSafeArea()
                 SearchView()
-                    .tag(TabType.search)
+                    .tag(TabType.searchtab)
                     .background(Color.tabBarBackground)
                     .ignoresSafeArea()
                 GenreSectionView()
