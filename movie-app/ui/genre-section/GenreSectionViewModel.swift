@@ -78,37 +78,41 @@ class GenreSectionViewModel: GenreSectionViewModelProtocol, ErrorViewModelProtoc
     }
     
     init() {
-        let request = FetchGenreRequest()
+    
+            let request = FetchGenreRequest()
+            
         
         //        future publisher, ami genre kat ad ki egy tömbben
-        let future = Future<[Genre], Error> { future in
+        let future = Future<[Genre], Error> { [self] future in
             Task {
                 do {
-                    let genres = try await self.movieService.fetchGenres(req: request)
-                    future(.success(genres))
+                    if Environment.name == .tv
+                        {
+                        let genres = try await self.movieService.fetchTVGenres(req: request)
+                        future(.success(genres))
+                    }else{
+                        let genres = try await self.movieService.fetchGenres(req: request)
+                        future(.success(genres))
+                    }
+//                    future(.success(genres))
                 } catch {
                     future(.failure(error))
                 }
             }
         }
         
-        let futureTV = Future<[Genre], Error> { future in
-            Task {
-                do {
-                    let genres = try await self.movieService.fetchTVGenres(req: request)
-                    future(.success(genres))
-                } catch {
-                    future(.failure(error))
-                }
-            }
-        }
+//        let futureTV = Future<[Genre], Error> { future in
+//            Task {
+//                do {
+//                    let genres = try await self.movieService.fetchTVGenres(req: request)
+//                    future(.success(genres))
+//                } catch {
+//                    future(.failure(error))
+//                }
+//            }
+//        }
         
         future
-            .flatMap ({ genres in
-                futureTV.map{ genresTV in
-                    (genres,genresTV)
-                }
-            })
             .receive(on: RunLoop.main)
         //        completion blokk megvizsgáljuk a sink válasza milyen tipusu
             .sink { completion in
@@ -118,8 +122,8 @@ class GenreSectionViewModel: GenreSectionViewModelProtocol, ErrorViewModelProtoc
                 case .finished:
                     break
                 }
-            } receiveValue: {[weak self] genres,genresTV in
-                self?.genres = genres + genresTV
+            } receiveValue: {[weak self] genres in
+                self?.genres = genres
             }
             .store(in: &cancellables)
     }
