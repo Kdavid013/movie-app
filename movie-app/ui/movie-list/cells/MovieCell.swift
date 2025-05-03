@@ -55,18 +55,30 @@ struct MovieCell: View {
                 .padding(LayoutConst.smallPadding)
                 
             }
+            HStack{
+                VStack(alignment: .leading){
+                    Text(movie.title)
+                        .font(Fonts.subheading)
+                        .lineLimit(2)
 
-            Text(movie.title)
-                .font(Fonts.subheading)
-                .lineLimit(2)
+                    Text("\(movie.year)")
+                        .font(Fonts.paragraph)
 
-            Text("\(movie.year)")
-                .font(Fonts.paragraph)
+                    Text("\(movie.duration)")
+                        .font(Fonts.caption)
+                }
 
-            Text("\(movie.duration)")
-                .font(Fonts.caption)
-
-            Spacer()
+                Spacer()
+                
+                ZStack{
+                    RoundedCorner(radius: 20)
+                        .foregroundStyle(.tabBarBackground)
+                    Image(.playic)
+                        .renderingMode(.template)
+                        .foregroundStyle(.invertedMain)
+                        .frame(width: 24, height: 24)
+                }.frame(width: 40.0, height: 40.0)
+            }
         }
     }
 }

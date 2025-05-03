@@ -42,7 +42,7 @@ struct MainTabView: View {
                     .tag(TabType.searchtab)
                     .background(Color.tabBarBackground)
                     .ignoresSafeArea()
-                GenreSectionView()
+                FavoritesView()
                     .tag(TabType.favorites)
                     .background(Color.tabBarBackground)
                     .ignoresSafeArea()
