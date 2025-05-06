@@ -10,16 +10,19 @@ import InjectPropertyWrapper
 
 
 struct MovieListView: View {
+    
+    let genre: Genre
+    
     @StateObject private var viewModel = MovieListViewModel()
 //    csak genreval fog tud dolgozni
-    let genre: Genre
+    
     
     let columns = [
         GridItem(.flexible(), spacing: 16),
         GridItem(.flexible(), spacing: 16)
     ]
     
-//    let columns = [
+//    let columns = [let genre: Genre
 //        GridItem(.adaptive(minimum: 150), spacing: 16)
 //    ]
     
@@ -27,18 +30,36 @@ struct MovieListView: View {
         ScrollView {
 //            pár cellát tart mindig a memóriába, csak annyit amennyi a képernyőn látszik
 //            columns - array amibe grid itemek kerülnek
-            LazyVGrid(columns: columns, spacing: 24) {
-                ForEach(viewModel.movies) { movie in
-                    MovieCell(movie: movie)
+            if Environment.name == .tv {
+                LazyVGrid(columns: columns, spacing: 24) {
+                    ForEach(viewModel.series) { series in
+                        SeriesCell(series: series)
+                    }
                 }
+                .padding(.horizontal, LayoutConst.normalPadding)
+                .padding(.top, LayoutConst.normalPadding)
+            }else{
+                LazyVGrid(columns: columns, spacing: 24) {
+                    ForEach(viewModel.movies) { movie in
+                        MovieCell(movie: movie)
+                    }
+                }
+                .padding(.horizontal, LayoutConst.normalPadding)
+                .padding(.top, LayoutConst.normalPadding)
             }
-            .padding(.horizontal, LayoutConst.normalPadding)
-            .padding(.top, LayoutConst.normalPadding)
+            
         }
         .navigationTitle(genre.name)
         .onAppear {
-            Task {
-                await viewModel.loadMovies(by: genre.id)
+            if Environment.name == .tv {
+                Task {
+                    await viewModel.loadSeries(by: genre.id)
+                }
+            }
+            else {
+                Task {
+                    await viewModel.loadMovies(by: genre.id)
+                }
             }
         }
     }

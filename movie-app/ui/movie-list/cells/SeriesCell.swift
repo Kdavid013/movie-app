@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct MovieCell: View {
-    let movie: Movie
+struct SeriesCell: View {
+    let series: Series
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             ZStack(alignment: .topLeading) {
                 HStack(alignment: .center) {
-                    AsyncImage(url: movie.imageUrl) { phase in
+                    AsyncImage(url: series.imageUrl) { phase in
                         switch phase {
                             //                            még nem töltődött be
                         case .empty:
@@ -49,22 +49,22 @@ struct MovieCell: View {
                 
                 //TODO: Import star image and add new font
                 HStack(spacing: 12.0){
-                    MovieLabel( type: .rating(movie.rating))
-                    MovieLabel( type: .voteCount(vote: movie.voteCount))
+                    MovieLabel( type: .rating(series.rating))
+                    MovieLabel( type: .voteCount(vote: series.voteCount))
                 }
                 .padding(LayoutConst.smallPadding)
                 
             }
             HStack{
                 VStack(alignment: .leading){
-                    Text(movie.title)
+                    Text(series.title)
                         .font(Fonts.subheading)
                         .lineLimit(2)
 
-                    Text("\(movie.year)")
+                    Text("\(series.year)")
                         .font(Fonts.paragraph)
 
-                    Text("\(movie.duration)")
+                    Text("\(series.duration)")
                         .font(Fonts.caption)
                 }
 

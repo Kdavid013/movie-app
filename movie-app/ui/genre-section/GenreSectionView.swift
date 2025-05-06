@@ -38,6 +38,19 @@ struct GenreSectionView: View {
                     .background(Color.clear)
                     .listRowBackground(Color.clear)
                     .listRowSeparator(.hidden)
+                    ScrollView(.horizontal, showsIndicators: false){
+                        HStack(spacing: 20) {
+                                ForEach(0..<10) {
+                                    Text("Item \($0)")
+                                        .foregroundStyle(.white)
+                                        .font(.largeTitle)
+                                        .frame(width: 150, height: 150)
+                                        .background(.gray)
+                                }
+                        }
+                    }
+                    .listRowBackground(Color.clear)
+                    
                 }
                 .accessibilityLabel("testCollectionView")
                 .listStyle(.plain)
