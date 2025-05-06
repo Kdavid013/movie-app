@@ -36,8 +36,8 @@ extension MoviesApi: TargetType {
             return "discover/movie"
         case .searchMovies:
             return "search/movie"
-        case .fetchFavorites:
-            return "account/"
+        case let .fetchFavorites(req):
+            return "account/\(req.accountId)/favorite/movies"
         case .fetchSeries:
             return "discover/tv"
         }

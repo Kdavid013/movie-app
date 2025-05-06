@@ -26,7 +26,7 @@ protocol MovieServiceProtocol {
     func fetchTVGenres(req: FetchGenreRequest) async throws -> [Genre]
     func fetchMovies(req: FetchMoviesRequest) async throws -> [Movie]
     func searchMovies(req: SearchMovieRequest) async throws -> [Movie]
-    func fetchFavorites(req: FetchMoviesRequest) async throws -> [Movie]
+    func fetchFavorites(req: FetchFavoritesRequest) async throws -> [Movie]
     func fetchSeries(req: FetchSeriesRequest) async throws -> [Series]
 }
 
@@ -69,11 +69,12 @@ class MovieService: MovieServiceProtocol {
         )
     }
     
-    func fetchFavorites(req: FetchMoviesRequest) async throws -> [Movie] {
+    func fetchFavorites(req: FetchFavoritesRequest) async throws -> [Movie] {
         try await requestAndTransform(
-            target: MultiTarget(MoviesApi.fetchMovies(req: req)),
+            target: MultiTarget(MoviesApi.fetchFavorites(req: req)),
             decodeTo: MoviePageResponse.self,
-            transform: { $0.results.map(Movie.init(dto:)) }
+            transform: { (moviePageResponse: MoviePageResponse) in
+                moviePageResponse.results.map(Movie.init(dto:)) }
         )
     }
     

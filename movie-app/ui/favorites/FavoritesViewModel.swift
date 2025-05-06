@@ -52,13 +52,14 @@ class FavoritesViewModel: FavoritesViewModelProtocol {
     }
     
     init(){
-        let request = FetchMoviesRequest(genreId: 28)
+        let request = FetchFavoritesRequest()
         
         //        future publisher, ami genre kat ad ki egy tömbben
         let future = Future<[Movie], Error> { future in
             Task {
                 do {
-                    let movies = try await self.movieService.fetchFavorites(req: request)
+                    let movies = try await
+                    self.movieService.fetchFavorites(req: request)
                     future(.success(movies))
                 } catch {
                     future(.failure(error))
