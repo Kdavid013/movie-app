@@ -60,8 +60,7 @@ struct GenreSectionView: View {
             }
             .listStyle(.plain)
         }
-        .alert(item: $viewModel.alertModel){
-            model in
+        .alert(item: $viewModel.alertModel){ model in
             return Alert(
                 title: Text(LocalizedStringKey(model.title)),
                 message: Text(LocalizedStringKey(model.message)),

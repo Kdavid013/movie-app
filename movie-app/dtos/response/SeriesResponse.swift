@@ -22,7 +22,7 @@ struct SeriesPageResponse: Decodable {
 
 struct SeriesResponse: Decodable {
     let id: Int
-    let title: String
+    let name: String
     let releaseDate: String
     let posterPath: String?
     let voteAverage: Double
@@ -30,7 +30,7 @@ struct SeriesResponse: Decodable {
 
     enum CodingKeys: String, CodingKey {
         case id
-        case title = "name"
+        case name
         case releaseDate = "first_air_date"
         case posterPath = "poster_path"
         case voteAverage = "vote_average"

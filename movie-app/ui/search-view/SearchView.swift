@@ -28,9 +28,7 @@ struct SearchView: View {
                     .font(Fonts.searchText)
                     .foregroundColor(.invertedMain)
                     .onChange(of: viewModel.searchText) {
-                        Task{
-                            await viewModel.searchMovies()
-                        }
+                        viewModel.startSearch.send(())
                     }
                 }
                 .frame(height: 56)

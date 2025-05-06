@@ -14,7 +14,8 @@ enum MoviesApi {
     case fetchMovies(req: FetchMoviesRequest)
     case searchMovies(req: SearchMovieRequest)
     case fetchFavorites(req: FetchFavoritesRequest)
-    case fetchSeries(req: FetchSeriesRequest)
+    case fetchSeries(req: FetchMoviesRequest)
+    case addFavoriteMovie(req: AddFavoriteRequest)
 }
 
 extension MoviesApi: TargetType {
@@ -40,6 +41,8 @@ extension MoviesApi: TargetType {
             return "account/\(req.accountId)/favorite/movies"
         case .fetchSeries:
             return "discover/tv"
+        case let .addFavoriteMovie(req: req):
+            return "account/\(req.accountId)/favorite"
         }
     }
     
@@ -47,6 +50,8 @@ extension MoviesApi: TargetType {
         switch self{
         case .fetchGenres, .fetchTVGenres,.fetchMovies, .searchMovies, .fetchFavorites, .fetchSeries:
             return .get
+        case .addFavoriteMovie:
+            return .post
         }
     }
     
@@ -64,6 +69,8 @@ extension MoviesApi: TargetType {
         case let .fetchFavorites(req):
             return .requestParameters(parameters: req.asRequestParams(), encoding: URLEncoding.queryString)
         case let .fetchSeries(req):
+            return .requestParameters(parameters: req.asRequestParams(), encoding: URLEncoding.queryString)
+        case let .addFavoriteMovie(req):
             return .requestParameters(parameters: req.asRequestParams(), encoding: URLEncoding.queryString)
         }
         
@@ -83,6 +90,8 @@ extension MoviesApi: TargetType {
         case let .fetchFavorites(req):
             return ["Authorization": req.accessToken]
         case let .fetchSeries(req):
+            return ["Authorization": req.accessToken]
+        case let .addFavoriteMovie(req):
             return ["Authorization": req.accessToken]
         }
     }    

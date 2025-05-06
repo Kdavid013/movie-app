@@ -27,5 +27,14 @@ struct FavoritesView: View {
             }
             .navigationTitle("favorites.title")
         }
+        .alert(item: $viewModel.alertModel){ model in
+            return Alert(
+                title: Text(LocalizedStringKey(model.title)),
+                message: Text(LocalizedStringKey(model.message)),
+                dismissButton: .default(Text(LocalizedStringKey(model.dismissButtonTitle))){
+                    viewModel.alertModel = nil
+                }
+            )
+        }
     }
 }

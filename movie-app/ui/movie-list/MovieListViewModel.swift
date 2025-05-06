@@ -6,45 +6,58 @@
 //
 import Foundation
 import InjectPropertyWrapper
+import Combine
 
 protocol MovieListViewModelProtocol: ObservableObject{
-    var movies: [Movie] { get }
-    var series: [Series] { get }
-    func loadMovies(by genreId: Int) async
+    var movies: [MediaItem] { get }
 }
 
-class MovieListViewModel: MovieListViewModelProtocol {
+class MovieListViewModel: MovieListViewModelProtocol, ErrorPresentable {
     
-    @Published var movies: [Movie] = []
-    @Published var series: [Series] = []
-
+    @Published var movies: [MediaItem] = []
+    
+    @Published var alertModel: AlertModel? = nil
+    
+    private var cancellables = Set<AnyCancellable>()
     @Inject
-    private var service: MovieServiceProtocol
+    private var service: ReactiveMoviesServiceProtocol
     
+    let genreIdSubject = PassthroughSubject<Int, Never>()
     
-    func loadMovies(by genreId: Int) async {
-        do {
-            let request = FetchMoviesRequest(genreId: genreId)
-            let movies = try await service.fetchMovies(req: request)
-            DispatchQueue.main.async {
-                self.movies = movies
+    init(){
+        
+        genreIdSubject
+            .flatMap { [weak self] genreId -> AnyPublisher<[MediaItem], MovieError> in
+                guard let self = self else {
+                    preconditionFailure("There is no self")
+                }
+                
+                let request = FetchMoviesRequest(genreId: genreId)
+                return Environment.name == .tv ?
+                self.service.fetchSeries(req: request):
+                self.service.fetchMovies(req: request)
             }
-        } catch {
-            print("Error fetching genres: \(error)")
-        }
+            .sink { completion in
+                if case let .failure(error) = completion {
+                    self.alertModel = self.toAlertModel(error)
+                }
+            } receiveValue: {[weak self] movies in
+                self?.movies = movies
+            }
+            .store(in: &cancellables)
     }
     
-    func loadSeries(by genreId:Int) async {
-        do {
-            let request = FetchSeriesRequest(genreId: genreId)
-            let series = try await service.fetchSeries(req: request)
-            DispatchQueue.main.async {
-                self.series = series
-            }
-        } catch {
-            print("Error fetching genres: \(error)")
-        }
-    }
+    //    func loadSeries(by genreId:Int) async {
+    //        do {
+    //            let request = FetchSeriesRequest(genreId: genreId)
+    //            let series = try await service.fetchSeries(req: request)
+    //            DispatchQueue.main.async {
+    //                self.series = series
+    //            }
+    //        } catch {
+    //            print("Error fetching genres: \(error)")
+    //        }
+    //    }
     
 }
 
