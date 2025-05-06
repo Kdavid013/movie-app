@@ -34,5 +34,9 @@ class ServiceAssembly: Assembly {
             return MovieService()
 //            return MockMoviesService()
         }.inObjectScope(.container)
+        
+        container.register(ReactiveMoviesServiceProtocol.self) { _ in
+            return ReactiveMoviesService()
+        }.inObjectScope(.container)
     }
 }

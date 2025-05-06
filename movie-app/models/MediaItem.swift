@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct Movie: Identifiable {
+struct MediaItem: Identifiable {
     let id: Int
     let title: String
     let year: String
@@ -37,6 +37,25 @@ struct Movie: Identifiable {
         
         self.id = dto.id
         self.title = dto.title
+        self.year = year
+        self.duration = duration
+        self.imageUrl = imageUrl
+        self.rating = dto.voteAverage
+        self.voteCount = dto.voteCount
+        
+    }
+    init(dto: SeriesResponse) {
+        let year = String(dto.releaseDate.prefix(4))
+        let duration = "1h 25min" // TODO: placeholder – ha lesz ilyen adat, cserélhető
+        
+        var imageUrl: URL? {
+            dto.posterPath.flatMap {
+                URL(string: "https://image.tmdb.org/t/p/w500\($0)")
+            }
+        }
+        
+        self.id = dto.id
+        self.title = dto.name
         self.year = year
         self.duration = duration
         self.imageUrl = imageUrl

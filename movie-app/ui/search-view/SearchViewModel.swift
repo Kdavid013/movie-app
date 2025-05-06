@@ -9,35 +9,37 @@ import Combine
 import InjectPropertyWrapper
 
 protocol SearchViewModelProtocol {
-    var movies: [Movie] { get }
+    var movies: [MediaItem] { get }
     var searchText: String { get set }
     func searchMovies() async
 }
 
-class SearchViewModel:  ObservableObject{
-    @Published var movies: [Movie] = []
+class SearchViewModel:  ObservableObject, ErrorPresentable{
+    @Published var movies: [MediaItem] = []
     @Published var searchText: String = ""
     
-    @Inject
-    private var service: MovieServiceProtocol
+    let startSearch = PassthroughSubject<Void, Never>()
     
-    func searchMovies() async {
-        
-        guard !searchText.isEmpty else {
-            DispatchQueue.main.async {
-                self.movies = []
+    @Published var alertModel: AlertModel? = nil
+    @Inject
+    private var service: ReactiveMoviesServiceProtocol
+    private var cancellables = Set<AnyCancellable>()
+    
+    init(){
+        startSearch
+            .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
+            .flatMap{ _ -> AnyPublisher<[MediaItem], MovieError> in
+                let request = SearchMovieRequest(query: self.searchText)
+                return self.service.searchMovies(req: request)
             }
-            return
-        }
-        
-        do {
-            let request = SearchMovieRequest(query: searchText)
-            let movies = try await service.searchMovies(req: request)
-            DispatchQueue.main.async {
-                self.movies = movies
+            .sink { completion in
+                if case let .failure(error) = completion {
+                    self.alertModel = self.toAlertModel(error)
+                }
+            } receiveValue: {[weak self] movies in
+                self?.movies = movies
             }
-        } catch {
-            print("Error fetching genres: \(error)")
-        }
+            .store(in: &cancellables)
     }
+
 }

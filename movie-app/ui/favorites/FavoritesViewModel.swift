@@ -9,78 +9,33 @@ import InjectPropertyWrapper
 import Combine
 
 protocol FavoritesViewModelProtocol: ObservableObject {
-    var movies: [Movie] { get }
+    var movies: [MediaItem] { get }
     
 }
 
-class FavoritesViewModel: FavoritesViewModelProtocol {
-    @Published var movies: [Movie] = []
-    @Published var alertModel: AlertModel? = nil
+class FavoritesViewModel: FavoritesViewModelProtocol, ErrorPresentable {
     
-    @Inject var movieService: MovieServiceProtocol
+    @Published var movies: [MediaItem] = []
+    var alertModel: AlertModel? = nil
+    
+    @Inject
+    var service: ReactiveMoviesServiceProtocol
     private var cancellables = Set<AnyCancellable>()
     
     
-    private func toAlertModel(_ error: Error) -> AlertModel{
-        guard let error = error as? MovieError else{
-            return AlertModel(
-                title: "alert.unexpected.title",
-                message: "alert.unexpected.text",
-                dismissButtonTitle: "alert.dismiss.button"
-            )
-        }
-        switch error {
-        case .invalidApiKeyError(let message):
-            return AlertModel(
-                title: "alert.api.title",
-                message: message,
-                dismissButtonTitle: "alert.dismiss.button"
-            )
-        case .clientError:
-            return AlertModel(
-                title: "Client Error",
-                message: error.localizedDescription,
-                dismissButtonTitle: "alert.dismiss.button"
-            )
-        default:
-            return AlertModel(
-                title: "alert.unexpected.title",
-                message: "alert.unexpected.text",
-                dismissButtonTitle: "alert.dismiss.button"
-            )
-        }
-    }
-    
     init(){
-        let request = FetchMoviesRequest(genreId: 28)
+        //        let request = FetchFavoritesRequest()
         
-        //        future publisher, ami genre kat ad ki egy tömbben
-        let future = Future<[Movie], Error> { future in
-            Task {
-                do {
-                    let movies = try await self.movieService.fetchFavorites(req: request)
-                    future(.success(movies))
-                } catch {
-                    future(.failure(error))
+        let request = FetchFavoritesRequest()
+        service.fetchFavorites(req: request)
+            .sink { completion in
+                if case let .failure(error) = completion {
+                    self.alertModel = self.toAlertModel(error)
                 }
+            } receiveValue: {[weak self] movies in
+                self?.movies = movies
             }
-            
-        }
-            future
-                .receive(on: RunLoop.main)
-            //        completion blokk megvizsgáljuk a sink válasza milyen tipusu
-                .sink { completion in
-                    switch completion {
-                    case .failure(let error):
-                        self.alertModel = self.toAlertModel(error)
-                    case .finished:
-                        break
-                    }
-                } receiveValue: {[weak self] movies in
-                    self?.movies = movies
-                }
-                .store(in: &cancellables)
-        }
+            .store(in: &cancellables)
+        
     }
-
-
+}
