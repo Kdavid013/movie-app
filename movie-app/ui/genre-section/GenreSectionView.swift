@@ -32,7 +32,6 @@ struct GenreSectionView: View {
                             EmptyView()
                         }
                         .opacity(0)
-                        
                         GenreSectionCell(genre: genre)
                     }
                     .background(Color.clear)

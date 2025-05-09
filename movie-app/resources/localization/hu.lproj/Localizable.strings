@@ -13,3 +13,10 @@
 "alert.api.title" = "API hiba";
 "alert.dismiss.button" = "Bezár";
 "alert.unexpected.title" = "Váraltahn hiba";
+"detail.label.date" = "Kiadás éve";
+"detail.label.duration" = "Idő";
+"detail.label.language" = "Nyelv";
+"button.rate.title" = "Értékeld a filmet";
+"button.imdb.title" = "Nézd meg IMDB-n";
+"button.send.review" = "Küld el az értékelésem";
+"button.watch.title" = "Nézd meg most";

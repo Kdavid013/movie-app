@@ -32,7 +32,14 @@ struct MovieListView: View {
             //            columns - array amibe grid itemek kerülnek
             LazyVGrid(columns: columns, spacing: 24) {
                 ForEach(viewModel.movies) { movie in
-                    MovieCell(movie: movie)
+                    ZStack{
+                        
+                        NavigationLink(destination: DetailsView(movie: movie)){
+                            MovieCell(movie: movie)
+                        }
+                        .foregroundColor(.invertedMain)
+                    }
+                    
                 }
             }
             .padding(.horizontal, LayoutConst.normalPadding)

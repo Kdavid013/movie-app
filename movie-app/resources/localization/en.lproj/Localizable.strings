@@ -14,3 +14,11 @@
 "alert.dismiss.button" = "Close";
 "alert.unexpected.title" = "Váraltahn hiba";
 "alert.unexpected.text" = "Something went wrong. Please try again later.";
+"detail.label.date" = "Release date";
+"detail.label.duration" = "Runtime";
+"detail.label.language" = "Language";
+"button.rate.title" = "Rate this movie";
+"button.imdb.title" = "Visit at IMDB";
+"button.send.review" = "Send my review";
+"button.watch.title" = "Watch now";
+
