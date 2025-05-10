@@ -16,7 +16,7 @@ enum MoviesApi {
     case fetchFavorites(req: FetchFavoritesRequest)
     case fetchSeries(req: FetchMoviesRequest)
     case addFavoriteMovie(req: AddFavoriteRequest)
-    case fetchMovieDetail(req: FetchMovieDetailRequest)
+    case fetchMovieDetail(req: FetchDetailRequest)
 }
 
 extension MoviesApi: TargetType {
@@ -44,8 +44,8 @@ extension MoviesApi: TargetType {
             return "discover/tv"
         case let .addFavoriteMovie(req: req):
             return "account/\(req.accountId)/favorite"
-        case .fetchMovieDetail:
-            return "/movie"
+        case let .fetchMovieDetail(req: req):
+            return "/movie/\(req.movieId)"
         }
     }
     

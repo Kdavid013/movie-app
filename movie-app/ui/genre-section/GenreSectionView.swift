@@ -39,13 +39,13 @@ struct GenreSectionView: View {
                     .listRowSeparator(.hidden)
                     ScrollView(.horizontal, showsIndicators: false){
                         HStack(spacing: 20) {
-                                ForEach(0..<10) {
-                                    Text("Item \($0)")
-                                        .foregroundStyle(.white)
-                                        .font(.largeTitle)
-                                        .frame(width: 150, height: 150)
-                                        .background(.gray)
-                                }
+                            ForEach(0..<10) {
+                                Text("Item \($0)")
+                                    .foregroundStyle(.white)
+                                    .font(.largeTitle)
+                                    .frame(width: 150, height: 150)
+                                    .background(.gray)
+                            }
                         }
                     }
                     .listRowBackground(Color.clear)
@@ -59,17 +59,7 @@ struct GenreSectionView: View {
             }
             .listStyle(.plain)
         }
-        .alert(item: $viewModel.alertModel){ model in
-            return Alert(
-                title: Text(LocalizedStringKey(model.title)),
-                message: Text(LocalizedStringKey(model.message)),
-                dismissButton: .default(Text(LocalizedStringKey(model.dismissButtonTitle))){
-                    viewModel.alertModel = nil
-                }
-            )
-        }
-        
-        
+        .showAlert(model: $viewModel.alertModel)
     }
 }
 

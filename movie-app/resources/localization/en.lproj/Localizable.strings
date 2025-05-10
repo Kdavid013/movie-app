@@ -21,4 +21,6 @@
 "button.imdb.title" = "Visit at IMDB";
 "button.send.review" = "Send my review";
 "button.watch.title" = "Watch now";
+"available" = "Available";
+"unavailable" = "Unavailable";
 

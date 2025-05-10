@@ -40,10 +40,9 @@ struct MoviePicture: View{
                     EmptyView()
                 }
             }
-            .frame(height: 100)
             .frame(maxHeight: 180)
             .frame(maxWidth: .infinity)
-            .cornerRadius(12)
+            .cornerRadius(30)
         }
         .padding(.bottom, LayoutConst.maxPadding)
     }

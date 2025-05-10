@@ -1,0 +1,76 @@
+//
+//  MediaItemDetail.swift
+//  movie-app
+//
+//  Created by David Karacs on 2025. 05. 10..
+//
+
+import Foundation
+
+struct MediaItemDetail: Identifiable {
+    let id: Int
+    let title: String
+    let year: String
+    let runtime: Int
+    let imageUrl: URL?
+    let rating: Double
+    let voteCount: Int
+    let summary: String?
+    let popularity: Double
+    let genres: [String]
+    let adult: Bool
+    let spokenLanguages: String
+    
+    init() {
+        self.id = 0
+        self.title = ""
+        self.year = ""
+        self.runtime = 0
+        self.imageUrl = nil
+        self.rating = 0
+        self.voteCount = 0
+        self.summary = ""
+        self.popularity = 0
+        self.genres = []
+        self.adult = false
+        self.spokenLanguages = ""
+    }
+    init(id: Int, title: String, year: String, runtime: Int, imageUrl: URL?, rating: Double, voteCount: Int, summary: String, popularity: Double, genres: [String], adult: Bool, spokenLanguages: String) {
+        self.id = id
+        self.title = title
+        self.year = year
+        self.runtime = runtime
+        self.imageUrl = imageUrl
+        self.rating = rating
+        self.voteCount = voteCount
+        self.summary = summary
+        self.popularity = popularity
+        self.genres = genres
+        self.adult = adult
+        self.spokenLanguages = spokenLanguages
+    }
+    
+    init(dto: MovieDetailResponse) {
+        let year = String(dto.releaseDate.prefix(4))
+        var imageUrl: URL? {
+            dto.posterPath.flatMap {
+                URL(string: "https://image.tmdb.org/t/p/w500\($0)")
+            }
+        }
+        self.id = dto.id
+        self.title = dto.title
+        self.year = year
+        self.runtime = dto.runtime
+        self.imageUrl = imageUrl
+        self.rating = dto.voteAverage
+        self.voteCount = dto.voteCount
+        self.summary = nil
+        self.popularity = dto.popularity
+        self.genres = dto.genres.map(\.name)
+        self.adult = dto.adult
+        self.spokenLanguages = dto.spokenLanguages.map({$0.englishName}).joined(separator: ", ")
+    }
+    var genreList: String {
+        genres.joined(separator: ", ")
+    }
+}

@@ -1,6 +1,16 @@
 {
   "images" : [
     {
+      "filename" : "persondark.svg",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
       "filename" : "person.svg",
       "idiom" : "universal"
     }

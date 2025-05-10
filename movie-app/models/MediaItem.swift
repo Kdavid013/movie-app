@@ -14,8 +14,10 @@ struct MediaItem: Identifiable {
     let imageUrl: URL?
     let rating: Double
     let voteCount: Int
+    let languages: [String]
+    let genres: [String]?
     
-    init(id: Int, title: String, year: String, duration: String, imageUrl: URL?, rating: Double, voteCount: Int) {
+    init(id: Int, title: String, year: String, duration: String, imageUrl: URL?, rating: Double, voteCount: Int, languages: [String], genres: [String]?) {
         self.id = id
         self.title = title
         self.year = year
@@ -23,6 +25,8 @@ struct MediaItem: Identifiable {
         self.imageUrl = imageUrl
         self.rating = rating
         self.voteCount = voteCount
+        self.languages = languages
+        self.genres = genres
     }
     
     init(dto: MovieResponse) {
@@ -35,6 +39,7 @@ struct MediaItem: Identifiable {
             }
         }
         
+        
         self.id = dto.id
         self.title = dto.title
         self.year = year
@@ -42,7 +47,9 @@ struct MediaItem: Identifiable {
         self.imageUrl = imageUrl
         self.rating = dto.voteAverage
         self.voteCount = dto.voteCount
-        
+        self.languages = []
+        self.genres = []
+        print("<<< debug movie dto")
     }
     init(dto: SeriesResponse) {
         let year = String(dto.releaseDate.prefix(4))
@@ -54,6 +61,7 @@ struct MediaItem: Identifiable {
             }
         }
         
+        
         self.id = dto.id
         self.title = dto.name
         self.year = year
@@ -61,7 +69,10 @@ struct MediaItem: Identifiable {
         self.imageUrl = imageUrl
         self.rating = dto.voteAverage
         self.voteCount = dto.voteCount
-        
+        self.languages = []
+        self.genres = []
+        print("<<< debug series dto")
     }
+    
     
 }
