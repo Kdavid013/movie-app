@@ -14,7 +14,7 @@ struct DetailsView: View {
     let mediaItem: MediaItem
     
     @StateObject private var viewModel = DetailsViewModel()
-
+    
     var body: some View {
         NavigationView {
             ZStack(alignment: .topTrailing){
@@ -30,10 +30,10 @@ struct DetailsView: View {
                     VStack{
                         MoviePicture(picUrl: viewModel.movie.imageUrl)
                         HStack(spacing:12){
-                                MovieLabel(type: .rating(viewModel.movie.rating))
-                                MovieLabel(type: .voteCount(vote: viewModel.movie.voteCount))
-                                MovieLabel(type: .popularity(viewModel.movie.popularity))
-                                Spacer()
+                            MovieLabel(type: .rating(viewModel.movie.rating))
+                            MovieLabel(type: .voteCount(vote: viewModel.movie.voteCount))
+                            MovieLabel(type: .popularity(viewModel.movie.popularity))
+                            Spacer()
                             MovieLabel(type: .captions(viewModel.movie.adult))
                         }
                         .padding(.bottom, LayoutConst.normalPadding)
@@ -41,7 +41,7 @@ struct DetailsView: View {
                         HStack{
                             VStack(alignment: .leading){
                                 Text(viewModel.movie.genreList)
-                                        .font(Fonts.paragraph)
+                                    .font(Fonts.paragraph)
                                 Text(viewModel.movie.title)
                                     .font(Fonts.detailTitle)
                             }
@@ -56,15 +56,37 @@ struct DetailsView: View {
                         }
                         .padding(.bottom, LayoutConst.normalPadding)
                         HStack(spacing: 24){
-                            ButtonLabel(text: Text("button.rate.title"))
-                            ButtonLabel(text: Text("button.imdb.title"))
+                            ButtonLabel(style: .outlined, text: "button.rate.title"){
+                                
+                            }
+                            ButtonLabel(style: .filled, text: "button.imdb.title"){
+                                
+                            }
                         }
-                        
+                        VStack(alignment: .leading, spacing: 12){
+                            Text(LocalizedStringKey("overview"))
+                                .font(Fonts.overviewText)
+                            Text(viewModel.movie.overview)
+                                .font(Fonts.paragraph)
+                                .lineLimit(nil)
+                        }
                     }
                     .padding(LayoutConst.maxPadding)
                     Spacer()
                 }
                 
+            }
+        }
+        .toolbar{
+            ToolbarItem(placement: .topBarTrailing){
+                Button(action:{
+                    
+                }){
+                    Image(.favorite)
+                        .resizable()
+                        .frame(height: 30)
+                        .frame(width: 30)
+                }
             }
         }
         .onAppear {

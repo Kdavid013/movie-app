@@ -25,7 +25,7 @@ struct SearchView: View {
                         .foregroundStyle(.invertedMain)
                     )
                     .textFieldStyle(PlainTextFieldStyle())
-                    .font(Fonts.searchText)
+                    .font(Fonts.caption)
                     .foregroundColor(.invertedMain)
                     .onChange(of: viewModel.searchText) {
                         viewModel.startSearch.send(())

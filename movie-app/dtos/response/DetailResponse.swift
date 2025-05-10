@@ -17,6 +17,7 @@ struct MovieDetailResponse: Decodable {
     let adult: Bool
     let runtime: Int
     let spokenLanguages: [SpokenLanguageResponse]
+    let overview: String
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -30,5 +31,6 @@ struct MovieDetailResponse: Decodable {
         case adult
         case runtime
         case spokenLanguages = "spoken_languages"
+        case overview
     }
 }

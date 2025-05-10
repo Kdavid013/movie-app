@@ -15,7 +15,7 @@ struct MediaItemDetail: Identifiable {
     let imageUrl: URL?
     let rating: Double
     let voteCount: Int
-    let summary: String?
+    let overview: String
     let popularity: Double
     let genres: [String]
     let adult: Bool
@@ -29,13 +29,13 @@ struct MediaItemDetail: Identifiable {
         self.imageUrl = nil
         self.rating = 0
         self.voteCount = 0
-        self.summary = ""
+        self.overview = ""
         self.popularity = 0
         self.genres = []
         self.adult = false
         self.spokenLanguages = ""
     }
-    init(id: Int, title: String, year: String, runtime: Int, imageUrl: URL?, rating: Double, voteCount: Int, summary: String, popularity: Double, genres: [String], adult: Bool, spokenLanguages: String) {
+    init(id: Int, title: String, year: String, runtime: Int, imageUrl: URL?, rating: Double, voteCount: Int, overview: String, popularity: Double, genres: [String], adult: Bool, spokenLanguages: String) {
         self.id = id
         self.title = title
         self.year = year
@@ -43,7 +43,7 @@ struct MediaItemDetail: Identifiable {
         self.imageUrl = imageUrl
         self.rating = rating
         self.voteCount = voteCount
-        self.summary = summary
+        self.overview = overview
         self.popularity = popularity
         self.genres = genres
         self.adult = adult
@@ -64,7 +64,7 @@ struct MediaItemDetail: Identifiable {
         self.imageUrl = imageUrl
         self.rating = dto.voteAverage
         self.voteCount = dto.voteCount
-        self.summary = nil
+        self.overview = dto.overview
         self.popularity = dto.popularity
         self.genres = dto.genres.map(\.name)
         self.adult = dto.adult
