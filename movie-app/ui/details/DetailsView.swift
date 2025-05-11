@@ -27,7 +27,7 @@ struct DetailsView: View {
                     }
                 }
                 ScrollView{
-                    VStack{
+                    VStack(alignment: .leading, spacing:15){
                         MoviePicture(picUrl: viewModel.movie.imageUrl)
                         HStack(spacing:12){
                             MovieLabel(type: .rating(viewModel.movie.rating))
@@ -36,10 +36,8 @@ struct DetailsView: View {
                             Spacer()
                             MovieLabel(type: .captions(viewModel.movie.adult))
                         }
-                        .padding(.bottom, LayoutConst.normalPadding)
-                        
                         HStack{
-                            VStack(alignment: .leading){
+                            VStack(alignment: .leading,spacing: 4){
                                 Text(viewModel.movie.genreList)
                                     .font(Fonts.paragraph)
                                 Text(viewModel.movie.title)
@@ -47,14 +45,12 @@ struct DetailsView: View {
                             }
                             Spacer()
                         }
-                        .padding(.bottom, LayoutConst.smallPadding)
-                        HStack(spacing: LayoutConst.smallPadding){
+                        HStack(spacing: LayoutConst.normalPadding){
                             DetailLabel(title: "detail.label.date", desc: viewModel.movie.year)
                             DetailLabel(title: "detail.label.duration", desc: "\(viewModel.movie.runtime)")
                             DetailLabel(title: "detail.label.language", desc: viewModel.movie.spokenLanguages)
                             Spacer()
                         }
-                        .padding(.bottom, LayoutConst.normalPadding)
                         HStack(spacing: 24){
                             ButtonLabel(style: .outlined, text: "button.rate.title"){
                                 
@@ -70,8 +66,14 @@ struct DetailsView: View {
                                 .font(Fonts.paragraph)
                                 .lineLimit(nil)
                         }
+                        Text("companies")
+                            .font(Fonts.overviewText)
+                        SideScrollView(type: .companies(viewModel.movie.companies))
+                        Text("cast")
+                            .font(Fonts.overviewText)
+                        SideScrollView(type: .companies(viewModel.people))
                     }
-                    .padding(LayoutConst.maxPadding)
+                    .padding(.horizontal, LayoutConst.maxPadding)
                     Spacer()
                 }
                 
@@ -89,6 +91,7 @@ struct DetailsView: View {
                 }
             }
         }
+        .showAlert(model: $viewModel.alertModel)
         .onAppear {
             viewModel.movieIdSubject.send(mediaItem.id)
         }

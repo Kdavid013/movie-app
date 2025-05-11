@@ -18,6 +18,7 @@ struct MovieDetailResponse: Decodable {
     let runtime: Int
     let spokenLanguages: [SpokenLanguageResponse]
     let overview: String
+    let companies: [CompanyResponse]
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -32,5 +33,6 @@ struct MovieDetailResponse: Decodable {
         case runtime
         case spokenLanguages = "spoken_languages"
         case overview
+        case companies = "production_companies"
     }
 }

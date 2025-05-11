@@ -20,6 +20,7 @@ struct MediaItemDetail: Identifiable {
     let genres: [String]
     let adult: Bool
     let spokenLanguages: String
+    let companies: [CompanyAndCast]
     
     init() {
         self.id = 0
@@ -34,8 +35,22 @@ struct MediaItemDetail: Identifiable {
         self.genres = []
         self.adult = false
         self.spokenLanguages = ""
+        self.companies = []
     }
-    init(id: Int, title: String, year: String, runtime: Int, imageUrl: URL?, rating: Double, voteCount: Int, overview: String, popularity: Double, genres: [String], adult: Bool, spokenLanguages: String) {
+    init(id: Int,
+         title: String,
+         year: String,
+         runtime: Int,
+         imageUrl: URL?,
+         rating: Double,
+         voteCount: Int,
+         overview: String,
+         popularity: Double,
+         genres: [String],
+         adult: Bool,
+         spokenLanguages: String,
+         companies: [CompanyAndCast]
+    ) {
         self.id = id
         self.title = title
         self.year = year
@@ -48,6 +63,7 @@ struct MediaItemDetail: Identifiable {
         self.genres = genres
         self.adult = adult
         self.spokenLanguages = spokenLanguages
+        self.companies = companies
     }
     
     init(dto: MovieDetailResponse) {
@@ -69,6 +85,7 @@ struct MediaItemDetail: Identifiable {
         self.genres = dto.genres.map(\.name)
         self.adult = dto.adult
         self.spokenLanguages = dto.spokenLanguages.map({$0.englishName}).joined(separator: ", ")
+        self.companies = dto.companies.map(CompanyAndCast.init)
     }
     var genreList: String {
         genres.joined(separator: ", ")

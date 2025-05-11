@@ -49,7 +49,6 @@ struct MediaItem: Identifiable {
         self.voteCount = dto.voteCount
         self.languages = []
         self.genres = []
-        print("<<< debug movie dto")
     }
     init(dto: SeriesResponse) {
         let year = String(dto.releaseDate.prefix(4))
@@ -71,7 +70,6 @@ struct MediaItem: Identifiable {
         self.voteCount = dto.voteCount
         self.languages = []
         self.genres = []
-        print("<<< debug series dto")
     }
     
     
