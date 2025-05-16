@@ -20,7 +20,7 @@ struct MediaItemDetail: Identifiable {
     let genres: [String]
     let adult: Bool
     let spokenLanguages: String
-    let companies: [CompanyAndCast]
+    let companies: [Contributors]
     
     init() {
         self.id = 0
@@ -49,7 +49,7 @@ struct MediaItemDetail: Identifiable {
          genres: [String],
          adult: Bool,
          spokenLanguages: String,
-         companies: [CompanyAndCast]
+         companies: [Contributors]
     ) {
         self.id = id
         self.title = title
@@ -85,7 +85,7 @@ struct MediaItemDetail: Identifiable {
         self.genres = dto.genres.map(\.name)
         self.adult = dto.adult
         self.spokenLanguages = dto.spokenLanguages.map({$0.englishName}).joined(separator: ", ")
-        self.companies = dto.companies.map(CompanyAndCast.init)
+        self.companies = dto.companies.map(Contributors.init)
     }
     var genreList: String {
         genres.joined(separator: ", ")

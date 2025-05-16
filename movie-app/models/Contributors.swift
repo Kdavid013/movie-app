@@ -8,7 +8,7 @@ import Foundation
 
 
 
-struct CompanyAndCast: Identifiable, Hashable, Equatable {
+struct Contributors: Identifiable, Hashable, Equatable {
     let id: Int
     let imageUrl: URL?
     let name: String
@@ -37,7 +37,6 @@ struct CompanyAndCast: Identifiable, Hashable, Equatable {
         self.id = dto.id
         self.name = dto.name
         self.imageUrl = imageUrl
-        print("<<<DEBUG ",self)
     }
     
     init(dto: CastResponse){
@@ -51,7 +50,6 @@ struct CompanyAndCast: Identifiable, Hashable, Equatable {
         self.id = dto.id
         self.name = dto.name
         self.imageUrl = imageUrl
-        print("<<<DEBUG ",self)
     }
     
 }

@@ -66,12 +66,17 @@ struct DetailsView: View {
                                 .font(Fonts.paragraph)
                                 .lineLimit(nil)
                         }
-                        Text("companies")
-                            .font(Fonts.overviewText)
-                        SideScrollView(type: .companies(viewModel.movie.companies))
-                        Text("cast")
-                            .font(Fonts.overviewText)
-                        SideScrollView(type: .companies(viewModel.people))
+                        VStack(alignment: .leading){
+                            Text("companies")
+                                .font(Fonts.overviewText)
+//                            ParticipantScrollView(participants: viewModel.movie.companies)
+                            SideScrollView(type: .companies(viewModel.movie.companies))
+                            Text("cast")
+                                .font(Fonts.overviewText)
+//                            ParticipantScrollView(participants: viewModel.cast)
+                            SideScrollView(type: .companies(viewModel.cast))
+                        }
+                        
                     }
                     .padding(.horizontal, LayoutConst.maxPadding)
                     Spacer()
@@ -82,7 +87,7 @@ struct DetailsView: View {
         .toolbar{
             ToolbarItem(placement: .topBarTrailing){
                 Button(action:{
-                    
+                    viewModel.favoriteButtonTapped.send()
                 }){
                     Image(.favorite)
                         .resizable()

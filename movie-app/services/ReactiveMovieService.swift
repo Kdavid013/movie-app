@@ -18,9 +18,9 @@ protocol ReactiveMoviesServiceProtocol {
     func fetchMovies(req: FetchMoviesRequest) -> AnyPublisher<[MediaItem], MovieError>
     func fetchSeries(req: FetchMoviesRequest) -> AnyPublisher<[MediaItem], MovieError>
     func fetchFavorites(req: FetchFavoritesRequest) -> AnyPublisher<[MediaItem], MovieError>
-    func addFavoriteMovie(req: AddFavoriteRequest) -> AnyPublisher<AddFavoriteResponse, MovieError>
+    func editFavoriteMovie(req: EditFavoriteRequest) -> AnyPublisher<EditFavoritesResult, MovieError>
     func fetchMovieDetail(req: FetchDetailRequest) -> AnyPublisher<MediaItemDetail, MovieError>
-    func fetchMovieCredits(req: FetchDetailRequest) -> AnyPublisher<[CompanyAndCast], MovieError>
+    func fetchMovieCredits(req: FetchDetailRequest) -> AnyPublisher<[Contributors], MovieError>
 }
 
 class ReactiveMoviesService: ReactiveMoviesServiceProtocol {
@@ -32,11 +32,11 @@ class ReactiveMoviesService: ReactiveMoviesServiceProtocol {
         )
     }
     
-    func fetchMovieCredits(req: FetchDetailRequest) -> AnyPublisher<[CompanyAndCast], MovieError> {
+    func fetchMovieCredits(req: FetchDetailRequest) -> AnyPublisher<[Contributors], MovieError> {
         requestAndTransform(
             target: MultiTarget(MoviesApi.fetchMovieCredits(req: req)),
             decodeTo: ListCastResponse.self,
-            transform: { $0.cast.map(CompanyAndCast.init(dto:))}
+            transform: { $0.cast.map(Contributors.init(dto:))}
         )
     }
     
@@ -48,10 +48,10 @@ class ReactiveMoviesService: ReactiveMoviesServiceProtocol {
         )
     }
     
-    func addFavoriteMovie(req: AddFavoriteRequest) -> AnyPublisher<AddFavoriteResponse, MovieError> {
+    func editFavoriteMovie(req: EditFavoriteRequest) -> AnyPublisher<EditFavoritesResult, MovieError> {
         requestAndTransform(
-            target: MultiTarget(MoviesApi.addFavoriteMovie(req: req)),
-            decodeTo: AddFavoriteResponse.self,
+            target: MultiTarget(MoviesApi.editFavoriteMovie(req: req)),
+            decodeTo: EditFavoritesResult.self,
             transform: { response in response }
         )    }
     

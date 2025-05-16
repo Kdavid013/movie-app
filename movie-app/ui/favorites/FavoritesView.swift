@@ -10,14 +10,13 @@ import InjectPropertyWrapper
 
 struct FavoritesView: View {
     
-    @StateObject
-    private var viewModel = FavoritesViewModel()
+    @StateObject private var viewModel = FavoritesViewModel()
     
     var body: some View {
-        NavigationView{
-            ScrollView{
-                LazyVStack(spacing: LayoutConst.normalPadding){
-                    ForEach(viewModel.movies){ movie in
+        NavigationView {
+            ScrollView {
+                LazyVStack(spacing: LayoutConst.normalPadding) {
+                    ForEach(viewModel.movies) { movie in
                         MovieCell(movie: movie)
                             .frame(height: 277)
                     }
@@ -25,8 +24,11 @@ struct FavoritesView: View {
                 .padding(.horizontal, LayoutConst.normalPadding)
                 .padding(.top, LayoutConst.normalPadding)
             }
-            .navigationTitle("favorites.title")
+            .navigationTitle(LocalizedStringKey("favorites.title"))
         }
         .showAlert(model: $viewModel.alertModel)
+        .onAppear {
+            viewModel.viewLoaded.send(())
+        }
     }
 }

@@ -17,20 +17,25 @@ protocol DetailsViewModelProtocol: ObservableObject {
 class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
     
     @Published var movie: MediaItemDetail = MediaItemDetail()
-    @Published var people: [CompanyAndCast] = []
+    @Published var cast: [Contributors] = []
+    var isFavorite: Bool = false
     
-    
+    let favoriteButtonTapped = PassthroughSubject<Void, Never>()
     let movieIdSubject = PassthroughSubject<Int, Never>()
+    
     @Published var alertModel: AlertModel? = nil
     
     private var cancellables = Set<AnyCancellable>()
+    
     @Inject
     private var service: ReactiveMoviesServiceProtocol
     
+    @Inject
+    private var favoriteMediaStorage: FavoriteMediaStoreProtocol
+    
     init() {
-        print("<<<details ini running")
         
-        
+        print("<<<DEBUG",isFavorite)
         let details = movieIdSubject
             .flatMap { [weak self] movieId -> AnyPublisher<MediaItemDetail, MovieError> in
                 guard let self = self else {
@@ -42,7 +47,7 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
             }
         
         let cast = movieIdSubject
-            .flatMap { [weak self] movieId -> AnyPublisher<[CompanyAndCast], MovieError> in
+            .flatMap { [weak self] movieId -> AnyPublisher<[Contributors], MovieError> in
                 guard let self = self else {
                     preconditionFailure("There is no self")
                 }
@@ -51,18 +56,55 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
                 return self.service.fetchMovieCredits(req: requset)
             }
         
-//        
+        //
         details.combineLatest(cast)
             .receive(on: RunLoop.main)
-            .print("<<< DEBUG: details combineLatest")
             .sink{ completion in
                 if case let .failure(error) = completion {
                     self.alertModel = self.toAlertModel(error)
                 }
-                    
+                
             } receiveValue: { [weak self] movie, cast in
-                self?.people = cast
-                self?.movie = movie
+                guard let self = self else {
+                    preconditionFailure("There is no self")
+                }
+                self.cast = cast
+                self.movie = movie
+                self.isFavorite = self.favoriteMediaStorage.isFavoriteMediaItem(withId: movie.id)
+            }
+            .store(in: &cancellables)
+        
+        favoriteButtonTapped
+            .flatMap { [weak self] _ -> AnyPublisher<(EditFavoritesResult, Bool), MovieError> in
+                guard let self = self else {
+                    preconditionFailure("There is no self")
+                }
+                let isFavorite = self.isFavorite
+                let request = EditFavoriteRequest(movieId: self.movie.id, isFavorite:  isFavorite)
+                return service.editFavoriteMovie(req: request)
+                    .map { result in
+                        (result,isFavorite)
+                }
+                .eraseToAnyPublisher()
+            }
+            .print("<<< DEBUG: favoriteButtonTapped")
+            .sink { [weak self] completion in
+                if case let .failure(error) = completion {
+                    self?.alertModel = self?.toAlertModel(error)
+                }
+            } receiveValue: { [weak self] result, isFavorite in
+                guard let self = self else {
+                    preconditionFailure("There is no self")
+                }
+                if result.success {
+                    if isFavorite{
+//                        self.favoriteMediaStorage.addFavoriteMediaItem(withId: self.movie)
+                    } else {
+                        self.favoriteMediaStorage.removeFavoriteMediaItem(withId: self.movie.id)
+                    }
+                    self.isFavorite = isFavorite
+                }
+                
             }
             .store(in: &cancellables)
     }

@@ -9,8 +9,8 @@ import SwiftUI
 import Foundation
 
 enum SideScrollViewType{
-    case companies(_ companies: [CompanyAndCast])
-    case actors(_ actors: [CompanyAndCast])
+    case companies(_ companies: [Contributors])
+    case actors(_ actors: [Contributors])
 }
 
 struct SideScrollView: View {
@@ -72,7 +72,9 @@ struct SideScrollView: View {
                         .cornerRadius(28)
                         Text(data.1)
                             .font(Fonts.paragraph)
+                            .lineLimit(nil)
                     }
+                    .frame(width: 100.0)
                 }
             }
         }
