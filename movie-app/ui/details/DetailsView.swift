@@ -69,19 +69,20 @@ struct DetailsView: View {
                         VStack(alignment: .leading){
                             Text("companies")
                                 .font(Fonts.overviewText)
-//                            ParticipantScrollView(participants: viewModel.movie.companies)
-                            SideScrollView(type: .companies(viewModel.movie.companies))
+                            //                            ParticipantScrollView(participants: viewModel.movie.companies)
+                            SideScrollView(contributors: viewModel.movie.companies)
                             Text("cast")
                                 .font(Fonts.overviewText)
-//                            ParticipantScrollView(participants: viewModel.cast)
-                            SideScrollView(type: .companies(viewModel.cast))
+                            //                            ParticipantScrollView(participants: viewModel.cast)
+                            SideScrollView(contributors: viewModel.cast)
                         }
                         
+                        
+                        .padding(.horizontal, LayoutConst.maxPadding)
+                        Spacer()
                     }
-                    .padding(.horizontal, LayoutConst.maxPadding)
-                    Spacer()
+                    
                 }
-                
             }
         }
         .toolbar{
@@ -89,10 +90,20 @@ struct DetailsView: View {
                 Button(action:{
                     viewModel.favoriteButtonTapped.send()
                 }){
-                    Image(.favorite)
-                        .resizable()
-                        .frame(height: 30)
-                        .frame(width: 30)
+                    if viewModel.isFavorite{
+                        Image(.favorite)
+                            .resizable()
+                            .frame(height: 30)
+                            .frame(width: 30)
+                    }else {
+                        Image(.nonfavorite)
+                            .resizable()
+                            .frame(height: 30)
+                            .frame(width: 30)
+                        
+                    }
+                    
+                    
                 }
             }
         }
@@ -103,3 +114,4 @@ struct DetailsView: View {
         
     }
 }
+

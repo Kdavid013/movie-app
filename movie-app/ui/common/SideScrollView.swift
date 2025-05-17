@@ -8,40 +8,17 @@
 import SwiftUI
 import Foundation
 
-enum SideScrollViewType{
-    case companies(_ companies: [Contributors])
-    case actors(_ actors: [Contributors])
-}
-
 struct SideScrollView: View {
     
-    let type: SideScrollViewType
-    
-    let rows = [
-        GridItem(.flexible(), spacing: 2),
-        GridItem(.flexible(), spacing: 2)
-    ]
+    let contributors: [Contributors]
     
     var body: some View {
-        var images: [URL?]
-        var names: [String]
-        var listofData: [(URL?,String)]
-        switch type {
-        case .companies(let value):
-            images = value.map({$0.imageUrl})
-            names = value.map({$0.name})
-            listofData = zip(images,names).map({$0})
-        case .actors(let value):
-            images = value.map({$0.imageUrl})
-            names = value.map({$0.name})
-            listofData = zip(images,names).map({$0})
-        }
         
         return ScrollView(.horizontal){
             HStack(spacing:20){
-                ForEach(listofData, id: \.1) { data in
+                ForEach(contributors) { contributor in
                     VStack{
-                        AsyncImage(url: data.0) { phase in
+                        AsyncImage(url: contributor.imageUrl) { phase in
                             switch phase {
                                 //                            még nem töltődött be
                             case .empty:
@@ -70,7 +47,7 @@ struct SideScrollView: View {
                         }
                         .frame(width: 56, height: 56)
                         .cornerRadius(28)
-                        Text(data.1)
+                        Text(contributor.name)
                             .font(Fonts.paragraph)
                             .lineLimit(nil)
                     }
@@ -80,3 +57,5 @@ struct SideScrollView: View {
         }
     }
 }
+
+
