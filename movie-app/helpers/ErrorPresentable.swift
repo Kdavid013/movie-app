@@ -6,11 +6,11 @@
 //
 
 protocol ErrorPresentable {
-    func toAlertModel(_ error: Error) -> AlertModel
+    func toAlertModel(_ error: Error) -> AlertModel?
 }
 
 extension ErrorPresentable {
-    func toAlertModel(_ error: Error) -> AlertModel{
+    func toAlertModel(_ error: Error) -> AlertModel?{
         guard let error = error as? MovieError else{
             return AlertModel(
                 title: "alert.unexpected.title",
@@ -31,6 +31,8 @@ extension ErrorPresentable {
                 message: error.localizedDescription,
                 dismissButtonTitle: "alert.dismiss.button"
             )
+        case .noInternetError:
+            return nil
         default:
             return AlertModel(
                 title: "alert.unexpected.title",

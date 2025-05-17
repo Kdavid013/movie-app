@@ -11,10 +11,11 @@ enum MovieError: Error {
     case invalidApiKeyError(message: String)
     case unexpectedError
     case clientError
+    case noInternetError
     
     var domain: String {
         switch self {
-        case .invalidApiKeyError, .unexpectedError, .clientError:
+        case .invalidApiKeyError, .unexpectedError, .clientError, .noInternetError:
                 return "MovieError"
         }
     }
@@ -31,6 +32,8 @@ extension MovieError: LocalizedError {
             return "Unexpected error"
         case .clientError:
             return "Client error"
+        case .noInternetError:
+            return "No internet connection"
         }
     }
 }
