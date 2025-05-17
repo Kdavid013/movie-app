@@ -1,16 +1,16 @@
 //
-//  AddFavoriteRequest.swift
+//  FetchMovieDetail.swift
 //  movie-app
 //
-//  Created by David Karacs on 2025. 05. 06..
+//  Created by David Karacs on 2025. 05. 09..
 //
 
-struct AddFavoriteRequest: Codable {
+struct FetchDetailRequest {
     let accessToken: String = Config.bearerToken
-    let accountId: Int = 21889570
     let movieId: Int
     
     func asRequestParams() -> [String: Any] {
         return [:]
     }
 }
+

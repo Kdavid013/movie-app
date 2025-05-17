@@ -10,6 +10,8 @@ import SwiftUI
 enum MovieLabelType{
     case rating(_ value: Double)
     case voteCount(vote: Int)
+    case popularity(_ count : Double)
+    case captions(_ captions : Bool)
 }
 
 struct MovieLabel: View {
@@ -26,15 +28,21 @@ struct MovieLabel: View {
         case .voteCount(let vote):
             text = "\(vote)"
             imageRes = .heart
+        case .popularity(let count):
+            text = "\(count)"
+            imageRes = .person
+        case .captions(let captions):
+            text =  captions ? "available" : "unavailable"
+            imageRes = .caption
         }
         
         return HStack(spacing: 4.0) {
             Image(imageRes)
-            Text(text)
+            Text(LocalizedStringKey(text))
                 .font(Fonts.labelBold)
         }
         .padding(4)
-        .background(Color.main.opacity(0.5))
+        .background(Color.invertedMain.opacity(0.3))
         .cornerRadius(12)
     }
 }

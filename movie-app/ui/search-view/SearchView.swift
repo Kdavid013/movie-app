@@ -25,7 +25,7 @@ struct SearchView: View {
                         .foregroundStyle(.invertedMain)
                     )
                     .textFieldStyle(PlainTextFieldStyle())
-                    .font(Fonts.searchText)
+                    .font(Fonts.caption)
                     .foregroundColor(.invertedMain)
                     .onChange(of: viewModel.searchText) {
                         viewModel.startSearch.send(())
@@ -54,8 +54,11 @@ struct SearchView: View {
                     ScrollView{
                         LazyVStack(spacing: LayoutConst.normalPadding){
                             ForEach(viewModel.movies){ movie in
-                                MovieCell(movie: movie)
-                                    .frame(height: 277)
+                                NavigationLink(destination: DetailsView(mediaItem: movie)){
+                                    MovieCell(movie: movie)
+                                        .frame(height: 277)
+                                }
+                                .foregroundColor(.invertedMain)
                             }
                         }
                         .padding(.horizontal, LayoutConst.normalPadding)

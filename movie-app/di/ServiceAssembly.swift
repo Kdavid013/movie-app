@@ -12,7 +12,7 @@ class ServiceAssembly: Assembly {
 
     func assemble(container: Container) {
         container.register(MoyaProvider<MultiTarget>.self) { _ in
-            let configuration = URLSessionConfiguration.default
+            let configuration = URLSessionConfiguration.ephemeral
             configuration.headers = .default
             
             return MoyaProvider<MultiTarget>(
@@ -26,7 +26,7 @@ class ServiceAssembly: Assembly {
                                     print("Response: \(item)")
                                 }
                             },
-                            logOptions: .verbose))
+                            logOptions: [.verbose, .requestBody]))
                 ])
         }.inObjectScope(.container)
         
@@ -37,6 +37,10 @@ class ServiceAssembly: Assembly {
         
         container.register(ReactiveMoviesServiceProtocol.self) { _ in
             return ReactiveMoviesService()
+        }.inObjectScope(.container)
+        
+        container.register(FavoriteMediaStoreProtocol.self) { _ in
+            return FavoriteMediaStore()
         }.inObjectScope(.container)
     }
 }
