@@ -41,5 +41,4 @@ class SearchViewModel:  ObservableObject, ErrorPresentable{
             }
             .store(in: &cancellables)
     }
-
 }

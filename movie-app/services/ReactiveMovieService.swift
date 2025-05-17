@@ -9,21 +9,29 @@ import Foundation
 import Moya
 import InjectPropertyWrapper
 import Combine
+import Alamofire
 
 protocol ReactiveMoviesServiceProtocol {
-//    viszsatérés any publisher, lecsupaszított adat típus
+    //    viszsatérés any publisher, lecsupaszított adat típus
     func fetchGenres(req: FetchGenreRequest) -> AnyPublisher<[Genre], MovieError>
     func fetchTVGenres(req: FetchGenreRequest) -> AnyPublisher<[Genre], MovieError>
     func searchMovies(req: SearchMovieRequest) -> AnyPublisher<[MediaItem], MovieError>
     func fetchMovies(req: FetchMoviesRequest) -> AnyPublisher<[MediaItem], MovieError>
     func fetchSeries(req: FetchMoviesRequest) -> AnyPublisher<[MediaItem], MovieError>
-    func fetchFavorites(req: FetchFavoritesRequest) -> AnyPublisher<[MediaItem], MovieError>
+    func fetchFavorites(req: FetchFavoritesRequest, fromLocal: Bool) -> AnyPublisher<[MediaItem], MovieError>
     func editFavoriteMovie(req: EditFavoriteRequest) -> AnyPublisher<EditFavoritesResult, MovieError>
     func fetchMovieDetail(req: FetchDetailRequest) -> AnyPublisher<MediaItemDetail, MovieError>
     func fetchMovieCredits(req: FetchDetailRequest) -> AnyPublisher<[Contributors], MovieError>
 }
 
 class ReactiveMoviesService: ReactiveMoviesServiceProtocol {
+    
+    @Inject
+    private var store: MediaItemStoreProtocol
+    
+    @Inject
+    private var networkMonitor: NetworkMonitorProtocol
+    
     func fetchSeries(req: FetchMoviesRequest) -> AnyPublisher<[MediaItem], MovieError> {
         requestAndTransform(
             target: MultiTarget(MoviesApi.fetchSeries(req: req)),
@@ -53,7 +61,8 @@ class ReactiveMoviesService: ReactiveMoviesServiceProtocol {
             target: MultiTarget(MoviesApi.editFavoriteMovie(req: req)),
             decodeTo: EditFavoritesResult.self,
             transform: { response in response }
-        )    }
+        )
+    }
     
     func fetchMovies(req: FetchMoviesRequest) -> AnyPublisher<[MediaItem], MovieError> {
         requestAndTransform(
@@ -63,12 +72,29 @@ class ReactiveMoviesService: ReactiveMoviesServiceProtocol {
         )
     }
     
-    func fetchFavorites(req: FetchFavoritesRequest) -> AnyPublisher<[MediaItem], MovieError> {
-        requestAndTransform(
+    func fetchFavorites(req: FetchFavoritesRequest, fromLocal: Bool = false) -> AnyPublisher<[MediaItem], MovieError> {
+        
+        let serviceResponse: AnyPublisher<[MediaItem], MovieError> = self.requestAndTransform(
             target: MultiTarget(MoviesApi.fetchFavorites(req: req)),
             decodeTo: MoviePageResponse.self,
             transform: { $0.results.map(MediaItem.init(dto:)) }
         )
+            .handleEvents(receiveOutput:{ [weak self] mediaItems in
+                self?.store.saveMediaItems(mediaItems)
+            })
+            .eraseToAnyPublisher()
+        
+        let localResponse: AnyPublisher<[MediaItem], MovieError> = store.mediaItems
+        
+        return networkMonitor.isConnected
+            .flatMap{ isconnected -> AnyPublisher<[MediaItem], MovieError> in
+                if isconnected || !fromLocal{
+                    return serviceResponse
+                } else{
+                    return localResponse
+                }
+            }
+            .eraseToAnyPublisher()
     }
     
     @Inject
@@ -129,12 +155,32 @@ class ReactiveMoviesService: ReactiveMoviesServiceProtocol {
                             future(.failure(.unexpectedError))
                         }
                     }
-                case .failure:
-                    future(.failure(.unexpectedError))
+                case .failure(let error):
+                    if error.isNoInternetError {
+                        future(.failure(MovieError.noInternetError))
+                    } else {
+                        future(.failure(MovieError.unexpectedError))
+                    }
                 }
             }
         }
         return future
             .eraseToAnyPublisher()
+    }
+}
+
+extension MoyaError {
+    var isNoInternetError: Bool {
+        if case let .underlying(error, _) = self {
+            // Ha AFError
+            if let afError = error as? AFError {
+                if let urlError = afError.underlyingError as? URLError {
+                    return urlError.code == .notConnectedToInternet
+                } else if let nsError = afError.underlyingError as NSError? {
+                    return nsError.domain == NSURLErrorDomain && nsError.code == NSURLErrorNotConnectedToInternet
+                }
+            }
+        }
+        return false
     }
 }

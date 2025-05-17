@@ -9,17 +9,7 @@ import Foundation
 import Moya
 import InjectPropertyWrapper
 
-struct MovieAPIErrorResponse: Decodable {
-    let statusCode: Int
-    let statusMessage: String
-    let success: Bool
-    
-    enum CodingKeys: String, CodingKey {
-        case statusCode = "status_code"
-        case statusMessage = "status_message"
-        case success = "success"
-    }
-}
+
 
 protocol MovieServiceProtocol {
     func fetchGenres(req: FetchGenreRequest) async throws -> [Genre]

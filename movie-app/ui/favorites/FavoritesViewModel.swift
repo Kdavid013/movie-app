@@ -23,29 +23,12 @@ class FavoritesViewModel: ErrorPresentable, ObservableObject {
     private var favoriteMediaStorage: FavoriteMediaStoreProtocol
     
     init() {
-        
-        favoriteMediaStorage.mediaItems
-            .receive(on: RunLoop.main)
-            .sink { completion in
-                switch completion {
-                case .failure(let error):
-                    self.alertModel = self.toAlertModel(error)
-                case .finished:
-                    break
-                }
-            } receiveValue: { [weak self] MediaItems in
-                self?.movies = MediaItems
-            }
-            .store(in: &cancellables)
-        
         viewLoaded
-            .flatMap { [weak self] _ -> AnyPublisher<[MediaItem], MovieError> in
+            .flatMap { [weak self]_ -> AnyPublisher<[MediaItem], MovieError> in
                 guard let self = self else {
                     preconditionFailure("There is no self")
                 }
-                let request = FetchFavoritesRequest()
-                
-                return service.fetchFavorites(req: request)
+                return self.service.fetchFavorites(req: FetchFavoritesRequest(), fromLocal: true)
             }
             .receive(on: RunLoop.main)
             .sink { completion in
@@ -56,7 +39,7 @@ class FavoritesViewModel: ErrorPresentable, ObservableObject {
                     break
                 }
             } receiveValue: { [weak self]movies in
-                self?.favoriteMediaStorage.addFavoriteMediaItems(movies)
+                self?.movies = movies
             }
             .store(in: &cancellables)
     }
