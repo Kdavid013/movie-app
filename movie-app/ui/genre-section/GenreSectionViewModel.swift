@@ -29,7 +29,7 @@ class GenreSectionViewModel: GenreSectionViewModelProtocol, ErrorViewModelProtoc
     init() {
             let request = FetchGenreRequest()
             
-            let genres = Environment.name == .tv ?
+            let genres = Environments.name == .tv ?
             self.service.fetchTVGenres(req: request):
             self.service.fetchGenres(req: request)
             

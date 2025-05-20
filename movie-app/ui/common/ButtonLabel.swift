@@ -11,36 +11,56 @@ enum ButtonLabelType{
     case outlined
 }
 
+enum ButtonLabelAction{
+    case simple
+    case link(_ url: URL?)
+}
+
 struct ButtonLabel: View{
     
     let style: ButtonLabelType
-    let text: String
-    let action: () -> Void
+    let title: String
+    let action: ButtonLabelAction
     
     var body: some View {
         
-        Button(action: action){
-            Text(LocalizedStringKey(text))
-                .font(Fonts.subheading)
-                .foregroundColor(style == .outlined ? .primary : .main)
-                .padding(.horizontal, LayoutConst.largePadding)
-                .padding(.vertical, 18.5)
-                .background(backgroundView)
-                .clipShape(Capsule())
-                .overlay(
-                    Capsule()
-                        .stroke(Color.primary, style: StrokeStyle(lineWidth: style == .outlined ? 1 : 0))
-                )
-        }
+        baseView
+            .font(Fonts.subheading)
+            .foregroundColor(style == .outlined ? .primary : .main)
+            .padding(.horizontal, LayoutConst.largePadding)
+            .padding(.vertical, 18.5)
+            .background(backgroundView)
+            .clipShape(Capsule())
+            .overlay(
+                Capsule()
+                    .stroke(Color.primary, style: StrokeStyle(lineWidth: style == .outlined ? 1 : 0))
+            )
     }
-    private var backgroundView: some View {
-        switch style {
-        case .filled:
-            return Color.primary
-        case .outlined:
-            return Color.main
+
+@ViewBuilder
+private var baseView: some View {
+    switch action {
+    case .simple:
+        Text(LocalizedStringKey(title))
+    case .link(let url):
+        if let url = url {
+            Link(LocalizedStringKey(title), destination: url)
+        } else {
+            Text(LocalizedStringKey(title))
         }
+        
     }
-    
+}
+
+
+private var backgroundView: some View {
+    switch style {
+    case .filled:
+        return Color.primary
+    case .outlined:
+        return Color.main
+    }
+}
+
 }
 

@@ -14,9 +14,9 @@ struct DetailsView: View {
     let mediaItem: MediaItem
     
     @StateObject private var viewModel = DetailsViewModel()
+    @Environment(\.dismiss) private var dismiss: DismissAction
     
     var body: some View {
-        NavigationView {
             ZStack(alignment: .topTrailing){
                 HStack{
                     Spacer()
@@ -37,27 +37,17 @@ struct DetailsView: View {
                             MovieLabel(type: .captions(viewModel.movie.adult))
                         }
                         HStack{
-                            VStack(alignment: .leading,spacing: 4){
                                 Text(viewModel.movie.genreList)
                                     .font(Fonts.paragraph)
-                                Text(viewModel.movie.title)
-                                    .font(Fonts.detailTitle)
-                            }
                             Spacer()
                         }
-                        HStack(spacing: LayoutConst.normalPadding){
-                            DetailLabel(title: "detail.label.date", desc: viewModel.movie.year)
-                            DetailLabel(title: "detail.label.duration", desc: "\(viewModel.movie.runtime)")
-                            DetailLabel(title: "detail.label.language", desc: viewModel.movie.spokenLanguages)
-                            Spacer()
-                        }
+                        MediaItemHeaderView(title: viewModel.movie.title, year: viewModel.movie.year, runtime: "\(viewModel.movie.runtime)", language: viewModel.movie.spokenLanguages)
                         HStack(spacing: 24){
-                            ButtonLabel(style: .outlined, text: "button.rate.title"){
-                                
+                            NavigationLink(destination: AddReviewView(mediaItemDetail: viewModel.movie)){
+                                ButtonLabel(style: .outlined, title: "button.rate.title", action: .simple)
                             }
-                            ButtonLabel(style: .filled, text: "button.imdb.title"){
-                                
-                            }
+                            
+                            ButtonLabel(style: .filled, title: "button.imdb.title", action: .simple)
                         }
                         VStack(alignment: .leading, spacing: 12){
                             Text(LocalizedStringKey("overview"))
@@ -76,15 +66,11 @@ struct DetailsView: View {
                             //                            ParticipantScrollView(participants: viewModel.cast)
                             SideScrollView(contributors: viewModel.cast)
                         }
-                        
-                        
-                        .padding(.horizontal, LayoutConst.maxPadding)
                         Spacer()
                     }
-                    
+                    .padding(.horizontal, LayoutConst.maxPadding)
                 }
             }
-        }
         .toolbar{
             ToolbarItem(placement: .topBarTrailing){
                 Button(action:{
@@ -102,8 +88,6 @@ struct DetailsView: View {
                             .frame(width: 30)
                         
                     }
-                    
-                    
                 }
             }
         }

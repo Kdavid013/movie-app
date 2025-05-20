@@ -33,7 +33,7 @@ class MovieListViewModel: MovieListViewModelProtocol, ErrorPresentable {
                 }
                 
                 let request = FetchMoviesRequest(genreId: genreId)
-                return Environment.name == .tv ?
+                return Environments.name == .tv ?
                 self.service.fetchSeries(req: request):
                 self.service.fetchMovies(req: request)
             }
