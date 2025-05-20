@@ -53,7 +53,7 @@ struct GenreSectionView: View {
                 }
                 .accessibilityLabel("testCollectionView")
                 .listStyle(.plain)
-                .navigationTitle(Environment.name == .tv ? "TV app":"genreSection.title")
+                .navigationTitle(Environments.name == .tv ? "TV app":"genreSection.title")
                 .background(Color.clear)
                 .padding(.bottom,LayoutConst.largePadding)
             }

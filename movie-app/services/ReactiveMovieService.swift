@@ -30,7 +30,13 @@ class ReactiveMoviesService: ReactiveMoviesServiceProtocol {
     private var store: MediaItemStoreProtocol
     
     @Inject
+    private var detailStore: MediaItemDetailStoreProtocol
+    
+    @Inject
     private var networkMonitor: NetworkMonitorProtocol
+    
+    @Inject
+    private var castMemberStore: CastMemberStoreProtocol
     
     func fetchSeries(req: FetchMoviesRequest) -> AnyPublisher<[MediaItem], MovieError> {
         requestAndTransform(
@@ -41,19 +47,50 @@ class ReactiveMoviesService: ReactiveMoviesServiceProtocol {
     }
     
     func fetchMovieCredits(req: FetchDetailRequest) -> AnyPublisher<[Contributors], MovieError> {
-        requestAndTransform(
-            target: MultiTarget(MoviesApi.fetchMovieCredits(req: req)),
-            decodeTo: ListCastResponse.self,
-            transform: { $0.cast.map(Contributors.init(dto:))}
-        )
-    }
-    
+            
+            return networkMonitor.isConnected
+                .flatMap { isConnected -> AnyPublisher<[Contributors], MovieError> in
+                    if isConnected {
+                        return self.requestAndTransform(
+                            target: MultiTarget(MoviesApi.fetchMovieCredits(req: req)),
+                            decodeTo: ListCastResponse.self,
+                            transform: { dto in
+                                dto.cast.map(Contributors.init(dto:))
+                            }
+                        )
+                        .handleEvents(receiveOutput: { [weak self]castMembers in
+                            self?.castMemberStore.saveCastMembers(castMembers, forMovieId: req.movieId)
+                        })
+                        .eraseToAnyPublisher()
+                    } else {
+                        return self.castMemberStore.getCastMembers(fromMovieId: req.movieId)
+                    }
+                }
+                .eraseToAnyPublisher()
+        }
     func fetchMovieDetail(req: FetchDetailRequest) -> AnyPublisher<MediaItemDetail, MovieError> {
-        requestAndTransform(
+        
+        let serviceResponse : AnyPublisher<MediaItemDetail, MovieError> = requestAndTransform(
             target: MultiTarget(MoviesApi.fetchMovieDetail(req: req)),
             decodeTo: MovieDetailResponse.self,
             transform: { MediaItemDetail(dto: $0)}
         )
+            .handleEvents(receiveOutput:{ [weak self] MediaItemDetail in
+                self?.detailStore.saveMediaItemDetail(MediaItemDetail)
+        })
+        .eraseToAnyPublisher()
+        
+        let localResponse: AnyPublisher<MediaItemDetail, MovieError> = detailStore.getMediaItemDetail(withId: req.movieId)
+        
+        return networkMonitor.isConnected
+            .flatMap{ isconnected -> AnyPublisher<MediaItemDetail, MovieError> in
+                if isconnected {
+                    return serviceResponse
+                } else{
+                    return localResponse
+                }
+            }
+            .eraseToAnyPublisher()
     }
     
     func editFavoriteMovie(req: EditFavoriteRequest) -> AnyPublisher<EditFavoritesResult, MovieError> {

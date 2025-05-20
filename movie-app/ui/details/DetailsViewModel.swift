@@ -11,7 +11,6 @@ import Combine
 
 protocol DetailsViewModelProtocol: ObservableObject {
     var movie: MediaItemDetail { get }
-    
 }
 
 class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
@@ -32,6 +31,9 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
     
     @Inject
     private var favoriteMediaStorage: FavoriteMediaStoreProtocol
+    
+    @Inject
+    private var mediaItemStore: MediaItemStoreProtocol
     
     init() {
         
@@ -84,8 +86,8 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
                 return service.editFavoriteMovie(req: request)
                     .map { result in
                         (result,isFavorite)
-                }
-                .eraseToAnyPublisher()
+                    }
+                    .eraseToAnyPublisher()
             }
             .print("<<< DEBUG: favoriteButtonTapped")
             .sink { [weak self] completion in
@@ -98,7 +100,7 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
                 }
                 if result.success {
                     if isFavorite{
-//                        self.favoriteMediaStorage.addFavoriteMediaItem(withId: self.movie)
+                        //                        self.favoriteMediaStorage.addFavoriteMediaItem(withId: self.movie)
                     } else {
                         self.favoriteMediaStorage.removeFavoriteMediaItem(withId: self.movie.id)
                     }

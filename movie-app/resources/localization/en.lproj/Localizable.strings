@@ -26,3 +26,5 @@
 "overview" = "Synopsis";
 "companies" = "Publisher and companies";
 "cast" = "Cast";
+"review.title" = "Give it a honest review";
+"review.button" = "Send my review";
