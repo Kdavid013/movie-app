@@ -6,6 +6,7 @@
 //
 
 import RealmSwift
+import Foundation
 
 class ProductionCompanyEntity: Object {
     @Persisted var id: Int
@@ -22,6 +23,9 @@ class ProductionCompanyEntity: Object {
     }
 
     var toDomain: Contributors {
-        Contributors(id: id, name: name)
+        Contributors(id: id,
+                     name: name,
+                     imageUrl: logoPath.flatMap(URL.init(string:)) )
     }
 }
+

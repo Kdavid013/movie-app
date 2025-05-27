@@ -47,8 +47,12 @@ class ServiceAssembly: Assembly {
             return MediaItemStore()
         }.inObjectScope(.container)
         
-        container.register(NetworkMonitorProtocol.self) { _ in
+        container.register(NetworkMonitorProtocol.self, name: "default") { _ in
             return NetworkMonitor()
+        }.inObjectScope(.container)
+        
+        container.register(NetworkMonitorProtocol.self, name: "new") { _ in
+            return NewNetworkMonitor()
         }.inObjectScope(.container)
         
         container.register(MediaItemDetailStoreProtocol.self) { _ in

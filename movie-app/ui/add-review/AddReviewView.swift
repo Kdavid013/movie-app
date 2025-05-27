@@ -26,7 +26,9 @@ struct AddReviewView: View {
                 Spacer()
                 VStack(spacing: 72.0){
                     StarRatingView(rating: $viewModel.selectedRating)
-                    ButtonLabel(style: .filled, title: "review.button", action: .simple)
+//                    ButtonLabel(style: .filled, title: "review.button", action:
+//                                
+//                    )
                 }
                 Spacer()
             }

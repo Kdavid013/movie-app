@@ -33,6 +33,13 @@ extension ErrorPresentable {
             )
         case .noInternetError:
             return nil
+            
+        case .serverError:
+            return AlertModel(
+                title: "Server Error",
+                message: error.localizedDescription,
+                dismissButtonTitle: "alert.dismiss.button"
+            )
         default:
             return AlertModel(
                 title: "alert.unexpected.title",
