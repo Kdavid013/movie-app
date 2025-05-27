@@ -16,9 +16,9 @@ struct RootView: View {
         ZStack(alignment: .top) {
             MainTabView(selectedTab: $selectedTab)
 
-            if !viewModel.isConnected {
-                OfflineBannerView()
-            }
+//            if !viewModel.isConnected {
+//                OfflineBannerView()
+//            }
         }
     }
 }

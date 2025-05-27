@@ -11,6 +11,19 @@ import Combine
 
 protocol NetworkMonitorProtocol {
     var isConnected: AnyPublisher<Bool, Never> { get }
+    func networkType() -> String
+}
+class NewNetworkMonitor: NetworkMonitorProtocol {
+    func networkType() -> String {
+        return "networkType"
+    }
+    
+    var isConnected: AnyPublisher<Bool, Never>{
+        Just(false)
+            .eraseToAnyPublisher()
+    }
+    
+    
 }
 
 class NetworkMonitor: NetworkMonitorProtocol {
@@ -44,6 +57,10 @@ class NetworkMonitor: NetworkMonitorProtocol {
         } catch {
             print("Unable to start notifier")
         }
-
+        print("<<<<",self)
+    }
+    
+    func networkType() -> String {
+        return reachability.connection.description
     }
 }

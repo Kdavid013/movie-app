@@ -18,6 +18,7 @@ enum MoviesApi {
     case editFavoriteMovie(req: EditFavoriteRequest)
     case fetchMovieDetail(req: FetchDetailRequest)
     case fetchMovieCredits(req: FetchDetailRequest)
+    case addReview(req: AddReviewRequest)
 }
 
 extension MoviesApi: TargetType {
@@ -49,6 +50,8 @@ extension MoviesApi: TargetType {
             return "/movie/\(req.movieId)"
         case let .fetchMovieCredits(req:  req):
             return "/movie/\(req.movieId)/credits"
+        case let .addReview(req: req):
+            return "account/\(req.mediaId)/rating"
         }
     }
     
@@ -56,7 +59,7 @@ extension MoviesApi: TargetType {
         switch self{
         case .fetchGenres, .fetchTVGenres,.fetchMovies, .searchMovies, .fetchFavorites, .fetchSeries, .fetchMovieDetail, .fetchMovieCredits:
             return .get
-        case .editFavoriteMovie:
+        case .editFavoriteMovie,.addReview:
             return .post
         }
     }
@@ -84,6 +87,10 @@ extension MoviesApi: TargetType {
             return .requestParameters(parameters: req.asRequestParams(), encoding: URLEncoding.queryString)
         case let .fetchMovieCredits(req):
             return .requestParameters(parameters: req.asRequestParams(), encoding: URLEncoding.queryString)
+        case let .addReview(req):
+//            return .requestParameters(parameters: req.asRequestParams(), encoding: URLEncoding.queryString)
+            let request = AddReviewRequest(mediaId: req.mediaId, rating: req.rating)
+                       return .requestJSONEncodable(request)
         }
         
     }
@@ -109,7 +116,8 @@ extension MoviesApi: TargetType {
             return ["Authorization": req.accessToken]
         case let .fetchMovieCredits(req):
             return ["Authorization": req.accessToken]
-
+        case let .addReview(req):
+            return ["Authorization": req.accessToken]
         }
     }
 }

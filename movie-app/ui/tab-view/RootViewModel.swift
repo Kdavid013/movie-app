@@ -11,7 +11,7 @@ import Combine
 
 class RootViewModel: ObservableObject {
     
-    @Inject
+    @Inject(name: "default")
     private var networkMonitor: NetworkMonitorProtocol
     
     @Published var isConnected: Bool = true
@@ -24,5 +24,6 @@ class RootViewModel: ObservableObject {
                 self?.isConnected = isConnected
             })
             .store(in: &cancellables)
+        
     }
 }
