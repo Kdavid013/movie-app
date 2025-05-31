@@ -29,7 +29,7 @@
 "review.title" = "Give it a honest review";
 "review.button" = "Send my review";
 "settings.title" = "Settings";
-"choose.language" = "Choose a language";
+"settings.chooseLanguage" = "Choose a language";
 "settings.lang.english" = "English";
 "settings.lang.german" = "Deutsche";
 "settings.lang.hungarian" = "Hungarian";

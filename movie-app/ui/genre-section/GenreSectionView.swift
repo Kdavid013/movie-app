@@ -32,7 +32,9 @@ struct GenreSectionView: View {
                             EmptyView()
                         }
                         .opacity(0)
-                        let mediaItems = viewModel.mediaItemsByGenre[genre.id] ?? []
+                        
+                        let mediaItems = viewModel.getMediaItemsByGenre(genre.id)
+                        
                         MediaItemListByGenre(genre: genre, mediaItems: mediaItems)
                             .onAppear {
                                 if viewModel.mediaItemsByGenre[genre.id] == nil {

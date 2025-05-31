@@ -12,7 +12,7 @@ struct TabBarItemView: View {
     var icon: TabIcon
     
     var body: some View {
-        let tabColor = icon.tab == selectedTab ? Color.tabBarBackground : .white
+        let tabColor = icon.tab == selectedTab ? Color.invertedMain : .white
         let borderColor = icon.tab == selectedTab ? .white : Color.tabBarBackground
         
         HStack {

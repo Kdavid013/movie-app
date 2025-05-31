@@ -54,6 +54,7 @@ class GenreSectionUseCaseImpl: GenreSectionUseCase {
     func loadMediaItems(genreId: Int) -> AnyPublisher<[MediaItem], MovieError> {
         
         let request = FetchMoviesRequest(genreId: genreId)
+        
         return Environments.name == .tv ?
         self.repository.fetchSeries(req: request):
         self.repository.fetchMovies(req: request)

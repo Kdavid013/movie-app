@@ -19,7 +19,7 @@ protocol GenreSectionViewModel: ObservableObject {
 
 class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, ErrorPresentable{
     @Published var genres: [Genre] = []
-    @Published var mediaItemsByGenre: [Int:[MediaItem]] = [:]
+    @Published var mediaItemsByGenre: [Int: [MediaItem]] = [:]
     @Published var alertModel: AlertModel? = nil
     
     private var cancellables = Set<AnyCancellable>()
@@ -65,21 +65,28 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
     
     func loadMediaItems(genreId: Int) {
     
+        
+        
         useCase.loadMediaItems(genreId: genreId)
-            .map({genres in
-            Array(genres.prefix(5))
+            .delay(for: .seconds(3), scheduler: RunLoop.main)
+            .map({mediaItems in
+            Array(mediaItems.prefix(5))
         })
             .sink { completion in
                 if case let .failure(error) = completion {
                     self.alertModel = self.toAlertModel(error)
                 }
-            } receiveValue: { mediaItem in
-                self.mediaItemsByGenre[genreId] = mediaItem
+            } receiveValue: { mediaItems in
+                self.mediaItemsByGenre[genreId] = mediaItems
             }
             .store(in: &cancellables)
     }
     
     func genreAppeared() {
         useCase.genresAppeared()
+    }
+    
+    func getMediaItemsByGenre(_ genreId: Int) -> [MediaItem] {
+        return self.mediaItemsByGenre[genreId] ?? Array(repeating: MediaItem(), count: 5)
     }
 }

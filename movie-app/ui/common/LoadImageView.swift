@@ -19,7 +19,7 @@ struct LoadImageView: View {
         } placeholder: {
             ZStack{
                 Color.gray.opacity(0.3)
-                ProgressView()
+//                ProgressView()
             }
         }
     }
