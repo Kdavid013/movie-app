@@ -11,7 +11,7 @@ import InjectPropertyWrapper
 import Combine
 import Alamofire
 
-protocol ReactiveMoviesServiceProtocol {
+protocol MovieRepository {
     //    viszsatérés any publisher, lecsupaszított adat típus
     func fetchGenres(req: FetchGenreRequest) -> AnyPublisher<[Genre], MovieError>
     func fetchTVGenres(req: FetchGenreRequest) -> AnyPublisher<[Genre], MovieError>
@@ -25,7 +25,7 @@ protocol ReactiveMoviesServiceProtocol {
     func addReview(req: AddReviewRequest) -> AnyPublisher<ModifyMediaResult, MovieError>
 }
 
-class ReactiveMoviesService: ReactiveMoviesServiceProtocol {
+class MovieRepositoryImpl: MovieRepository {
     
     @Inject
     private var store: MediaItemStoreProtocol
@@ -200,7 +200,8 @@ class ReactiveMoviesService: ReactiveMoviesServiceProtocol {
                     default:
                         if let apiError = try? JSONDecoder().decode(MovieAPIErrorResponse.self, from: response.data) {
                             if apiError.statusCode == 7 {
-                                future(.failure(.invalidApiKeyError(message: apiError.statusMessage)))
+                                future(.failure(.invalidApiKeyError(
+                                    message: apiError.statusMessage)))
                             } else {
                                 future(.failure(.unexpectedError))
                             }

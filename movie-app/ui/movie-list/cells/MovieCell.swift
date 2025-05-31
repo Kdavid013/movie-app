@@ -12,8 +12,6 @@ struct MovieCell: View {
     
     var body: some View {
         ZStack{
-            
-            
             VStack(alignment: .leading, spacing: 8) {
                 ZStack(alignment: .topLeading) {
                     HStack(alignment: .center) {

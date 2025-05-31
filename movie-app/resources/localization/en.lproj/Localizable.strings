@@ -28,3 +28,12 @@
 "cast" = "Cast";
 "review.title" = "Give it a honest review";
 "review.button" = "Send my review";
+"settings.title" = "Settings";
+"choose.language" = "Choose a language";
+"settings.lang.english" = "English";
+"settings.lang.german" = "Deutsche";
+"settings.lang.hungarian" = "Hungarian";
+"settings.chooseTheme" = "Choose the dark or light side";
+"settings.theme.light" = "Light mode";
+"settings.theme.dark" = "Dark mode";
+

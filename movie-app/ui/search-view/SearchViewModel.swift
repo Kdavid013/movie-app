@@ -22,7 +22,7 @@ class SearchViewModel:  ObservableObject, ErrorPresentable{
     
     @Published var alertModel: AlertModel? = nil
     @Inject
-    private var service: ReactiveMoviesServiceProtocol
+    private var repository: MovieRepository
     private var cancellables = Set<AnyCancellable>()
     
     init(){
@@ -30,7 +30,7 @@ class SearchViewModel:  ObservableObject, ErrorPresentable{
             .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
             .flatMap{ _ -> AnyPublisher<[MediaItem], MovieError> in
                 let request = SearchMovieRequest(query: self.searchText)
-                return self.service.searchMovies(req: request)
+                return self.repository.searchMovies(req: request)
             }
             .sink { completion in
                 if case let .failure(error) = completion {
