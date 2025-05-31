@@ -25,3 +25,14 @@
 "overview" = "Összefoglaló";
 "companies" = "Kiadó és gyártó";
 "cast" = "Szereplők";
+"review.title" = "Add meg a véleményed";
+"review.button" = "Értékelés küldése";
+"settings.title" = "Beállítások";
+"choose.language" = "Válassz egy nyelvet";
+"settings.lang.english" = "Angol";
+"settings.lang.german" = "Német";
+"settings.lang.hungarian" = "Magyar";
+"settings.chooseTheme" = "Válasz a sötét vagy világos oldalt";
+"settings.chooseTheme" = "Világos mód";
+"dettings.theme.dark" = "Sötét mód";
+

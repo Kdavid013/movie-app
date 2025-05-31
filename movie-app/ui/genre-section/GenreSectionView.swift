@@ -12,7 +12,7 @@ import InjectPropertyWrapper
 struct GenreSectionView: View {
     
     @StateObject
-    private var viewModel = GenreSectionViewModel()
+    private var viewModel = GenreSectionViewModelImpl()
     
     var body: some View {
         
@@ -32,23 +32,17 @@ struct GenreSectionView: View {
                             EmptyView()
                         }
                         .opacity(0)
-                        GenreSectionCell(genre: genre)
+                        let mediaItems = viewModel.mediaItemsByGenre[genre.id] ?? []
+                        MediaItemListByGenre(genre: genre, mediaItems: mediaItems)
+                            .onAppear {
+                                if viewModel.mediaItemsByGenre[genre.id] == nil {
+                                    viewModel.loadMediaItems(genreId: genre.id)
+                                }
+                            }
                     }
                     .background(Color.clear)
                     .listRowBackground(Color.clear)
                     .listRowSeparator(.hidden)
-                    ScrollView(.horizontal, showsIndicators: false){
-                        HStack(spacing: 20) {
-                            ForEach(0..<10) {
-                                Text("Item \($0)")
-                                    .foregroundStyle(.white)
-                                    .font(.largeTitle)
-                                    .frame(width: 150, height: 150)
-                                    .background(.gray)
-                            }
-                        }
-                    }
-                    .listRowBackground(Color.clear)
                     
                 }
                 .accessibilityLabel("testCollectionView")
@@ -60,6 +54,10 @@ struct GenreSectionView: View {
             .listStyle(.plain)
         }
         .showAlert(model: $viewModel.alertModel)
+        .onAppear{
+            viewModel.loadGenres()
+            viewModel.genreAppeared()
+        }
     }
 }
 

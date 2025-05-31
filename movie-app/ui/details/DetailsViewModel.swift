@@ -27,7 +27,7 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
     private var cancellables = Set<AnyCancellable>()
     
     @Inject
-    private var service: ReactiveMoviesServiceProtocol
+    private var repository: MovieRepository
     
     @Inject
     private var favoriteMediaStorage: FavoriteMediaStoreProtocol
@@ -45,7 +45,7 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
                 }
                 
                 let requset = FetchDetailRequest(movieId: movieId)
-                return self.service.fetchMovieDetail(req: requset)
+                return self.repository.fetchMovieDetail(req: requset)
             }
         
         let cast = movieIdSubject
@@ -55,7 +55,7 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
                 }
                 
                 let requset = FetchDetailRequest(movieId: movieId)
-                return self.service.fetchMovieCredits(req: requset)
+                return self.repository.fetchMovieCredits(req: requset)
             }
         
         //
@@ -83,7 +83,7 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
                 }
                 let isFavorite = self.isFavorite
                 let request = EditFavoriteRequest(movieId: self.movie.id, isFavorite:  isFavorite)
-                return service.editFavoriteMovie(req: request)
+                return repository.editFavoriteMovie(req: request)
                     .map { result in
                         (result,isFavorite)
                     }

@@ -35,6 +35,7 @@ struct ButtonLabel: View{
                 Capsule()
                     .stroke(Color.primary, style: StrokeStyle(lineWidth: style == .outlined ? 1 : 0))
             )
+//            .frame(maxWidth: .infinity)
     }
 
 @ViewBuilder
