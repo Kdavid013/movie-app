@@ -34,14 +34,22 @@ struct MovieListView: View {
                 ForEach(viewModel.movies) { movie in
                     NavigationLink(destination: DetailsView(mediaItem: movie)){
                         MovieCell(movie: movie)
+                            .onAppear {
+                                if viewModel.movies.last?.id == movie.id {
+                                    viewModel.genreIdSubject.send(genre.id)
+                                }
+                            }
                     }
                     .buttonStyle(PlainButtonStyle())
                 }
             }
             .padding(.horizontal, LayoutConst.normalPadding)
             .padding(.top, LayoutConst.normalPadding)
+            
+            if viewModel.isLoading{
+                ProgressView()
+            }
         }
-        
         .navigationTitle(genre.name)
         .onAppear {
             viewModel.genreIdSubject.send(genre.id)

@@ -69,8 +69,8 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
         
         useCase.loadMediaItems(genreId: genreId)
             .delay(for: .seconds(3), scheduler: RunLoop.main)
-            .map({mediaItems in
-            Array(mediaItems.prefix(5))
+            .map({mediaItemPage in
+                Array(mediaItemPage.mediaItems.prefix(5))
         })
             .sink { completion in
                 if case let .failure(error) = completion {
