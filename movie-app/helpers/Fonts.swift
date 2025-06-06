@@ -17,5 +17,5 @@ enum Fonts {
     static let emptyStateText = Font.custom("Raleway-Medium", size: 24)
     static let detailTitle = Font.custom("Raleway-ExtraBold", size: 36)
     static let detailsButton = Font.custom("Lato-Regular", size: 16)
-    
+    static let paragraphList = Font.custom("Lato-Regular", size: 8)
 }

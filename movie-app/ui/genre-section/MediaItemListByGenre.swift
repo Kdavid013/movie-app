@@ -12,12 +12,14 @@ struct MediaItemListByGenre: View {
     
     let genre: Genre
     let mediaItems: [MediaItem]
+    @State
+    var onScreen: [Int] = []
     
     var body: some View {
         VStack{
             GenreSectionCell(genre: genre)
             ScrollView(.horizontal){
-                HStack(spacing: 20) {
+                LazyHStack(spacing: 20) {
                     ForEach(mediaItems) {mediaItem in
                         NavigationLink(destination: DetailsView(mediaItem: mediaItem)) {
                             if (mediaItem.id == 0){
@@ -30,7 +32,6 @@ struct MediaItemListByGenre: View {
                             }
                         }
                         .buttonStyle(PlainButtonStyle())
-                        
                     }
                 }
             }

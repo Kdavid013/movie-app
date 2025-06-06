@@ -23,6 +23,7 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
     @Published var alertModel: AlertModel? = nil
     
     private var cancellables = Set<AnyCancellable>()
+    @Published var motdMovie: MediaItemDetail?
     
     @Inject
     var repository: MovieRepository
@@ -65,19 +66,33 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
     
     func loadMediaItems(genreId: Int) {
     
-        
-        
         useCase.loadMediaItems(genreId: genreId)
-            .delay(for: .seconds(3), scheduler: RunLoop.main)
-            .map({mediaItemPage in
-                Array(mediaItemPage.mediaItems.prefix(5))
-        })
+//            .delay(for: .seconds(3), scheduler: RunLoop.main)
+//            .map({mediaItemPage in
+//                Array(arrayLiteral: mediaItemPage.mediaItems.prefix(5))
+//        })
             .sink { completion in
                 if case let .failure(error) = completion {
                     self.alertModel = self.toAlertModel(error)
                 }
-            } receiveValue: { mediaItems in
-                self.mediaItemsByGenre[genreId] = mediaItems
+            } receiveValue: { mediaItemPage in
+                self.mediaItemsByGenre[genreId] = mediaItemPage.mediaItems
+                
+                if self.motdMovie == nil, let randomMovie = mediaItemPage.mediaItems.randomElement() {
+                    self.loadMotdMovie(movie: randomMovie)
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    func loadMotdMovie(movie: MediaItem){
+        useCase.loadMotdMovie(movie: movie)
+            .sink{ completion in
+                if case let .failure(error) = completion {
+                    self.alertModel = self.toAlertModel(error)
+                }
+            } receiveValue: { motdMovie in
+                self.motdMovie = motdMovie
             }
             .store(in: &cancellables)
     }

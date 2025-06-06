@@ -15,7 +15,6 @@ struct GenreSectionView: View {
     private var viewModel = GenreSectionViewModelImpl()
     
     var body: some View {
-        
         NavigationView {
             ZStack(alignment: .topTrailing){
                 HStack{
@@ -26,31 +25,37 @@ struct GenreSectionView: View {
                         Spacer()
                     }
                 }
-                List(viewModel.genres){ genre in
-                    ZStack{
-                        NavigationLink(destination: MovieListView(genre: genre)){
-                            EmptyView()
+                List{
+                    HStack{
+                        if let motd = viewModel.motdMovie {
+                            GenreMotdCell(mediaItem: motd)
                         }
-                        .opacity(0)
-                        
-                        let mediaItems = viewModel.getMediaItemsByGenre(genre.id)
-                        
-                        MediaItemListByGenre(genre: genre, mediaItems: mediaItems)
-                            .onAppear {
-                                if viewModel.mediaItemsByGenre[genre.id] == nil {
-                                    viewModel.loadMediaItems(genreId: genre.id)
-                                }
-                            }
                     }
-                    .background(Color.clear)
                     .listRowBackground(Color.clear)
                     .listRowSeparator(.hidden)
                     
+                    ForEach(viewModel.genres){ genre in
+                        ZStack{
+                            NavigationLink(destination: MovieListView(genre: genre)){
+                                EmptyView()
+                            }
+                            .opacity(0)
+                            
+                            let mediaItems = viewModel.getMediaItemsByGenre(genre.id)
+                            
+                            MediaItemListByGenre(genre: genre, mediaItems: mediaItems)
+                                .onAppear {
+                                    if viewModel.mediaItemsByGenre[genre.id] == nil {
+                                        viewModel.loadMediaItems(genreId: genre.id)
+                                    }
+                                }
+                        }
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                    }
                 }
                 .accessibilityLabel("testCollectionView")
-                .listStyle(.plain)
                 .navigationTitle(Environments.name == .tv ? "TV app":"genreSection.title")
-                .background(Color.clear)
                 .padding(.bottom,LayoutConst.largePadding)
             }
             .listStyle(.plain)
