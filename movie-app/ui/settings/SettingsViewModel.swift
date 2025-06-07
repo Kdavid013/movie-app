@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
 
 protocol SettingsViewModelProtocol: ObservableObject {
     
@@ -14,31 +13,28 @@ protocol SettingsViewModelProtocol: ObservableObject {
 
 class SettingsViewModel: SettingsViewModelProtocol {
 //    @Published var selectedLanguage: String = Bundle.getLangCode()
-    @Published var selectedTheme: ColorScheme = .light
     
-    @AppStorage("color-scheme") var colorSchemeRawValue: String = "light"
+    private let themeKey = "color-scheme"
+    
+    @Published var selectedTheme: Theme{
+        didSet {
+            UserDefaults.standard.set(selectedTheme.rawValue, forKey: themeKey)
+        }
+    }
     
     init(){
-        self.selectedTheme = ColorScheme(colorSchemeRawValue)
+        let storedTheme = UserDefaults.standard.string(forKey: themeKey)
+        self.selectedTheme = Theme(rawValue: storedTheme ?? "") ?? .light
     }
     
     func changeSelectedLanguage(_ language: String) {
 //        self.selectedLanguage = language
+        
         Bundle.setLanguage(lang: language)
     }
     
-    func changeTheme(_ theme: ColorScheme) {
+    func changeTheme(_ theme: Theme) {
         self.selectedTheme = theme
-        colorSchemeRawValue = theme == .dark ? "dark" : "light"
     }
 
-}
-extension ColorScheme {
-    var RawValue: String {
-        self == .dark ? "dark" : "light"
-    }
-    
-    init (_ rawValue: String) {
-        self = rawValue == "dark" ? .dark : .light
-    }
 }

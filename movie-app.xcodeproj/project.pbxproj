@@ -12,6 +12,8 @@
 		4A2D52122DD89C5500857D00 /* Reachability in Frameworks */ = {isa = PBXBuildFile; productRef = 4A2D52112DD89C5500857D00 /* Reachability */; };
 		4A537E132DB7B49D0013C5D7 /* Nimble in Frameworks */ = {isa = PBXBuildFile; productRef = 4A537E122DB7B49D0013C5D7 /* Nimble */; };
 		4A537E162DB7B4B70013C5D7 /* Quick in Frameworks */ = {isa = PBXBuildFile; productRef = 4A537E152DB7B4B70013C5D7 /* Quick */; };
+		4ADC98202DEAF69A002735C4 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 4ADC981F2DEAF69A002735C4 /* Lottie */; };
+		4ADC98312DEB1A0C002735C4 /* Shimmer in Frameworks */ = {isa = PBXBuildFile; productRef = 4ADC98302DEB1A0C002735C4 /* Shimmer */; };
 		4AF60ABC2DAA65DF0099935A /* CombineMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 4AF60ABB2DAA65DF0099935A /* CombineMoya */; };
 		4AF60ABE2DAA65DF0099935A /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 4AF60ABD2DAA65DF0099935A /* Moya */; };
 		4AF60BFE2DAE85520099935A /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 4AF60BFD2DAE85520099935A /* Swinject */; };
@@ -97,10 +99,12 @@
 				4A2D520D2DD8982200857D00 /* SDWebImageSwiftUI in Frameworks */,
 				4A2D52122DD89C5500857D00 /* Reachability in Frameworks */,
 				4AF60C012DAE857B0099935A /* InjectPropertyWrapper in Frameworks */,
+				4ADC98312DEB1A0C002735C4 /* Shimmer in Frameworks */,
 				4AF60ABE2DAA65DF0099935A /* Moya in Frameworks */,
 				4AF60ABC2DAA65DF0099935A /* CombineMoya in Frameworks */,
 				4A2D52012DD87F6700857D00 /* RealmSwift in Frameworks */,
 				4AF60BFE2DAE85520099935A /* Swinject in Frameworks */,
+				4ADC98202DEAF69A002735C4 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,6 +207,8 @@
 				4A2D52002DD87F6700857D00 /* RealmSwift */,
 				4A2D520C2DD8982200857D00 /* SDWebImageSwiftUI */,
 				4A2D52112DD89C5500857D00 /* Reachability */,
+				4ADC981F2DEAF69A002735C4 /* Lottie */,
+				4ADC98302DEB1A0C002735C4 /* Shimmer */,
 			);
 			productName = "movie-app";
 			productReference = 4AA4088F2DA53D56003FF56D /* movie-app.app */;
@@ -250,6 +256,8 @@
 				4A2D51FF2DD87F6700857D00 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				4A2D520B2DD8982200857D00 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				4A2D52102DD89C5500857D00 /* XCRemoteSwiftPackageReference "Reachability" */,
+				4ADC981E2DEAF69A002735C4 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				4ADC982F2DEB1A0C002735C4 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4AA408902DA53D56003FF56D /* Products */;
@@ -1806,6 +1814,22 @@
 				kind = branch;
 			};
 		};
+		4ADC981E2DEAF69A002735C4 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.5.2;
+			};
+		};
+		4ADC982F2DEB1A0C002735C4 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/markiv/SwiftUI-Shimmer";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.1;
+			};
+		};
 		4AF60ABA2DAA65DF0099935A /* XCRemoteSwiftPackageReference "Moya" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Moya/Moya.git";
@@ -1857,6 +1881,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4A537E142DB7B4B70013C5D7 /* XCRemoteSwiftPackageReference "Quick" */;
 			productName = Quick;
+		};
+		4ADC981F2DEAF69A002735C4 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4ADC981E2DEAF69A002735C4 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
+		4ADC98302DEB1A0C002735C4 /* Shimmer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4ADC982F2DEB1A0C002735C4 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */;
+			productName = Shimmer;
 		};
 		4AF60ABB2DAA65DF0099935A /* CombineMoya */ = {
 			isa = XCSwiftPackageProductDependency;

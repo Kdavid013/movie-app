@@ -13,6 +13,9 @@ struct SearchView: View {
     @StateObject
     private var viewModel = SearchViewModel()
     
+    @State
+    private var isAnimated: [Int] = []
+    
     var body: some View {
         NavigationView{
             VStack{
@@ -53,10 +56,18 @@ struct SearchView: View {
                 }else{
                     ScrollView{
                         LazyVStack(spacing: LayoutConst.normalPadding){
-                            ForEach(viewModel.movies){ movie in
+                            ForEach(Array(viewModel.movies.enumerated()), id: \.1.id){ index, movie in
                                 NavigationLink(destination: DetailsView(mediaItem: movie)){
                                     MovieCell(movie: movie)
                                         .frame(height: 277)
+                                        .offset(x: isAnimated.contains(movie.id) ? 0 : 200 )
+                                        .opacity(isAnimated.contains(movie.id) ? 1 : 0)
+                                        .onAppear {
+                                            withAnimation(.easeInOut(duration: 0.5).delay(Double(index) * 0.02)){
+                                                isAnimated.append(movie.id)
+                                            }
+                                        }
+                                        
                                 }
                                 .foregroundColor(.invertedMain)
                             }
@@ -64,6 +75,7 @@ struct SearchView: View {
                         .padding(.horizontal, LayoutConst.normalPadding)
                         .padding(.top, LayoutConst.normalPadding)
                     }
+                    
                 }
             }
         }

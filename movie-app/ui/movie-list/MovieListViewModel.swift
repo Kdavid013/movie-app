@@ -15,6 +15,10 @@ protocol MovieListViewModelProtocol: ObservableObject{
 class MovieListViewModel: MovieListViewModelProtocol, ErrorPresentable {
     
     @Published var movies: [MediaItem] = []
+    @Published var isLoading: Bool = false
+    
+    var actualPage: Int = 0
+    var totalPages: Int = 500
     
     @Published var alertModel: AlertModel? = nil
     
@@ -27,22 +31,35 @@ class MovieListViewModel: MovieListViewModelProtocol, ErrorPresentable {
     init(){
         
         genreIdSubject
-            .flatMap { [weak self] genreId -> AnyPublisher<[MediaItem], MovieError> in
+            .filter{[weak self] _ in
                 guard let self = self else {
                     preconditionFailure("There is no self")
                 }
-                
-                let request = FetchMoviesRequest(genreId: genreId)
-                return Environments.name == .tv ?
-                self.repository.fetchSeries(req: request):
-                self.repository.fetchMovies(req: request)
+                return self.actualPage < self.totalPages
             }
-            .sink { completion in
-                if case let .failure(error) = completion {
-                    self.alertModel = self.toAlertModel(error)
+            .handleEvents(receiveOutput:{ [weak self]_ in
+                self?.isLoading = true
+                self?.actualPage += 1
+            })
+            .flatMap { [weak self] genreId -> AnyPublisher<MediaItemPage, MovieError> in
+                guard let self = self else {
+                    preconditionFailure("There is no self")
                 }
-            } receiveValue: {[weak self] movies in
-                self?.movies = movies
+                let request = FetchMoviesRequest(genreId: genreId, page: actualPage)
+                return self.repository.fetchMovies(req: request)
+            }
+            .delay(for: .seconds(2), scheduler: RunLoop.main)
+            .sink { [weak self] completion in
+                if case let .failure(error) = completion {
+                    self?.alertModel = self?.toAlertModel(error)
+                    self?.isLoading = false
+                }
+            } receiveValue: {[weak self] mediaItemPage in
+                if mediaItemPage.totalPages < 500 {
+                    self?.totalPages = mediaItemPage.totalPages
+                }
+                self?.movies.append(contentsOf: mediaItemPage.mediaItems)
+                self?.isLoading = false
             }
             .store(in: &cancellables)
     }

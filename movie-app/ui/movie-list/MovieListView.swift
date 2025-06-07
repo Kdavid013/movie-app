@@ -16,6 +16,8 @@ struct MovieListView: View {
     @StateObject private var viewModel = MovieListViewModel()
     //    csak genreval fog tud dolgozni
     
+    @State
+    private var isAnimated: [Int] = []
     
     let columns = [
         GridItem(.flexible(), spacing: 16),
@@ -31,19 +33,38 @@ struct MovieListView: View {
             //            pár cellát tart mindig a memóriába, csak annyit amennyi a képernyőn látszik
             //            columns - array amibe grid itemek kerülnek
             LazyVGrid(columns: columns, spacing: 24) {
-                ForEach(viewModel.movies) { movie in
+                ForEach(Array(viewModel.movies.enumerated()), id: \.1.id ) {index, movie in
                     NavigationLink(destination: DetailsView(mediaItem: movie)){
                         MovieCell(movie: movie)
+                            .offset(y: isAnimated.contains(movie.id) ? 0 : 200 )
+                            .opacity(isAnimated.contains(movie.id) ? 1 : 0)
+                            .onAppear {
+                                if viewModel.movies.last?.id == movie.id {
+                                    viewModel.genreIdSubject.send(genre.id)
+                                }
+                                withAnimation(.easeInOut(duration: 0.5).delay(Double(index) * 0.001)){
+                                    isAnimated.append(movie.id)
+                                }
+                            }
                     }
                     .buttonStyle(PlainButtonStyle())
                 }
             }
             .padding(.horizontal, LayoutConst.normalPadding)
             .padding(.top, LayoutConst.normalPadding)
+            
+            if viewModel.isLoading{
+                ProgressView()
+            }
         }
-        
         .navigationTitle(genre.name)
         .onAppear {
+            viewModel.genreIdSubject.send(genre.id)
+        }
+        .refreshable {
+            isAnimated = []
+            viewModel.movies.removeAll()
+            viewModel.actualPage = 0
             viewModel.genreIdSubject.send(genre.id)
         }
     }

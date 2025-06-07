@@ -48,14 +48,14 @@ struct SettingsView: View {
                     .font(Fonts.subheading)
                     .padding(.bottom, LayoutConst.maxPadding)
                 HStack(spacing: 12) {
-                    ButtonLabel(style: selectedTheme == "light" ? .filled : .outlined, title: "settings.theme.light", action: .simple)
+                    ButtonLabel(style: viewModel.selectedTheme == .light ? .filled : .outlined, title: "settings.theme.light", action: .simple)
                         .font(Fonts.detailsButton)
                         .lineLimit(1)
                         .frame(maxWidth: .infinity)
                         .onTapGesture {
                             viewModel.changeTheme(.light)
                         }
-                    ButtonLabel(style: selectedTheme == "dark" ? .filled : .outlined, title: "settings.theme.dark", action: .simple)
+                    ButtonLabel(style: viewModel.selectedTheme == .dark ? .filled : .outlined, title: "settings.theme.dark", action: .simple)
                         .font(Fonts.detailsButton)
                         .lineLimit(1)
                         .frame(maxWidth: .infinity)
