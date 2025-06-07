@@ -6,32 +6,42 @@
 //
 
 import SwiftUI
+import Shimmer
 
 struct GenreMotdCell: View {
-    let mediaItem: MediaItemDetail
+    
+    let mediaItems: [MediaItemDetail]
+    var onScreenIndex: Int
     
     var body: some View {
-        ZStack(alignment: .bottomLeading) {
-            LoadImageView(url: mediaItem.imageUrl)
-                .frame(width: 370, height: 185)
-                .cornerRadius(12)
-            
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(mediaItem.genreList)
-                        .font(Fonts.paragraphList)
-                    Text(mediaItem.title)
-                        .font(Fonts.title)
-                }
-                .padding(LayoutConst.normalPadding)
+        if mediaItems.indices.contains(onScreenIndex) {
+            ZStack(alignment: .bottomLeading) {
+                LoadImageView(url: mediaItems[onScreenIndex].imageUrl)
+                    .frame(width: 370, height: 185)
+                    .cornerRadius(12)
                 
-                Spacer()
-                
-                Image(.playButton)
-                    .frame(width: 48, height: 48)
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(mediaItems[onScreenIndex].genreList)
+                            .font(Fonts.paragraphList)
+                        Text(mediaItems[onScreenIndex].title)
+                            .font(Fonts.title)
+                    }
                     .padding(LayoutConst.normalPadding)
+                    
+                    Spacer()
+                    
+                    Image(.playButton)
+                        .frame(width: 48, height: 48)
+                        .padding(LayoutConst.normalPadding)
+                }
             }
+            .padding(LayoutConst.maxPadding)
+        } else {
+            Rectangle()
+                .frame(width: 370, height: 185)
+                .shimmering()
         }
-        .padding(LayoutConst.maxPadding)
+        
     }
 }

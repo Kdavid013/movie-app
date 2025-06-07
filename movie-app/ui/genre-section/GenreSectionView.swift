@@ -27,8 +27,9 @@ struct GenreSectionView: View {
                 }
                 List{
                     HStack{
-                        if let motd = viewModel.motdMovie {
-                            GenreMotdCell(mediaItem: motd)
+                        if let motd = viewModel.motdMovies {
+                            GenreMotdCell(mediaItems: motd, onScreenIndex: viewModel.onScreenIndex)
+                                .animation(.spring(response: 1))
                         }
                     }
                     .listRowBackground(Color.clear)
@@ -64,6 +65,7 @@ struct GenreSectionView: View {
         .onAppear{
             viewModel.loadGenres()
             viewModel.genreAppeared()
+            
         }
     }
 }

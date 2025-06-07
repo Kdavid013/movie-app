@@ -7,11 +7,12 @@
 
 struct FetchMoviesRequest {
     let accessToken: String = Config.bearerToken
-    let genreId: Int
+    let genreId: Int?
     let page: Int
     
     func asRequestParams() -> [String: Any] {
-        return ["with_genres": genreId,
+        return ["with_genres": genreId ?? "",
                 "page": page]
-    }
+                }
 }
+

@@ -13,11 +13,12 @@ protocol GenreSectionUseCase {
     func loadGenres() -> AnyPublisher<[Genre], MovieError>
     var showAppearPopup: AnyPublisher<Bool, Never> { get }
     func genresAppeared()
-    func loadMediaItems(genreId: Int) -> AnyPublisher<MediaItemPage, MovieError>
+    func loadMediaItems(genreId: Int?) -> AnyPublisher<MediaItemPage, MovieError>
     func loadMotdMovie(movie: MediaItem) -> AnyPublisher<MediaItemDetail, MovieError>
 }
 
 class GenreSectionUseCaseImpl: GenreSectionUseCase {
+    
     
     @Inject
     private var repository: MovieRepository
@@ -52,7 +53,7 @@ class GenreSectionUseCaseImpl: GenreSectionUseCase {
             .eraseToAnyPublisher()
     }
     
-    func loadMediaItems(genreId: Int) -> AnyPublisher<MediaItemPage, MovieError> {
+    func loadMediaItems(genreId: Int?) -> AnyPublisher<MediaItemPage, MovieError> {
         
         let request = FetchMoviesRequest(genreId: genreId, page: 1)
         
@@ -62,8 +63,10 @@ class GenreSectionUseCaseImpl: GenreSectionUseCase {
     func loadMotdMovie(movie: MediaItem) -> AnyPublisher<MediaItemDetail, MovieError>{
         
         let request = FetchDetailRequest(movieId: movie.id)
+        print("<<debug request futott")
         
         return self.repository.fetchMovieDetail(req: request)
     }
+    
 }
 
