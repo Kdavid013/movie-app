@@ -37,7 +37,7 @@ class ServiceAssembly: Assembly {
         
         container.register(MovieRepository.self) { _ in
             return MovieRepositoryImpl()
-        }.inObjectScope(.container)
+        }.inObjectScope(.transient)
         
         container.register(FavoriteMediaStoreProtocol.self) { _ in
             return FavoriteMediaStore()

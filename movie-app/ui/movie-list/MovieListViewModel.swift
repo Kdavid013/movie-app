@@ -30,6 +30,8 @@ class MovieListViewModel: MovieListViewModelProtocol, ErrorPresentable {
     
     init(){
         
+        print("<<< létrejött a MovieListViewModel")
+        
         genreIdSubject
             .filter{[weak self] _ in
                 guard let self = self else {
