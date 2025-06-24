@@ -51,6 +51,7 @@ struct GenreMotdCell: View {
                 }
                 .padding(LayoutConst.maxPadding)
             }
+
         } else {
             Rectangle()
                 .frame(width: 370, height: 185)

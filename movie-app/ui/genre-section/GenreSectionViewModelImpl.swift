@@ -53,9 +53,7 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
             .store(in: &cancellables)
         
         self.getRandomMovies(genreId: nil)
-        
-        
-        
+      
         self.indexChanger()
     }
     
@@ -103,7 +101,7 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
     func getRandomMovies(genreId: Int?) {
         
         print("<<< lefutott a film választés")
-        
+      
         useCase.loadMediaItems(genreId: genreId)
             .sink { completion in
                 if case let .failure(error) = completion {
