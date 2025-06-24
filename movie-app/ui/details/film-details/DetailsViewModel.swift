@@ -81,6 +81,7 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
             }
             .store(in: &cancellables)
         
+//        hasonló filmek lekérése
         similarMovieIdSubject
             .handleEvents(receiveOutput: { [weak self] _ in
                 self?.isLoading = true
@@ -109,6 +110,7 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
                 self.isLoading = false
             }
             .store(in: &cancellables)
+        
         
         favoriteButtonTapped
             .flatMap { [weak self] _ -> AnyPublisher<(ModifyMediaResult, Bool), MovieError> in

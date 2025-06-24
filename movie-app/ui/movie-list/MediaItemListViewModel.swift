@@ -8,13 +8,13 @@ import Foundation
 import InjectPropertyWrapper
 import Combine
 
-protocol MovieListViewModelProtocol: ObservableObject{
-    var movies: [MediaItem] { get }
+protocol MediaItemListViewModelProtocol: ObservableObject{
+    var mediaItems: [MediaItem] { get }
 }
 
-class MovieListViewModel: MovieListViewModelProtocol, ErrorPresentable {
+class MediaItemListViewModel: MediaItemListViewModelProtocol, ErrorPresentable {
     
-    @Published var movies: [MediaItem] = []
+    @Published var mediaItems: [MediaItem] = []
     @Published var isLoading: Bool = false
     
     var actualPage: Int = 0
@@ -48,7 +48,8 @@ class MovieListViewModel: MovieListViewModelProtocol, ErrorPresentable {
                     preconditionFailure("There is no self")
                 }
                 let request = FetchMoviesRequest(genreId: genreId, page: actualPage)
-                return self.repository.fetchMovies(req: request)
+                return /*Environments.name == tv. ? self.repository.fetchSeries(req: request)*/
+                self.repository.fetchMovies(req: request)
             }
             .delay(for: .seconds(2), scheduler: RunLoop.main)
             .sink { [weak self] completion in
@@ -60,7 +61,7 @@ class MovieListViewModel: MovieListViewModelProtocol, ErrorPresentable {
                 if mediaItemPage.totalPages < 500 {
                     self?.totalPages = mediaItemPage.totalPages
                 }
-                self?.movies.append(contentsOf: mediaItemPage.mediaItems)
+                self?.mediaItems.append(contentsOf: mediaItemPage.mediaItems)
                 self?.isLoading = false
             }
             .store(in: &cancellables)

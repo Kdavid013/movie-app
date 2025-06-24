@@ -11,8 +11,8 @@ import Foundation
 class ViewModelAssembly: Assembly {
 
     func assemble(container: Container) {
-        container.register((any MovieListViewModelProtocol).self) { _ in
-            return MovieListViewModel()
+        container.register((any MediaItemListViewModelProtocol).self) { _ in
+            return MediaItemListViewModel()
         }.inObjectScope(.container)
         container.register((any GenreSectionViewModel).self) { _ in
             return GenreSectionViewModelImpl()

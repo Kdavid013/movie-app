@@ -7,7 +7,6 @@
 
 import SwiftUI
 import InjectPropertyWrapper
-import Lottie
 
 struct DetailsView: View {
     
