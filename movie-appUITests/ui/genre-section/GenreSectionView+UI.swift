@@ -21,40 +21,34 @@ final class GenreSectionViewUITests: XCTestCase {
         // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
 //        érdemes elinditani az alkalmazást
         app.launch()
+        sleep(5)
     }
 
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
-//    func testBasicUsage() throws {
-//        // UI tests must launch the application that they test.
-//        
-//        sleep(4)
-//
-//        app.images["search"].tap()
-//        app.images["favorites"].tap()
-//        app.images["settings"].tap()
-//        app.images["genre"].tap()
-//        
-//        
-//    }
-//    
-    func testUsage() throws {
+    func testBasicUsage() throws {
         // UI tests must launch the application that they test.
         
-        sleep(4)
+
+        app.images["searchtab"].tap()
+        app.images["favorites"].tap()
+        app.images["settings"].tap()
+        app.images["genre"].tap()
         
-        let collectionViewsQuery = XCUIApplication().collectionViews
         
-        collectionViewsQuery.children(matching: .cell).element(boundBy: 0).children(matching: .other).element(boundBy: 0).children(matching: .other).element.swipeUp()
+    }
+//    
+    func testGenreSelection() throws {
+        // UI tests must launch the application that they test.
+//                
         
-        let collectionView = app.firstCellInCollectionView(withIdentifier: "testCollectionView")
+        let collectionView = app.firstCellInCollectionView(withIdentifier: AccessibilityLabels.genreSectionCollectionView)
         collectionView.swipeUp()
         
         let adventureGenreCell = app.findElement(withId: "Adventure")
         adventureGenreCell?.tap()
-                
         
     }
 }

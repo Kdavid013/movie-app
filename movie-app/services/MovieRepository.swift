@@ -1,5 +1,5 @@
 //
-//  ReactiveMovieService.swift
+//  MovieRepository.swift
 //  movie-app
 //
 //  Created by David Karacs on 2025. 05. 06..
@@ -25,6 +25,7 @@ protocol MovieRepository {
     func addReview(req: AddReviewRequest) -> AnyPublisher<ModifyMediaResult, MovieError>
     func fetchCastDetail(req: FetchDetailRequest) -> AnyPublisher<CastDetail, MovieError>
     func fetchCompanyDetail(req: FetchDetailRequest) -> AnyPublisher<CastDetail, MovieError>
+    func fetchSimilarMovies(req: FetchSimilarMoviesRequest) -> AnyPublisher<[MediaItem], MovieError>
 }
 
 class MovieRepositoryImpl: MovieRepository {
@@ -190,6 +191,14 @@ class MovieRepositoryImpl: MovieRepository {
             target: MultiTarget(MoviesApi.fetchCompanyDetail(req: req)),
             decodeTo: CompanyDetailResponse.self,
             transform: { CastDetail(dto: $0)}
+        )
+    }
+    
+    func fetchSimilarMovies(req: FetchSimilarMoviesRequest) -> AnyPublisher<[MediaItem], MovieError> {
+        requestAndTransform(
+            target: MultiTarget(MoviesApi.fetchSimilarMovies(req: req)),
+            decodeTo: MoviePageResponse.self,
+            transform: { $0.results.map(MediaItem.init(dto:))}
         )
     }
     

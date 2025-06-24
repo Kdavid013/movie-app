@@ -8,7 +8,6 @@
 import SwiftUI
 import InjectPropertyWrapper
 
-
 struct DetailsView: View {
     
     let mediaItemId: Int
@@ -66,9 +65,20 @@ struct DetailsView: View {
                         //                            ParticipantScrollView(participants: viewModel.cast)
                         SideScrollView(contributors: viewModel.cast)
                     }
-                    Spacer()
+                    Text("detail.similar.movies")
+                        .font(Fonts.title)
+                    
                 }
                 .padding(.horizontal, LayoutConst.maxPadding)
+                MovieSideScrollView(isLoading: viewModel.isLoading, mediaItems: viewModel.mediaItems,
+                lastIdAppeared: { _ in
+                    viewModel.similarMovieIdSubject.send(mediaItemId)
+                    return 0
+                }, firstId: { (firstDescript: String, lastDescript: Int) -> Bool in
+                    return true
+                }
+                )
+                
             }
         }
         .toolbar{
@@ -94,6 +104,7 @@ struct DetailsView: View {
         .showAlert(model: $viewModel.alertModel)
         .onAppear {
             viewModel.movieIdSubject.send(mediaItemId)
+            viewModel.similarMovieIdSubject.send(mediaItemId)
         }
     }
 }

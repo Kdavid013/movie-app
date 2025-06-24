@@ -17,10 +17,16 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
     
     @Published var movie: MediaItemDetail = MediaItemDetail()
     @Published var cast: [Contributors] = []
+    @Published var mediaItems: [MediaItem] = []
+    @Published var isLoading: Bool = false
+    
     var isFavorite: Bool = false
+    var actualPage: Int = 0
+    var totalPages: Int = 500
     
     let favoriteButtonTapped = PassthroughSubject<Void, Never>()
     let movieIdSubject = PassthroughSubject<Int, Never>()
+    let similarMovieIdSubject = PassthroughSubject<Int, Never>()
     
     @Published var alertModel: AlertModel? = nil
     
@@ -57,8 +63,7 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
                 return self.repository.fetchMovieCredits(req: requset)
             }
         
-        //
-        details.combineLatest(cast)
+        Publishers.CombineLatest(details, cast)
             .receive(on: RunLoop.main)
             .sink{ completion in
                 if case let .failure(error) = completion {
@@ -72,8 +77,40 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
                 self.cast = cast
                 self.movie = movie
                 self.isFavorite = self.favoriteMediaStorage.isFavoriteMediaItem(withId: movie.id)
+                
             }
             .store(in: &cancellables)
+        
+//        hasonló filmek lekérése
+        similarMovieIdSubject
+            .handleEvents(receiveOutput: { [weak self] _ in
+                self?.isLoading = true
+                self?.actualPage += 1
+            })
+            .flatMap { [weak self] movieId -> AnyPublisher<[MediaItem], MovieError> in
+                guard let self = self else {
+                    preconditionFailure("There is no self")
+                }
+                
+                let requset = FetchSimilarMoviesRequest(movieId: movieId, page: actualPage)
+                return self.repository.fetchSimilarMovies(req: requset)
+            }
+            .delay(for: .seconds(3), scheduler: RunLoop.main)
+            .sink{ [weak self] completion in
+                if case let .failure(error) = completion {
+                    self?.alertModel = self?.toAlertModel(error)
+                    self?.isLoading = false
+                }
+                
+            } receiveValue: { [weak self]  mediaItems in
+                guard let self = self else {
+                    preconditionFailure("There is no self")
+                }
+                self.mediaItems.append(contentsOf: mediaItems)
+                self.isLoading = false
+            }
+            .store(in: &cancellables)
+        
         
         favoriteButtonTapped
             .flatMap { [weak self] _ -> AnyPublisher<(ModifyMediaResult, Bool), MovieError> in

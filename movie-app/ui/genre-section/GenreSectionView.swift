@@ -43,7 +43,7 @@ struct GenreSectionView: View {
                     
                     ForEach(viewModel.genres){ genre in
                         ZStack{
-                            NavigationLink(destination: MovieListView(genre: genre)){
+                            NavigationLink(destination: MediaItemListView(genre: genre)){
                                 EmptyView()
                             }
                             .opacity(0)
@@ -61,7 +61,7 @@ struct GenreSectionView: View {
                         .listRowSeparator(.hidden)
                     }
                 }
-                .accessibilityLabel("testCollectionView")
+                .accessibilityLabel(AccessibilityLabels.genreSectionCollectionView)
                 .navigationTitle(Environments.name == .tv ? "TV app":"genreSection.title")
                 .padding(.bottom,LayoutConst.largePadding)
             }

@@ -12,8 +12,6 @@ struct MediaItemListByGenre: View {
     
     let genre: Genre
     let mediaItems: [MediaItem]
-    @State
-    var onScreen: [Int] = []
     
     var body: some View {
         VStack{
@@ -27,7 +25,7 @@ struct MediaItemListByGenre: View {
                                     .frame(width: 200, height: 100)
                                     .shimmering()
                             } else {
-                                MovieCell(movie: mediaItem)
+                                MediaItemCell(movie: mediaItem)
                                     .frame(width: 200)
                             }
                         }

@@ -7,13 +7,13 @@
 
 import SwiftUI
 import InjectPropertyWrapper
+import Lottie
 
-
-struct MovieListView: View {
+struct MediaItemListView: View {
     
     let genre: Genre
     
-    @StateObject private var viewModel = MovieListViewModel()
+    @StateObject private var viewModel = MediaItemListViewModel()
     //    csak genreval fog tud dolgozni
     
     @State
@@ -33,13 +33,13 @@ struct MovieListView: View {
             //            pár cellát tart mindig a memóriába, csak annyit amennyi a képernyőn látszik
             //            columns - array amibe grid itemek kerülnek
             LazyVGrid(columns: columns, spacing: 24) {
-                ForEach(Array(viewModel.movies.enumerated()), id: \.1.id ) {index, movie in
+                ForEach(Array(viewModel.mediaItems.enumerated()), id: \.1.id ) {index, movie in
                     NavigationLink(destination: DetailsView(mediaItemId: movie.id)){
-                        MovieCell(movie: movie)
+                        MediaItemCell(movie: movie)
                             .offset(y: isAnimated.contains(movie.id) ? 0 : 200 )
                             .opacity(isAnimated.contains(movie.id) ? 1 : 0)
                             .onAppear {
-                                if viewModel.movies.last?.id == movie.id {
+                                if viewModel.mediaItems.last?.id == movie.id {
                                     viewModel.genreIdSubject.send(genre.id)
                                 }
                                 withAnimation(.easeInOut(duration: 0.5).delay(Double(index) * 0.001)){
@@ -54,7 +54,8 @@ struct MovieListView: View {
             .padding(.top, LayoutConst.normalPadding)
             
             if viewModel.isLoading{
-                ProgressView()
+                LottieView(animation: .named("loading"))
+                    .playing(loopMode: .loop)
             }
         }
         .navigationTitle(genre.name)
@@ -63,7 +64,7 @@ struct MovieListView: View {
         }
         .refreshable {
             isAnimated = []
-            viewModel.movies.removeAll()
+            viewModel.mediaItems.removeAll()
             viewModel.actualPage = 0
             viewModel.genreIdSubject.send(genre.id)
         }

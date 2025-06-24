@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MovieCell: View {
+struct MediaItemCell: View {
     let movie: MediaItem
     
     var body: some View {
