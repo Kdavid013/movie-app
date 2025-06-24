@@ -1,5 +1,5 @@
 //
-//  ReactiveMovieService.swift
+//  MovieRepository.swift
 //  movie-app
 //
 //  Created by David Karacs on 2025. 05. 06..

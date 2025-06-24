@@ -66,20 +66,20 @@ struct DetailsView: View {
                         //                            ParticipantScrollView(participants: viewModel.cast)
                         SideScrollView(contributors: viewModel.cast)
                     }
-                    Spacer()
                     Text("detail.similar.movies")
                         .font(Fonts.title)
                     
                 }
                 .padding(.horizontal, LayoutConst.maxPadding)
-                HStack{
-                    MovieSideScrollView(viewModel: viewModel, mediaItems: viewModel.mediaItems)
-                    if viewModel.isLoading{
-                        LottieView(animation: .named("loading"))
-                            .playing(loopMode: .loop)
-                    }
+                MovieSideScrollView(isLoading: viewModel.isLoading, mediaItems: viewModel.mediaItems,
+                lastIdAppeared: { _ in
+                    viewModel.similarMovieIdSubject.send(mediaItemId)
+                    return 0
+                }, firstId: { (firstDescript: String, lastDescript: Int) -> Bool in
+                    return true
                 }
-                    
+                )
+                
             }
         }
         .toolbar{

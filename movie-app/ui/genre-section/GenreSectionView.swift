@@ -61,7 +61,7 @@ struct GenreSectionView: View {
                         .listRowSeparator(.hidden)
                     }
                 }
-                .accessibilityLabel("testCollectionView")
+                .accessibilityLabel(AccessibilityLabels.genreSectionCollectionView)
                 .navigationTitle(Environments.name == .tv ? "TV app":"genreSection.title")
                 .padding(.bottom,LayoutConst.largePadding)
             }

@@ -58,7 +58,7 @@ struct SearchView: View {
                         LazyVStack(spacing: LayoutConst.normalPadding){
                             ForEach(Array(viewModel.movies.enumerated()), id: \.1.id){ index, movie in
                                 NavigationLink(destination: DetailsView(mediaItemId: movie.id)){
-                                    MovieCell(movie: movie)
+                                    MediaItemCell(movie: movie)
                                         .frame(height: 277)
                                         .offset(x: isAnimated.contains(movie.id) ? 0 : 200 )
                                         .opacity(isAnimated.contains(movie.id) ? 1 : 0)

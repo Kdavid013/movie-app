@@ -35,7 +35,7 @@ struct MovieListView: View {
             LazyVGrid(columns: columns, spacing: 24) {
                 ForEach(Array(viewModel.movies.enumerated()), id: \.1.id ) {index, movie in
                     NavigationLink(destination: DetailsView(mediaItemId: movie.id)){
-                        MovieCell(movie: movie)
+                        MediaItemCell(movie: movie)
                             .offset(y: isAnimated.contains(movie.id) ? 0 : 200 )
                             .opacity(isAnimated.contains(movie.id) ? 1 : 0)
                             .onAppear {
