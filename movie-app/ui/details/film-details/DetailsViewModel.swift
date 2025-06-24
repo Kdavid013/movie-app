@@ -37,7 +37,6 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
     
     init() {
         
-        print("<<<DEBUG",isFavorite)
         let details = movieIdSubject
             .flatMap { [weak self] movieId -> AnyPublisher<MediaItemDetail, MovieError> in
                 guard let self = self else {
@@ -89,7 +88,6 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
                     }
                     .eraseToAnyPublisher()
             }
-            .print("<<< DEBUG: favoriteButtonTapped")
             .sink { [weak self] completion in
                 if case let .failure(error) = completion {
                     self?.alertModel = self?.toAlertModel(error)

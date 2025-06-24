@@ -17,6 +17,9 @@
 "detail.label.date" = "Release date";
 "detail.label.duration" = "Runtime";
 "detail.label.language" = "Language";
+"detail.label.birthYear" = "Birth year";
+"detail.label.birthPlace" = "City";
+"detail.bio" = "Bio";
 "button.rate.title" = "Rate this movie";
 "button.imdb.title" = "Visit at IMDB";
 "button.send.review" = "Send my review";
@@ -36,4 +39,5 @@
 "settings.chooseTheme" = "Choose the dark or light side";
 "settings.theme.light" = "Light mode";
 "settings.theme.dark" = "Dark mode";
+"detail.popularity" = "Popularity";
 

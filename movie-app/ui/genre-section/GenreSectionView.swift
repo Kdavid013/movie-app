@@ -30,6 +30,12 @@ struct GenreSectionView: View {
                         if let motd = viewModel.motdMovies {
                             GenreMotdCell(mediaItems: motd, onScreenIndex: viewModel.onScreenIndex)
                                 .animation(.spring(response: 1))
+                                .onAppear {
+                                    viewModel.indexChanger(state: true)
+                                }
+                                .onDisappear {
+                                    viewModel.stopIndexChanger()
+                                }
                         }
                     }
                     .listRowBackground(Color.clear)
