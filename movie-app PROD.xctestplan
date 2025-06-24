@@ -1,7 +1,7 @@
 {
   "configurations" : [
     {
-      "id" : "5AA30CF8-EE56-4F90-894A-193B33C2E60D",
+      "id" : "C3573FF4-32B8-4207-AB7B-2C73D262CC43",
       "name" : "Test Scheme Action",
       "options" : {
 
@@ -17,8 +17,7 @@
   },
   "testTargets" : [
     {
-      "enabled" : false,
-      "parallelizable" : false,
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:movie-app.xcodeproj",
         "identifier" : "4A537E032DB7B2AD0013C5D7",
@@ -26,13 +25,7 @@
       }
     },
     {
-      "skippedTests" : [
-        "movie_appUITests",
-        "movie_appUITests\/testExample()",
-        "movie_appUITests\/testLaunchPerformance()",
-        "movie_appUITestsLaunchTests",
-        "movie_appUITestsLaunchTests\/testLaunch()"
-      ],
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:movie-app.xcodeproj",
         "identifier" : "4A582FD52DB7CDB100D4F309",

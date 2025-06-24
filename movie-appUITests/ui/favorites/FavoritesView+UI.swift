@@ -1,13 +1,13 @@
 //
-//  GenreSectionView+UI.swift
+//  FavoritesView+UI.swift
 //  movie-app
 //
-//  Created by David Karacs on 2025. 04. 22..
+//  Created by David Karacs on 2025. 06. 17..
 //
 
 import XCTest
 
-final class GenreSectionViewUITests: XCTestCase {
+final class FavoritesViewUITests: XCTestCase {
     
 //    alkalmazás elérése
     let app = XCUIApplication()
@@ -29,33 +29,32 @@ final class GenreSectionViewUITests: XCTestCase {
     
 //    func testBasicUsage() throws {
 //        // UI tests must launch the application that they test.
-//        
+//
 //        sleep(4)
 //
 //        app.images["search"].tap()
 //        app.images["favorites"].tap()
 //        app.images["settings"].tap()
 //        app.images["genre"].tap()
-//        
-//        
+//
+//
 //    }
-//    
-    func testUsage() throws {
+//
+    func testFavoriteSelection() throws {
         // UI tests must launch the application that they test.
         
         sleep(4)
         
-        let collectionViewsQuery = XCUIApplication().collectionViews
+        app.images["favorites"].tap()
         
-        collectionViewsQuery.children(matching: .cell).element(boundBy: 0).children(matching: .other).element(boundBy: 0).children(matching: .other).element.swipeUp()
+        let scrollView = app.firstCellInCollectionView(withIdentifier: AccessibilityLabels.favoritesScrollView)
         
-        let collectionView = app.firstCellInCollectionView(withIdentifier: "testCollectionView")
-        collectionView.swipeUp()
+        scrollView.swipeUp()
         
-        let adventureGenreCell = app.findElement(withId: "Adventure")
-        adventureGenreCell?.tap()
+        
+//        let adventureGenreCell = app.findElement(withId: "Adventure")
+//        adventureGenreCell?.tap()
                 
         
     }
 }
-

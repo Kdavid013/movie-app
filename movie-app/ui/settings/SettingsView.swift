@@ -6,6 +6,7 @@
 //
 import SwiftUI
 import InjectPropertyWrapper
+import FirebaseCrashlytics
 
 struct SettingsView: View {
     @StateObject private var viewModel = SettingsViewModel()
@@ -64,7 +65,19 @@ struct SettingsView: View {
                         }
                 }
                 .padding(.bottom, 43)
-                
+                Button("Crash") {
+                  fatalError("Crash was triggered")
+                }
+                Button("Send non fatal error") {
+                    Crashlytics.crashlytics().record(error: MovieError.noInternetError)
+                    let userInfo = [
+                      "View": "SettingsView"
+                    ]
+                    let testError = NSError.init(domain: NSCocoaErrorDomain,
+                                             code: -1001,
+                                             userInfo: userInfo)
+                    Crashlytics.crashlytics().record(error: testError)
+                }
                 Spacer()
                 VStack(spacing: LayoutConst.smallPadding) {
                     Text("Version 0.9.1")

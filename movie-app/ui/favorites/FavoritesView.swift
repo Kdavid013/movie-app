@@ -16,9 +16,10 @@ struct FavoritesView: View {
         NavigationView {
             ScrollView {
                 LazyVStack(spacing: LayoutConst.normalPadding) {
-                    ForEach(viewModel.movies) { movie in
+                    ForEach(Array(viewModel.movies.enumerated()), id: \.element.id) { index, movie in
                         NavigationLink(destination: DetailsView(mediaItemId: movie.id)){
                             MovieCell(movie: movie)
+                                .accessibilityLabel("MediaItem \(index)")
                                 .frame(height: 277)
                         }
                         .buttonStyle(PlainButtonStyle())
@@ -27,6 +28,7 @@ struct FavoritesView: View {
                 .padding(.horizontal, LayoutConst.normalPadding)
                 .padding(.top, LayoutConst.normalPadding)
             }
+            .accessibilityLabel(AccessibilityLabels.favoritesScrollView)
             .navigationTitle(LocalizedStringKey("favorites.title"))
         }
         .showAlert(model: $viewModel.alertModel)
