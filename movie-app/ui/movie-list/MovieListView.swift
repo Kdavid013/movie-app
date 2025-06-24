@@ -7,7 +7,7 @@
 
 import SwiftUI
 import InjectPropertyWrapper
-
+import Lottie
 
 struct MovieListView: View {
     
@@ -54,7 +54,8 @@ struct MovieListView: View {
             .padding(.top, LayoutConst.normalPadding)
             
             if viewModel.isLoading{
-                ProgressView()
+                LottieView(animation: .named("loading"))
+                    .playing(loopMode: .loop)
             }
         }
         .navigationTitle(genre.name)

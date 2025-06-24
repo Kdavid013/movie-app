@@ -7,7 +7,7 @@
 
 import SwiftUI
 import InjectPropertyWrapper
-
+import Lottie
 
 struct DetailsView: View {
     
@@ -67,8 +67,19 @@ struct DetailsView: View {
                         SideScrollView(contributors: viewModel.cast)
                     }
                     Spacer()
+                    Text("detail.similar.movies")
+                        .font(Fonts.title)
+                    
                 }
                 .padding(.horizontal, LayoutConst.maxPadding)
+                HStack{
+                    MovieSideScrollView(viewModel: viewModel, mediaItems: viewModel.mediaItems)
+                    if viewModel.isLoading{
+                        LottieView(animation: .named("loading"))
+                            .playing(loopMode: .loop)
+                    }
+                }
+                    
             }
         }
         .toolbar{
@@ -94,6 +105,7 @@ struct DetailsView: View {
         .showAlert(model: $viewModel.alertModel)
         .onAppear {
             viewModel.movieIdSubject.send(mediaItemId)
+            viewModel.similarMovieIdSubject.send(mediaItemId)
         }
     }
 }

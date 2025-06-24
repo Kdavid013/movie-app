@@ -12,8 +12,6 @@ struct MediaItemListByGenre: View {
     
     let genre: Genre
     let mediaItems: [MediaItem]
-    @State
-    var onScreen: [Int] = []
     
     var body: some View {
         VStack{
