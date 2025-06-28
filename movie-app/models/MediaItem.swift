@@ -9,11 +9,12 @@ import Foundation
 struct MediaItem: Identifiable {
     let id: Int
     let title: String
-    let year: String
+    let year: String?
     let duration: String
     let imageUrl: URL?
     let rating: Double
     let voteCount: Int
+    let type: MediaItemType
     
     init() {
         self.id = 0
@@ -23,9 +24,10 @@ struct MediaItem: Identifiable {
         self.rating = 0
         self.voteCount = 0
         self.duration = ""
+        self.type = .unknown
     }
        
-    init(id: Int, title: String, year: String, duration: String, imageUrl: URL?, rating: Double, voteCount: Int) {
+    init(id: Int, title: String, year: String, duration: String, imageUrl: URL?, rating: Double, voteCount: Int, type: MediaItemType) {
         self.id = id
         self.title = title
         self.year = year
@@ -33,10 +35,11 @@ struct MediaItem: Identifiable {
         self.imageUrl = imageUrl
         self.rating = rating
         self.voteCount = voteCount
+        self.type = type
     }
     
     init(dto: MovieResponse) {
-        let year = String(dto.releaseDate.prefix(4))
+        let year = String(dto.releaseDate?.prefix(4) ?? "")
         let duration = "1h 25min" // TODO: placeholder – ha lesz ilyen adat, cserélhető
         
         var imageUrl: URL? {
@@ -53,7 +56,9 @@ struct MediaItem: Identifiable {
         self.imageUrl = imageUrl
         self.rating = dto.voteAverage
         self.voteCount = dto.voteCount
+        self.type = .movie
     }
+    
     init(dto: SeriesResponse) {
         let year = String(dto.releaseDate.prefix(4))
         let duration = "1h 25min" // TODO: placeholder – ha lesz ilyen adat, cserélhető
@@ -72,7 +77,7 @@ struct MediaItem: Identifiable {
         self.imageUrl = imageUrl
         self.rating = dto.voteAverage
         self.voteCount = dto.voteCount
+        self.type = .tv
     }
-    
     
 }

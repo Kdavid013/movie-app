@@ -29,8 +29,10 @@ class SearchViewModel:  ObservableObject, ErrorPresentable{
         startSearch
             .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
             .flatMap{ _ -> AnyPublisher<[MediaItem], MovieError> in
-                let request = SearchMovieRequest(query: self.searchText)
-                return self.repository.searchMovies(req: request)
+                
+                
+                let request = SearchMediaItemRequest(query: self.searchText)
+                return Environments.name == .tv ? self.repository.searchTvs(req: request) : self.repository.searchMovies(req: request)
             }
             .sink { completion in
                 if case let .failure(error) = completion {

@@ -34,7 +34,7 @@ struct MediaItemListView: View {
             //            columns - array amibe grid itemek kerülnek
             LazyVGrid(columns: columns, spacing: 24) {
                 ForEach(Array(viewModel.mediaItems.enumerated()), id: \.1.id ) {index, movie in
-                    NavigationLink(destination: DetailsView(mediaItemId: movie.id)){
+                    NavigationLink(destination: DetailsView(mediaItem: movie)){
                         MediaItemCell(movie: movie)
                             .offset(y: isAnimated.contains(movie.id) ? 0 : 200 )
                             .opacity(isAnimated.contains(movie.id) ? 1 : 0)

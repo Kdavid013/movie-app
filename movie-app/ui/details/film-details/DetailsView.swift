@@ -10,7 +10,7 @@ import InjectPropertyWrapper
 
 struct DetailsView: View {
     
-    let mediaItemId: Int
+    let mediaItem: MediaItem
     
     @StateObject private var viewModel = DetailsViewModel()
     @Environment(\.dismiss) private var dismiss: DismissAction
@@ -72,7 +72,7 @@ struct DetailsView: View {
                 .padding(.horizontal, LayoutConst.maxPadding)
                 MovieSideScrollView(isLoading: viewModel.isLoading, mediaItems: viewModel.mediaItems,
                 lastIdAppeared: { _ in
-                    viewModel.similarMovieIdSubject.send(mediaItemId)
+                    viewModel.similarMovieIdSubject.send(mediaItem.id)
                     return 0
                 }, firstId: { (firstDescript: String, lastDescript: Int) -> Bool in
                     return true
@@ -103,8 +103,9 @@ struct DetailsView: View {
         }
         .showAlert(model: $viewModel.alertModel)
         .onAppear {
-            viewModel.movieIdSubject.send(mediaItemId)
-            viewModel.similarMovieIdSubject.send(mediaItemId)
+            viewModel.movieIdSubject.send(mediaItem)
+            viewModel.similarMovieIdSubject.send(mediaItem.id)
+            viewModel.actualPage = 0
         }
     }
 }

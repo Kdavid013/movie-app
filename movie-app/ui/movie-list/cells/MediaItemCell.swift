@@ -55,7 +55,7 @@ struct MediaItemCell: View {
                     }.frame(width: 40.0, height: 40.0)
                 }
             }
-            NavigationLink(destination: DetailsView(mediaItemId: movie.id)){
+            NavigationLink(destination: DetailsView(mediaItem: movie)){
                 EmptyView()
             }
             .background(.red)

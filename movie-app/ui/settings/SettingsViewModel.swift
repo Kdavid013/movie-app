@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import InjectPropertyWrapper
 
 protocol SettingsViewModelProtocol: ObservableObject {
     
@@ -16,6 +17,11 @@ class SettingsViewModel: SettingsViewModelProtocol {
     
     private let themeKey = "color-scheme"
     
+    @Inject
+    private var appVersionProvider: AppVersionProviderProtocol
+    
+    @Published var appInfo: String = ""
+    
     @Published var selectedTheme: Theme{
         didSet {
             UserDefaults.standard.set(selectedTheme.rawValue, forKey: themeKey)
@@ -25,6 +31,8 @@ class SettingsViewModel: SettingsViewModelProtocol {
     init(){
         let storedTheme = UserDefaults.standard.string(forKey: themeKey)
         self.selectedTheme = Theme(rawValue: storedTheme ?? "") ?? .light
+        
+        appInfo = appVersionProvider.version + " (" + appVersionProvider.build + ")"
     }
     
     func changeSelectedLanguage(_ language: String) {

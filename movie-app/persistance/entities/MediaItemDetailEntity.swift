@@ -58,7 +58,8 @@ class MediaItemDetailEntity: Object {
             adult: adult,
             spokenLanguages: spokenLanguages,
 //            imdbUrl: imdbUrl.flatMap(URL.init(string:)),
-            companies: companies.map { $0.toDomain }
+            companies: companies.map { $0.toDomain },
+            type: .movie
         )
     }
 }

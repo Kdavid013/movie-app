@@ -15,7 +15,7 @@ protocol MovieServiceProtocol {
     func fetchGenres(req: FetchGenreRequest) async throws -> [Genre]
     func fetchTVGenres(req: FetchGenreRequest) async throws -> [Genre]
     func fetchMovies(req: FetchMoviesRequest) async throws -> [MediaItem]
-    func searchMovies(req: SearchMovieRequest) async throws -> [MediaItem]
+    func searchMovies(req: SearchMediaItemRequest) async throws -> [MediaItem]
     func fetchFavorites(req: FetchFavoritesRequest
     ) async throws -> [MediaItem]
     func fetchSeries(req: FetchMoviesRequest) async throws -> [MediaItem]
@@ -50,7 +50,7 @@ class MovieService: MovieServiceProtocol {
         )
     }
     
-    func searchMovies(req: SearchMovieRequest) async throws -> [MediaItem] {
+    func searchMovies(req: SearchMediaItemRequest) async throws -> [MediaItem] {
         try await requestAndTransform(
             target: MultiTarget(MoviesApi.searchMovies(req: req)),
             decodeTo: MoviePageResponse.self,

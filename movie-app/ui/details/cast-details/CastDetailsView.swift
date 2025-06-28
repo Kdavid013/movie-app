@@ -46,7 +46,11 @@ struct CastDetailsView: View {
                         Text(LocalizedStringKey("detail.popularity"))
                             .font(Fonts.overviewText)
                     }
-                    
+                    LazyVStack{
+                        ForEach(viewModel.combinedCredits){ mediaItem in
+                            MediaItemCell(movie: mediaItem)
+                        }
+                    }
                 }
             }
             .padding(.horizontal,LayoutConst.maxPadding)

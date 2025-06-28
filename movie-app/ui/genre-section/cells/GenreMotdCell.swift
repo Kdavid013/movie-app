@@ -15,12 +15,11 @@ struct GenreMotdCell: View {
     
     var body: some View {
         if mediaItems.indices.contains(onScreenIndex) {
-            NavigationLink(destination: DetailsView(mediaItemId: mediaItems[onScreenIndex].id)){
+//            NavigationLink(destination: DetailsView(mediaItem: MediaItem(mediaItems[onScreenIndex]))){
                 ZStack(alignment: .bottomLeading) {
                     LoadImageView(url: mediaItems[onScreenIndex].imageUrl)
                         .frame(width: 370, height: 185)
                         .cornerRadius(12)
-                    
                     VStack{
                         HStack{
                             ForEach(Array(mediaItems.enumerated()), id: \.element.id) { index, item in
@@ -50,7 +49,7 @@ struct GenreMotdCell: View {
                     
                 }
                 .padding(LayoutConst.maxPadding)
-            }
+//            }
 
         } else {
             Rectangle()

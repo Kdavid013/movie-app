@@ -57,7 +57,7 @@ struct SearchView: View {
                     ScrollView{
                         LazyVStack(spacing: LayoutConst.normalPadding){
                             ForEach(Array(viewModel.movies.enumerated()), id: \.1.id){ index, movie in
-                                NavigationLink(destination: DetailsView(mediaItemId: movie.id)){
+                                NavigationLink(destination: DetailsView(mediaItem: movie)){
                                     MediaItemCell(movie: movie)
                                         .frame(height: 277)
                                         .offset(x: isAnimated.contains(movie.id) ? 0 : 200 )

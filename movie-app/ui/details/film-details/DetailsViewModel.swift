@@ -25,7 +25,7 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
     var totalPages: Int = 500
     
     let favoriteButtonTapped = PassthroughSubject<Void, Never>()
-    let movieIdSubject = PassthroughSubject<Int, Never>()
+    let movieIdSubject = PassthroughSubject<MediaItem, Never>()
     let similarMovieIdSubject = PassthroughSubject<Int, Never>()
     
     @Published var alertModel: AlertModel? = nil
@@ -49,8 +49,17 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
                     preconditionFailure("There is no self")
                 }
                 
-                let requset = FetchDetailRequest(movieId: movieId)
-                return self.repository.fetchMovieDetail(req: requset)
+                let requset = FetchDetailRequest(movieId: movieId.id)
+                switch movieId.type {
+                case .movie:
+                    return self.repository.fetchMovieDetail(req: requset)
+                case .tv:
+                    return self.repository.fetchMovieDetail(req: requset)
+                case .unknown:
+                    return Just<MediaItemDetail>(MediaItemDetail())
+                        .setFailureType(to: MovieError.self)
+                        .eraseToAnyPublisher()
+                }
             }
         
         let cast = movieIdSubject
@@ -58,9 +67,18 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
                 guard let self = self else {
                     preconditionFailure("There is no self")
                 }
+                let requset = FetchDetailRequest(movieId: movieId.id)
+                switch movieId.type {
+                case .movie:
+                    return self.repository.fetchMovieCredits(req: requset)
+                case .tv:
+                    return self.repository.fetchMovieCredits(req: requset)
+                case .unknown:
+                    return Just<[Contributors]>(Array(repeating:Contributors(), count: 5))
+                        .setFailureType(to: MovieError.self)
+                        .eraseToAnyPublisher()
+                }
                 
-                let requset = FetchDetailRequest(movieId: movieId)
-                return self.repository.fetchMovieCredits(req: requset)
             }
         
         Publishers.CombineLatest(details, cast)
@@ -81,7 +99,7 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
             }
             .store(in: &cancellables)
         
-//        hasonló filmek lekérése
+        //        hasonló filmek lekérése
         similarMovieIdSubject
             .handleEvents(receiveOutput: { [weak self] _ in
                 self?.isLoading = true

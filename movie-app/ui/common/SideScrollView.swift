@@ -22,7 +22,7 @@ struct SideScrollView: View {
         return ScrollView(.horizontal){
             HStack(spacing:20){
                 ForEach(contributors) { contributor in
-                    NavigationLink(destination: CastDetailsView(castDetailType: .company(id: contributor.id))){
+                    NavigationLink(destination: CastDetailsView(castDetailType: .castMember(id: contributor.id))){
                         VStack{
                             LoadImageView(url: contributor.imageUrl)
                             .frame(width: 56, height: 56)

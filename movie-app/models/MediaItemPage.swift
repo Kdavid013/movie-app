@@ -14,4 +14,9 @@ struct MediaItemPage {
         self.mediaItems = dto.results.map(MediaItem.init)
         self.totalPages = dto.totalPages
     }
+    
+    init(dto: SeriesPageResponse){
+        self.mediaItems = dto.results.map(MediaItem.init)
+        self.totalPages = dto.totalPages
+    }
 }
