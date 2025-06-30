@@ -80,12 +80,15 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
     func loadMediaItems(genreId: Int) {
         
         useCase.loadMediaItems(genreId: genreId)
+            .map( { mediaItemPage in
+                Array(mediaItemPage.mediaItems.prefix(3))
+            })
             .sink { completion in
                 if case let .failure(error) = completion {
                     self.alertModel = self.toAlertModel(error)
                 }
-            } receiveValue: { mediaItemPage in
-                self.mediaItemsByGenre[genreId] = mediaItemPage.mediaItems
+            } receiveValue: { mediaItems in
+                self.mediaItemsByGenre[genreId] = mediaItems
             }
             .store(in: &cancellables)
     }

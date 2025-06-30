@@ -97,9 +97,9 @@ extension MoviesApi: TargetType {
         case let .fetchSeries(req):
             return .requestParameters(parameters: req.asRequestParams(), encoding: URLEncoding.queryString)
         case let .editFavoriteMovie(req):
-            return .requestParameters(parameters: req.asRequestParams(), encoding: URLEncoding.httpBody)
-//            let request = EditFavoriteRequest(movieId: req.movieId, isFavorite: req.isFavorite)
-//            return .requestJSONEncodable(request)
+//            return .requestParameters(parameters: req.asRequestParams(), encoding: URLEncoding.httpBody)
+            let request = EditFavoriteBodyRequest(movieId: req.movieId, isFavorite: req.isFavorite)
+            return .requestJSONEncodable(request)
         case let .fetchMovieDetail(req):
             return .requestParameters(parameters: req.asRequestParams(), encoding: URLEncoding.queryString)
         case let .fetchMovieCredits(req):

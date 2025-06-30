@@ -15,7 +15,7 @@ struct GenreMotdCell: View {
     
     var body: some View {
         if mediaItems.indices.contains(onScreenIndex) {
-//            NavigationLink(destination: DetailsView(mediaItem: MediaItem(mediaItems[onScreenIndex]))){
+            NavigationLink(destination: DetailsView(mediaItem: MediaItem(detail: mediaItems[onScreenIndex]))){
                 ZStack(alignment: .bottomLeading) {
                     LoadImageView(url: mediaItems[onScreenIndex].imageUrl)
                         .frame(width: 370, height: 185)
@@ -49,7 +49,7 @@ struct GenreMotdCell: View {
                     
                 }
                 .padding(LayoutConst.maxPadding)
-//            }
+            }
 
         } else {
             Rectangle()

@@ -135,7 +135,7 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
                 guard let self = self else {
                     preconditionFailure("There is no self")
                 }
-                let isFavorite = self.isFavorite
+                let isFavorite = !self.isFavorite
                 let request = EditFavoriteRequest(movieId: self.movie.id, isFavorite:  isFavorite)
                 return repository.editFavoriteMovie(req: request)
                     .map { result in
@@ -153,7 +153,7 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
                 }
                 if result.success {
                     if isFavorite{
-                        //                        self.favoriteMediaStorage.addFavoriteMediaItem(withId: self.movie)
+                        self.favoriteMediaStorage.addFavoriteMediaItem(MediaItem(detail: oself.movie))
                     } else {
                         self.favoriteMediaStorage.removeFavoriteMediaItem(withId: self.movie.id)
                     }

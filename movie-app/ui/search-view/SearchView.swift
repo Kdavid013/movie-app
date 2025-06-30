@@ -32,6 +32,7 @@ struct SearchView: View {
                     .foregroundColor(.invertedMain)
                     .onChange(of: viewModel.searchText) {
                         viewModel.startSearch.send(())
+                        isAnimated.removeAll()
                     }
                 }
                 .frame(height: 56)
@@ -40,7 +41,7 @@ struct SearchView: View {
                 .overlay(
                     RoundedRectangle(cornerRadius: 28)
                         .stroke(Color.invertedMain, lineWidth: 1)
-                    )
+                )
                 .cornerRadius(28)
                 .padding(.horizontal, LayoutConst.maxPadding)
                 
@@ -67,7 +68,7 @@ struct SearchView: View {
                                                 isAnimated.append(movie.id)
                                             }
                                         }
-                                        
+                                    
                                 }
                                 .foregroundColor(.invertedMain)
                             }
@@ -79,5 +80,5 @@ struct SearchView: View {
                 }
             }
         }
-        }
     }
+}
