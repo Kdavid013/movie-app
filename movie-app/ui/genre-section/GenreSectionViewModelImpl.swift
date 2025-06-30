@@ -169,10 +169,7 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
                 }
             }, receiveValue: { [weak self] index in
                 
-                
                 self?.onScreenIndex = index
-                
-                print("<<<",index)
             })
             
     }

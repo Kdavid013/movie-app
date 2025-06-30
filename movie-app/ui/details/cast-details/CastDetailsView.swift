@@ -42,9 +42,15 @@ struct CastDetailsView: View {
                             .font(Fonts.paragraph)
                             .lineLimit(5)
                     }
-                    VStack{
-                        Text(LocalizedStringKey("detail.popularity"))
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Popularity")
                             .font(Fonts.overviewText)
+                            .foregroundColor(Color.primary)
+                        HStack {
+                            Spacer()
+                            StarRatingView(rating: $viewModel.rating, starSize: 24)
+                            Spacer()
+                        }
                     }
                     LazyVStack{
                         ForEach(viewModel.combinedCredits){ mediaItem in

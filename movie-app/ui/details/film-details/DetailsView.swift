@@ -46,7 +46,7 @@ struct DetailsView: View {
                             ButtonLabel(style: .outlined, title: "button.rate.title", action: .simple)
                         }
                         
-                        ButtonLabel(style: .filled, title: "button.imdb.title", action: .simple)
+                        ButtonLabel(style: .filled, title: "button.imdb.title", action: .link(viewModel.movie.imageUrl))
                     }
                     VStack(alignment: .leading, spacing: 12){
                         Text(LocalizedStringKey("overview"))
@@ -59,11 +59,11 @@ struct DetailsView: View {
                         Text("companies")
                             .font(Fonts.overviewText)
                         //                            ParticipantScrollView(participants: viewModel.movie.companies)
-                        SideScrollView(contributors: viewModel.movie.companies)
+                        SideScrollView(contributors: viewModel.movie.companies, type: .company)
                         Text("cast")
                             .font(Fonts.overviewText)
                         //                            ParticipantScrollView(participants: viewModel.cast)
-                        SideScrollView(contributors: viewModel.cast)
+                        SideScrollView(contributors: viewModel.cast, type: .cast)
                     }
                     Text("detail.similar.movies")
                         .font(Fonts.title)

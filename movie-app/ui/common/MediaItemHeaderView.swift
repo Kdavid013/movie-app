@@ -16,7 +16,7 @@ struct MediaItemHeaderView: View {
     let language: String
     
     var body: some View {
-        VStack{
+        VStack(alignment:.leading){
             Text(title)
                 .font(Fonts.detailTitle)
             HStack(spacing: LayoutConst.normalPadding){

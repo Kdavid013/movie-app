@@ -13,6 +13,7 @@ struct MediaItemDetail: Identifiable {
     let year: String
     let runtime: Int
     let imageUrl: URL?
+//    let imdbUrl: URL?
     let rating: Double
     let voteCount: Int
     let overview: String
@@ -29,6 +30,7 @@ struct MediaItemDetail: Identifiable {
         self.year = ""
         self.runtime = 0
         self.imageUrl = nil
+//        self.imdbUrl = URL(string: "")
         self.rating = 0
         self.voteCount = 0
         self.overview = ""
@@ -45,6 +47,7 @@ struct MediaItemDetail: Identifiable {
          year: String,
          runtime: Int,
          imageUrl: URL?,
+//         imdbUrl: URL?,
          rating: Double,
          voteCount: Int,
          overview: String,
@@ -60,6 +63,7 @@ struct MediaItemDetail: Identifiable {
         self.year = year
         self.runtime = runtime
         self.imageUrl = imageUrl
+//        self.imdbUrl = imdbUrl
         self.rating = rating
         self.voteCount = voteCount
         self.overview = overview
@@ -92,6 +96,7 @@ struct MediaItemDetail: Identifiable {
         self.spokenLanguages = dto.spokenLanguages.map({$0.englishName}).joined(separator: ", ")
         self.companies = dto.companies.map(Contributors.init)
         self.type = .movie
+//        self.imdbUrl = URL(string: "https://www.imdb.com/title/\(dto.imdbId)/")
     }
     var genreList: String {
         genres.joined(separator: ", ")

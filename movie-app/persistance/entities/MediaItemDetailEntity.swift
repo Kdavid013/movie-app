@@ -50,6 +50,7 @@ class MediaItemDetailEntity: Object {
             year: year,
             runtime: runtime,
             imageUrl: imageUrl.flatMap(URL.init),
+//            imdbUrl: imdbUrl.flatMap(URL.init),
             rating: rating,
             voteCount: voteCount,
             overview: overview,
@@ -57,7 +58,6 @@ class MediaItemDetailEntity: Object {
             genres: Array(genres),
             adult: adult,
             spokenLanguages: spokenLanguages,
-//            imdbUrl: imdbUrl.flatMap(URL.init(string:)),
             companies: companies.map { $0.toDomain },
             type: .movie
         )

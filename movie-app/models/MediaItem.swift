@@ -9,7 +9,7 @@ import Foundation
 struct MediaItem: Identifiable {
     let id: Int
     let title: String
-    let year: String?
+    let year: String
     let duration: String
     let imageUrl: URL?
     let rating: Double

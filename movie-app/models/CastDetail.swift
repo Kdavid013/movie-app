@@ -34,7 +34,7 @@ struct CastDetail: Identifiable, Hashable, Equatable {
         self.id = dto.id
         self.name = dto.name
         self.biography = dto.biography
-        self.birthYear = dto.birthday
+        self.birthYear = String(String(dto.birthday).prefix(4))
         self.originPlace = dto.birthplace
         self.popularity = dto.popularity
         self.imageUrl = imageUrl

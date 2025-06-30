@@ -10,6 +10,7 @@ struct MovieDetailResponse: Decodable {
     let title: String
     let releaseDate: String
     let posterPath: String?
+    let imdbId: String
     let voteAverage: Double
     let voteCount: Int
     let genres: [GenreResponse]
@@ -25,6 +26,7 @@ struct MovieDetailResponse: Decodable {
         case title
         case releaseDate = "release_date"
         case posterPath = "poster_path"
+        case imdbId = "imdb_id"
         case voteAverage = "vote_average"
         case voteCount = "vote_count"
         case genres
