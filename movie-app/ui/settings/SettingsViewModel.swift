@@ -13,7 +13,7 @@ protocol SettingsViewModelProtocol: ObservableObject {
 }
 
 class SettingsViewModel: SettingsViewModelProtocol {
-//    @Published var selectedLanguage: String = Bundle.getLangCode()
+    @Published var selectedLanguage: String = Bundle.getLangCode()
     
     private let themeKey = "color-scheme"
     
@@ -35,11 +35,11 @@ class SettingsViewModel: SettingsViewModelProtocol {
         appInfo = appVersionProvider.version + " (" + appVersionProvider.build + ")"
     }
     
-    func changeSelectedLanguage(_ language: String) {
-//        self.selectedLanguage = language
+    func changeSelectedLanguge(_ language: String) {
+            self.selectedLanguage = language
+            Bundle.setLanguage(lang: language)
+        }
         
-        Bundle.setLanguage(lang: language)
-    }
     
     func changeTheme(_ theme: Theme) {
         self.selectedTheme = theme

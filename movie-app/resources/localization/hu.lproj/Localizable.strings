@@ -8,31 +8,45 @@
 
 "genreSection.title" = "Filmek alkalmazás";
 "favorites.title" = "Kedvencek";
+
 "search.textfield.placeholder" = "Filmek, Rendező, Szinész, Szinésznő";
 "search.empty.title" = "Kezdj el gépelni a kereséshez";
+
 "alert.api.title" = "API hiba";
 "alert.dismiss.button" = "Bezár";
 "alert.unexpected.title" = "Váraltahn hiba";
+
 "detail.label.date" = "Kiadás éve";
 "detail.label.duration" = "Idő";
 "detail.label.language" = "Nyelv";
+"detail.label.birthYear" = "Születési év";
+"detail.label.birthPlace" = "Város";
+"detail.bio" = "Életrajz";
+"detail.lable.popularity" = "Népszerűség";
+"detail.similar.movies" = "Hasonló filmek";
+
 "button.rate.title" = "Értékeld a filmet";
 "button.imdb.title" = "Nézd meg IMDB-n";
 "button.send.review" = "Küld el az értékelésem";
 "button.watch.title" = "Nézd meg most";
+
 "available" = "Elérhető";
 "unavailable" = "Nem elérhető";
+
 "overview" = "Összefoglaló";
 "companies" = "Kiadó és gyártó";
 "cast" = "Szereplők";
+
 "review.title" = "Add meg a véleményed";
 "review.button" = "Értékelés küldése";
+
 "settings.title" = "Beállítások";
 "settings.chooseLanguage" = "Válassz egy nyelvet";
 "settings.lang.english" = "Angol";
 "settings.lang.german" = "Német";
 "settings.lang.hungarian" = "Magyar";
 "settings.chooseTheme" = "Válasz a sötét vagy világos oldalt";
-"settings.chooseTheme" = "Világos mód";
-"dettings.theme.dark" = "Sötét mód";
-"detail.similar.movies" = "Hasonló filmek";
+"settings.theme.light" = "Világos mód";
+"settings.theme.dark" = "Sötét mód";
+
+

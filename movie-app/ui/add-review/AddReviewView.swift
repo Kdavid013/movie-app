@@ -20,13 +20,13 @@ struct AddReviewView: View {
             MediaItemHeaderView(title: viewModel.mediaItemDetail.title, year: viewModel.mediaItemDetail.year, runtime: "\(viewModel.mediaItemDetail.runtime)", language: viewModel.mediaItemDetail.spokenLanguages)
             
             MoviePicture(picUrl: viewModel.mediaItemDetail.imageUrl)
-            Text(LocalizedStringKey("review.title"))
+            Text("review.title".localized())
                 .font(Fonts.detailTitle)
             HStack{
                 Spacer()
                 VStack(spacing: 72.0){
                     StarRatingView(rating: $viewModel.selectedRating)
-                    ButtonLabel(style: .filled, title: "review.button", action: .simple)
+                    ButtonLabel(style: .filled, title: "button.send.review".localized(), action: .simple)
                 }
                 Spacer()
             }

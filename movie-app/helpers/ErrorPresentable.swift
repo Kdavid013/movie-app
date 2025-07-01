@@ -13,23 +13,23 @@ extension ErrorPresentable {
     func toAlertModel(_ error: Error) -> AlertModel?{
         guard let error = error as? MovieError else{
             return AlertModel(
-                title: "alert.unexpected.title",
-                message: "alert.unexpected.text",
-                dismissButtonTitle: "alert.dismiss.button"
+                title: "alert.unexpected.title".localized(),
+                message: "alert.unexpected.text".localized(),
+                dismissButtonTitle: "alert.dismiss.button".localized()
             )
         }
         switch error {
         case .invalidApiKeyError(let message):
             return AlertModel(
-                title: "alert.api.title",
+                title: "alert.api.title".localized(),
                 message: message,
-                dismissButtonTitle: "alert.dismiss.button"
+                dismissButtonTitle: "alert.dismiss.button".localized()
             )
         case .clientError:
             return AlertModel(
                 title: "Client Error",
                 message: error.localizedDescription,
-                dismissButtonTitle: "alert.dismiss.button"
+                dismissButtonTitle: "alert.dismiss.button".localized()
             )
         case .noInternetError:
             return nil
@@ -38,13 +38,13 @@ extension ErrorPresentable {
             return AlertModel(
                 title: "Server Error",
                 message: error.localizedDescription,
-                dismissButtonTitle: "alert.dismiss.button"
+                dismissButtonTitle: "alert.dismiss.button".localized()
             )
         default:
             return AlertModel(
-                title: "alert.unexpected.title",
-                message: "alert.unexpected.text",
-                dismissButtonTitle: "alert.dismiss.button"
+                title: "alert.unexpected.title".localized(),
+                message: "alert.unexpected.text".localized(),
+                dismissButtonTitle: "alert.dismiss.button".localized()
             )
         }
     }

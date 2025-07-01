@@ -24,7 +24,7 @@ struct SearchView: View {
                         .frame(width: 24, height: 24)
                     TextField("",
                               text: $viewModel.searchText,
-                              prompt: Text("search.textfield.placeholder")
+                              prompt: Text("search.textfield.placeholder".localized())
                         .foregroundStyle(.invertedMain)
                     )
                     .textFieldStyle(PlainTextFieldStyle())
@@ -48,7 +48,7 @@ struct SearchView: View {
                 if viewModel.movies.isEmpty {
                     VStack{
                         Spacer()
-                        Text("search.empty.title")
+                        Text("search.empty.title".localized())
                             .multilineTextAlignment(.center)
                             .font(Fonts.emptyStateText)
                             .foregroundColor(.invertedMain)

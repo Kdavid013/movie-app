@@ -101,4 +101,29 @@ struct MediaItemDetail: Identifiable {
     var genreList: String {
         genres.joined(separator: ", ")
     }
+    
+    init(dto: SeriesDetailResponse) {
+        let year = String(dto.firstAirDate.prefix(4))
+        let imageUrl: URL? = dto.posterPath.flatMap {
+            URL(string: "https://image.tmdb.org/t/p/w500\($0)")
+        }
+        let duration = 40
+
+        self.id = dto.id
+        self.title = dto.name
+        self.year = year
+        self.runtime = duration
+        self.imageUrl = imageUrl
+        self.rating = dto.voteAverage
+        self.voteCount = dto.voteCount
+        self.overview = dto.overview
+        self.popularity = dto.popularity
+        self.genres = dto.genres.map(\.name)
+//        self.adult = dto.adult
+        self.spokenLanguages = dto.spokenLanguages.map(\.englishName).joined(separator: ", ")
+        self.companies = dto.productionCompanies.map(Contributors.init)
+        self.type = .tv
+        self.adult = false
+    }
+
 }

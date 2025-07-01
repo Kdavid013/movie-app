@@ -29,7 +29,7 @@ struct FavoritesView: View {
                 .padding(.top, LayoutConst.normalPadding)
             }
             .accessibilityLabel(AccessibilityLabels.favoritesScrollView)
-            .navigationTitle(LocalizedStringKey("favorites.title"))
+            .navigationTitle(LocalizedStringKey("favorites.title".localized()))
         }
         .showAlert(model: $viewModel.alertModel)
         .onAppear {

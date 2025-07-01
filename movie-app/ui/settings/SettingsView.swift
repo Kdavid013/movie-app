@@ -10,53 +10,51 @@ import FirebaseCrashlytics
 
 struct SettingsView: View {
     @StateObject private var viewModel = SettingsViewModel()
-    @State private var selectedLanguage: String = "en"
-    @State private var selectedTheme: String = "dark"
     
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading) {
-                Text("settings.chooseLanguage")
+                Text("settings.chooseLanguage".localized())
                     .font(Fonts.subheading)
                     .padding(.bottom, LayoutConst.maxPadding)
                 HStack(spacing: 12) {
-                    ButtonLabel(style: selectedLanguage == "en" ? .filled : .outlined, title: "settings.lang.english", action: .simple)
+                    ButtonLabel(style: viewModel.selectedLanguage == "en" ? .filled : .outlined, title: "settings.lang.english".localized(), action: .simple)
                         .font(Fonts.detailsButton)
                         .lineLimit(1)
                         .fixedSize()
                         .onTapGesture {
-                            selectedLanguage = "en"
+                            viewModel.changeSelectedLanguge("en")
                             
                         }
-                    ButtonLabel(style: selectedLanguage == "de" ? .filled : .outlined, title: "settings.lang.german", action: .simple)
+                    ButtonLabel(style: viewModel.selectedLanguage == "de" ? .filled : .outlined, title: "settings.lang.german".localized(), action: .simple)
                         .font(Fonts.detailsButton)
                         .lineLimit(1)
                         .fixedSize()
                         .onTapGesture {
-                            selectedLanguage = "de"
+                            viewModel.changeSelectedLanguge("de")
                         }
-                    ButtonLabel(style: selectedLanguage == "hu" ? .filled : .outlined, title: "settings.lang.hungarian", action: .simple)
+                    ButtonLabel(style: viewModel.selectedLanguage == "hu" ? .filled : .outlined, title: "settings.lang.hungarian".localized(), action: .simple)
                         .font(Fonts.detailsButton)
                         .lineLimit(1)
                         .fixedSize()
                         .onTapGesture {
-                            selectedLanguage = "hu"
+                            viewModel.changeSelectedLanguge("hu")
                         }
                 }
                 .padding(.bottom, 43)
                 
-                Text("settings.chooseTheme")
+                Text("settings.chooseTheme".localized())
                     .font(Fonts.subheading)
                     .padding(.bottom, LayoutConst.maxPadding)
                 HStack(spacing: 12) {
-                    ButtonLabel(style: viewModel.selectedTheme == .light ? .filled : .outlined, title: "settings.theme.light", action: .simple)
+                    ButtonLabel(style: viewModel.selectedTheme == .light ? .filled : .outlined, title: "settings.theme.light".localized(), action: .simple)
                         .font(Fonts.detailsButton)
                         .lineLimit(1)
                         .frame(maxWidth: .infinity)
                         .onTapGesture {
                             viewModel.changeTheme(.light)
                         }
-                    ButtonLabel(style: viewModel.selectedTheme == .dark ? .filled : .outlined, title: "settings.theme.dark", action: .simple)
+                    ButtonLabel(style: viewModel.selectedTheme == .dark ? .filled : .outlined, title: "settings.theme.dark".localized(), action: .simple)
                         .font(Fonts.detailsButton)
                         .lineLimit(1)
                         .frame(maxWidth: .infinity)
@@ -88,7 +86,7 @@ struct SettingsView: View {
                 .padding(.bottom, 66)
             }
             .padding(LayoutConst.maxPadding)
-            .navigationTitle("settings.title")
+            .navigationTitle("settings.title".localized())
             .frame(maxHeight: .infinity, alignment: .top)
         }
     }

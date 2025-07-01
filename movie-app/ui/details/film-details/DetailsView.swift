@@ -43,29 +43,29 @@ struct DetailsView: View {
                     MediaItemHeaderView(title: viewModel.movie.title, year: viewModel.movie.year, runtime: "\(viewModel.movie.runtime)", language: viewModel.movie.spokenLanguages)
                     HStack(spacing: 24){
                         NavigationLink(destination: AddReviewView(mediaItemDetail: viewModel.movie)){
-                            ButtonLabel(style: .outlined, title: "button.rate.title", action: .simple)
+                            ButtonLabel(style: .outlined, title: "button.rate.title".localized(), action: .simple)
                         }
                         
-                        ButtonLabel(style: .filled, title: "button.imdb.title", action: .link(viewModel.movie.imageUrl))
+                        ButtonLabel(style: .filled, title: "button.imdb.title".localized(), action: .link(viewModel.movie.imageUrl))
                     }
                     VStack(alignment: .leading, spacing: 12){
-                        Text(LocalizedStringKey("overview"))
+                        Text("overview".localized())
                             .font(Fonts.overviewText)
                         Text(viewModel.movie.overview)
                             .font(Fonts.paragraph)
                             .lineLimit(nil)
                     }
                     VStack(alignment: .leading){
-                        Text("companies")
+                        Text("companies".localized())
                             .font(Fonts.overviewText)
                         //                            ParticipantScrollView(participants: viewModel.movie.companies)
                         SideScrollView(contributors: viewModel.movie.companies, type: .company)
-                        Text("cast")
+                        Text("cast".localized())
                             .font(Fonts.overviewText)
                         //                            ParticipantScrollView(participants: viewModel.cast)
                         SideScrollView(contributors: viewModel.cast, type: .cast)
                     }
-                    Text("detail.similar.movies")
+                    Text("detail.similar.movies".localized())
                         .font(Fonts.title)
                     
                 }

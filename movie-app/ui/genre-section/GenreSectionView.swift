@@ -62,7 +62,7 @@ struct GenreSectionView: View {
                     }
                 }
                 .accessibilityLabel(AccessibilityLabels.genreSectionCollectionView)
-                .navigationTitle(Environments.name == .tv ? "TV app":"genreSection.title")
+                .navigationTitle(Environments.name == .tv ? "TV app":"genreSection.title".localized())
                 .padding(.bottom,LayoutConst.largePadding)
             }
             .listStyle(.plain)

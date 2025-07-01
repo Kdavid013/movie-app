@@ -28,6 +28,8 @@ protocol MovieRepository {
     func fetchCompanyDetail(req: FetchDetailRequest) -> AnyPublisher<CastDetail, MovieError>
     func fetchSimilarMovies(req: FetchSimilarMoviesRequest) -> AnyPublisher<[MediaItem], MovieError>
     func fetchCombinedCredits(req: FetchDetailRequest) -> AnyPublisher<[MediaItem], MovieError>
+    func fetchTvDetail(req: FetchDetailRequest) -> AnyPublisher<MediaItemDetail, MovieError>
+    func fetchTvCredits(req: FetchDetailRequest) -> AnyPublisher<[Contributors], MovieError>
 }
 
 class MovieRepositoryImpl: MovieRepository {
@@ -219,10 +221,28 @@ class MovieRepositoryImpl: MovieRepository {
     func fetchCombinedCredits(req: FetchDetailRequest) -> AnyPublisher<[MediaItem], MovieError> {
         return requestAndTransform(
             target: MultiTarget(MoviesApi.fetchCombinedCredits(req: req)),
-            decodeTo: MoviePageResponse.self,
-            transform: { $0.results.map(MediaItem.init(dto:))}
+            decodeTo: CombinedPageResponse.self,
+            transform: { $0.cast.map(MediaItem.init(dto:))}
         )
     }
+    
+    func fetchTvDetail(req: FetchDetailRequest) -> AnyPublisher<MediaItemDetail, MovieError> {
+        return requestAndTransform(
+            target: MultiTarget(MoviesApi.fetchTvDetail(req: req)),
+            decodeTo: SeriesDetailResponse.self,
+            transform: { MediaItemDetail(dto: $0)}
+        )
+    }
+    
+    func fetchTvCredits(req: FetchDetailRequest) -> AnyPublisher<[Contributors], MovieError> {
+        return requestAndTransform(
+            target: MultiTarget(MoviesApi.fetchTvCredits(req: req)),
+            decodeTo: ListCastResponse.self,
+            transform: { dto in
+                dto.cast.map(Contributors.init(dto:))}
+        )
+    }
+    
     
     private func requestAndTransform<ResponseType: Decodable, Output>(
         target: MultiTarget,

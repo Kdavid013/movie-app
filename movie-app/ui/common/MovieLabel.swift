@@ -32,7 +32,7 @@ struct MovieLabel: View {
             text = "\(count)"
             imageRes = .person
         case .captions(let captions):
-            text =  captions ? "available" : "unavailable"
+            text =  captions ? "available".localized() : "unavailable".localized()
             imageRes = .caption
         }
         

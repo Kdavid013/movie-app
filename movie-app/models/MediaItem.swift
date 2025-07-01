@@ -26,7 +26,7 @@ struct MediaItem: Identifiable {
         self.duration = ""
         self.type = .unknown
     }
-       
+    
     init(id: Int, title: String, year: String, duration: String, imageUrl: URL?, rating: Double, voteCount: Int, type: MediaItemType) {
         self.id = id
         self.title = title
@@ -61,7 +61,7 @@ struct MediaItem: Identifiable {
     
     init(dto: SeriesResponse) {
         let year = String(dto.releaseDate.prefix(4))
-        let duration = "1h 25min" // TODO: placeholder – ha lesz ilyen adat, cserélhető
+        let duration = "40min" // TODO: placeholder – ha lesz ilyen adat, cserélhető
         
         var imageUrl: URL? {
             dto.posterPath.flatMap {
@@ -81,15 +81,42 @@ struct MediaItem: Identifiable {
     }
     
     init(detail: MediaItemDetail) {
-           self.id = detail.id
-           self.title = detail.title
-           self.year = detail.year
-           self.duration = "1h 25min"
-           self.imageUrl = detail.imageUrl
-           self.rating = detail.rating
-           self.voteCount = detail.voteCount
-           self.type = detail.type
-           
-       }
+        self.id = detail.id
+        self.title = detail.title
+        self.year = detail.year
+        self.duration = "1h 25min"
+        self.imageUrl = detail.imageUrl
+        self.rating = detail.rating
+        self.voteCount = detail.voteCount
+        self.type = detail.type
+        
+    }
     
+    init(dto: CombinedMediaItemResponse){
+        let releaseDate: String? = dto.releaseDate ?? dto.firstAirDate
+        let prefixedYear: Substring = releaseDate?.prefix(4) ?? "-"
+        let year = String(prefixedYear)
+        let duration = "1h 25min"
+        
+        var imageUrl: URL? {
+            dto.posterPath.flatMap {
+                URL(string: "https://image.tmdb.org/t/p/w500\($0)")
+            }
+        }
+        self.id = dto.id
+        self.title = dto.originalTitle ?? dto.originalName ?? "N/A"
+        self.year = year
+        self.duration = duration
+        self.imageUrl = imageUrl
+        self.rating = dto.voteAverage
+        self.voteCount = dto.voteCount
+        switch dto.mediaType {
+        case "movie":
+            self.type = .movie
+        case "tv":
+            self.type = .tv
+        default:
+            self.type = .unknown
+        }
+    }
 }

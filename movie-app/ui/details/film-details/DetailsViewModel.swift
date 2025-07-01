@@ -54,7 +54,7 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
                 case .movie:
                     return self.repository.fetchMovieDetail(req: requset)
                 case .tv:
-                    return self.repository.fetchMovieDetail(req: requset)
+                    return self.repository.fetchTvDetail(req: requset)
                 case .unknown:
                     return Just<MediaItemDetail>(MediaItemDetail())
                         .setFailureType(to: MovieError.self)
@@ -72,7 +72,7 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
                 case .movie:
                     return self.repository.fetchMovieCredits(req: requset)
                 case .tv:
-                    return self.repository.fetchMovieCredits(req: requset)
+                    return self.repository.fetchTvCredits(req: requset)
                 case .unknown:
                     return Just<[Contributors]>(Array(repeating:Contributors(), count: 5))
                         .setFailureType(to: MovieError.self)
@@ -153,7 +153,7 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
                 }
                 if result.success {
                     if isFavorite{
-                        self.favoriteMediaStorage.addFavoriteMediaItem(MediaItem(detail: oself.movie))
+                        self.favoriteMediaStorage.addFavoriteMediaItem(MediaItem(detail: self.movie))
                     } else {
                         self.favoriteMediaStorage.removeFavoriteMediaItem(withId: self.movie.id)
                     }

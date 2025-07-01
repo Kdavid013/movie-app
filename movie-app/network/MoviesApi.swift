@@ -24,6 +24,8 @@ enum MoviesApi {
     case fetchCompanyDetail(req: FetchDetailRequest)
     case fetchSimilarMovies(req: FetchSimilarMoviesRequest)
     case fetchCombinedCredits(req: FetchDetailRequest)
+    case fetchTvDetail(req: FetchDetailRequest)
+    case fetchTvCredits(req: FetchDetailRequest)
 }
 
 extension MoviesApi: TargetType {
@@ -67,12 +69,16 @@ extension MoviesApi: TargetType {
             return "/movie/\(req.movieId)/similar"
         case let .fetchCombinedCredits(req: req):
             return "/person/\(req.movieId)/combined_credits"
+        case let .fetchTvDetail(req: req):
+            return "/tv/\(req.movieId)"
+        case let .fetchTvCredits(req: req):
+            return "/tv/\(req.movieId)/credits"
         }
     }
     
     var method: Moya.Method {
         switch self{
-        case .fetchGenres, .fetchTVGenres,.fetchMovies, .searchMovies, .searchTvs, .fetchFavorites, .fetchSeries, .fetchMovieDetail, .fetchMovieCredits, .fetchCastDetail, .fetchCompanyDetail, .fetchSimilarMovies, .fetchCombinedCredits:
+        case .fetchGenres, .fetchTVGenres,.fetchMovies, .searchMovies, .searchTvs, .fetchFavorites, .fetchSeries, .fetchMovieDetail, .fetchMovieCredits, .fetchCastDetail, .fetchCompanyDetail, .fetchSimilarMovies, .fetchCombinedCredits, .fetchTvDetail, .fetchTvCredits:
             return .get
         case .editFavoriteMovie,.addReview:
             return .post
@@ -116,6 +122,10 @@ extension MoviesApi: TargetType {
             return .requestParameters(parameters: req.asRequestParams(), encoding: URLEncoding.queryString)
         case let .fetchCombinedCredits(req):
             return .requestParameters(parameters: req.asRequestParams(), encoding: URLEncoding.queryString)
+        case let .fetchTvDetail(req):
+            return .requestParameters(parameters: req.asRequestParams(), encoding: URLEncoding.queryString)
+        case let .fetchTvCredits(req):
+            return .requestParameters(parameters: req.asRequestParams(), encoding: URLEncoding.queryString)
         }
         
     }
@@ -152,6 +162,10 @@ extension MoviesApi: TargetType {
         case let .fetchSimilarMovies(req):
             return ["Authorization": req.accessToken]
         case let .fetchCombinedCredits(req):
+            return ["Authorization": req.accessToken]
+        case let .fetchTvDetail(req):
+            return ["Authorization": req.accessToken]
+        case let .fetchTvCredits(req):
             return ["Authorization": req.accessToken]
         }
     }
