@@ -45,6 +45,7 @@ class CastDetailsViewModel: ObservableObject, ErrorPresentable{
                     return Fail(error: MovieError.unexpectedError).eraseToAnyPublisher()
                     
                 }
+
                 let request = FetchDetailRequest(movieId: participantType.id)
                 
                 return self.repository.fetchCombinedCredits(req: request)
@@ -73,11 +74,7 @@ class CastDetailsViewModel: ObservableObject, ErrorPresentable{
                     print(">>>Error received: \(error)")
                 }
             }, receiveValue: { [weak self] combinedCredits in
-                print(">>>Received combinedCredits: \(combinedCredits)")
                 self?.combinedCredits.append(contentsOf: combinedCredits)
-//                self?.castDetail = castDetail
-//                
-//                self?.rating = self?.calculateStarRating(for: castDetail.popularity) ?? 0
             })
             .store(in: &cancellables)
         

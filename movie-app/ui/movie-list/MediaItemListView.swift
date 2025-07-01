@@ -13,6 +13,9 @@ struct MediaItemListView: View {
     
     let genre: Genre
     
+    @EnvironmentObject
+    var languageManager: LanguageManager
+    
     @StateObject private var viewModel = MediaItemListViewModel()
     //    csak genreval fog tud dolgozni
     
@@ -33,17 +36,17 @@ struct MediaItemListView: View {
             //            pár cellát tart mindig a memóriába, csak annyit amennyi a képernyőn látszik
             //            columns - array amibe grid itemek kerülnek
             LazyVGrid(columns: columns, spacing: 24) {
-                ForEach(Array(viewModel.mediaItems.enumerated()), id: \.1.id ) {index, movie in
-                    NavigationLink(destination: DetailsView(mediaItem: movie)){
-                        MediaItemCell(movie: movie)
-                            .offset(y: isAnimated.contains(movie.id) ? 0 : 200 )
-                            .opacity(isAnimated.contains(movie.id) ? 1 : 0)
+                ForEach(Array(viewModel.mediaItems.enumerated()), id: \.1.id ) {index, mediaItem in
+                    NavigationLink(destination: DetailsView(mediaItem: mediaItem)){
+                        MediaItemCell(movie: mediaItem)
+                            .offset(y: isAnimated.contains(mediaItem.id) ? 0 : 200 )
+                            .opacity(isAnimated.contains(mediaItem.id) ? 1 : 0)
                             .onAppear {
-                                if viewModel.mediaItems.last?.id == movie.id {
+                                if viewModel.mediaItems.last?.id == mediaItem.id {
                                     viewModel.genreIdSubject.send(genre.id)
                                 }
                                 withAnimation(.easeInOut(duration: 0.5).delay(Double(index) * 0.001)){
-                                    isAnimated.append(movie.id)
+                                    isAnimated.append(mediaItem.id)
                                 }
                             }
                     }
@@ -67,6 +70,7 @@ struct MediaItemListView: View {
             viewModel.mediaItems.removeAll()
             viewModel.actualPage = 0
             viewModel.genreIdSubject.send(genre.id)
+            viewModel.reachedButtomSubject.send()
         }
     }
 }

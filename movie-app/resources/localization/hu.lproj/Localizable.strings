@@ -37,6 +37,9 @@
 "companies" = "Kiadó és gyártó";
 "cast" = "Szereplők";
 
+"version" = "Verzió";
+"created" = "Készítette: Hell yeah";
+
 "review.title" = "Add meg a véleményed";
 "review.button" = "Értékelés küldése";
 

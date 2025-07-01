@@ -39,6 +39,11 @@
 "cast" = "Cast";
 "review.title" = "Give it a honest review";
 
+"mediaItem.default.duration"  = "1h 25min";
+
+"version" = "Version";
+"created" = "Created by Hell yeah";
+
 "settings.title" = "Settings";
 "settings.chooseLanguage" = "Choose a language";
 "settings.lang.english" = "English";

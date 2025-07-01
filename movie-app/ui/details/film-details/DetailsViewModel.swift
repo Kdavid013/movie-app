@@ -10,12 +10,12 @@ import InjectPropertyWrapper
 import Combine
 
 protocol DetailsViewModelProtocol: ObservableObject {
-    var movie: MediaItemDetail { get }
+    var mediaItem: MediaItemDetail { get }
 }
 
 class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
     
-    @Published var movie: MediaItemDetail = MediaItemDetail()
+    @Published var mediaItem: MediaItemDetail = MediaItemDetail()
     @Published var cast: [Contributors] = []
     @Published var mediaItems: [MediaItem] = []
     @Published var isLoading: Bool = false
@@ -88,13 +88,13 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
                     self.alertModel = self.toAlertModel(error)
                 }
                 
-            } receiveValue: { [weak self] movie, cast in
+            } receiveValue: { [weak self] mediaItem, cast in
                 guard let self = self else {
                     preconditionFailure("There is no self")
                 }
                 self.cast = cast
-                self.movie = movie
-                self.isFavorite = self.favoriteMediaStorage.isFavoriteMediaItem(withId: movie.id)
+                self.mediaItem = mediaItem
+                self.isFavorite = self.favoriteMediaStorage.isFavoriteMediaItem(withId: mediaItem.id)
                 
             }
             .store(in: &cancellables)
@@ -136,7 +136,7 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
                     preconditionFailure("There is no self")
                 }
                 let isFavorite = !self.isFavorite
-                let request = EditFavoriteRequest(movieId: self.movie.id, isFavorite:  isFavorite)
+                let request = EditFavoriteRequest(movieId: self.mediaItem.id, isFavorite:  isFavorite)
                 return repository.editFavoriteMovie(req: request)
                     .map { result in
                         (result,isFavorite)
@@ -153,9 +153,9 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
                 }
                 if result.success {
                     if isFavorite{
-                        self.favoriteMediaStorage.addFavoriteMediaItem(MediaItem(detail: self.movie))
+                        self.favoriteMediaStorage.addFavoriteMediaItem(MediaItem(detail: self.mediaItem))
                     } else {
-                        self.favoriteMediaStorage.removeFavoriteMediaItem(withId: self.movie.id)
+                        self.favoriteMediaStorage.removeFavoriteMediaItem(withId: self.mediaItem.id)
                     }
                     self.isFavorite = isFavorite
                 }

@@ -18,6 +18,7 @@ struct SplashScreen: View {
     var body: some View {
         if animationFinished {
             RootView(selectedTab: selectedTab)
+                .environmentObject(LanguageManager.shared)
         } else {
             LottieView(animation: .named("movies"))
                 .playing(loopMode: .playOnce)

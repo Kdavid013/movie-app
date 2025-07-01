@@ -115,8 +115,8 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
                 if self.motdMovies?.count ?? 0 < 5{
                     let randomMovies = mediaItemPage.mediaItems.shuffled().prefix(5)
                     
-                    randomMovies.flatMap{ movie in
-                        self.useCase.loadMotdMovie(movie: movie)
+                    randomMovies.flatMap{ mediaItem in
+                        self.useCase.loadMotdMovie(movie: mediaItem)
                             .sink { completion in
                                 if case let .failure(error) = completion {
                                     self.alertModel = self.toAlertModel(error)

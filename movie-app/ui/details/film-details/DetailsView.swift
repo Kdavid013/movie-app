@@ -15,6 +15,8 @@ struct DetailsView: View {
     @StateObject private var viewModel = DetailsViewModel()
     @Environment(\.dismiss) private var dismiss: DismissAction
     
+    @EnvironmentObject var languageManager: LanguageManager
+    
     var body: some View {
         ZStack(alignment: .topTrailing){
             HStack{
@@ -27,31 +29,32 @@ struct DetailsView: View {
             }
             ScrollView{
                 VStack(alignment: .leading, spacing:15){
-                    MoviePicture(picUrl: viewModel.movie.imageUrl)
+                    MoviePicture(picUrl: viewModel.mediaItem.imageUrl)
                     HStack(spacing:12){
-                        MovieLabel(type: .rating(viewModel.movie.rating))
-                        MovieLabel(type: .voteCount(vote: viewModel.movie.voteCount))
-                        MovieLabel(type: .popularity(viewModel.movie.popularity))
+                        MovieLabel(type: .rating(viewModel.mediaItem.rating))
+                        MovieLabel(type: .voteCount(vote: viewModel.mediaItem.voteCount))
+                        MovieLabel(type: .popularity(viewModel.mediaItem.popularity))
                         Spacer()
-                        MovieLabel(type: .captions(viewModel.movie.adult))
+                        MovieLabel(type: .captions(viewModel.mediaItem.adult))
                     }
                     HStack{
-                        Text(viewModel.movie.genreList)
+                        Text(viewModel.mediaItem.genreList)
                             .font(Fonts.paragraph)
                         Spacer()
                     }
-                    MediaItemHeaderView(title: viewModel.movie.title, year: viewModel.movie.year, runtime: "\(viewModel.movie.runtime)", language: viewModel.movie.spokenLanguages)
+                    MediaItemHeaderView(title: viewModel.mediaItem.title, year: viewModel.mediaItem.year, runtime: "\(viewModel.mediaItem.runtime)", language: viewModel.mediaItem.spokenLanguages)
                     HStack(spacing: 24){
-                        NavigationLink(destination: AddReviewView(mediaItemDetail: viewModel.movie)){
+                        NavigationLink(destination: AddReviewView(mediaItemDetail: viewModel.mediaItem)){
                             ButtonLabel(style: .outlined, title: "button.rate.title".localized(), action: .simple)
                         }
-                        
-                        ButtonLabel(style: .filled, title: "button.imdb.title".localized(), action: .link(viewModel.movie.imageUrl))
+                        if viewModel.mediaItem.imdbUrl != nil{
+                            ButtonLabel(style: .filled, title: "button.imdb.title".localized(), action: .link(viewModel.mediaItem.imdbUrl))
+                        }
                     }
                     VStack(alignment: .leading, spacing: 12){
                         Text("overview".localized())
                             .font(Fonts.overviewText)
-                        Text(viewModel.movie.overview)
+                        Text(viewModel.mediaItem.overview)
                             .font(Fonts.paragraph)
                             .lineLimit(nil)
                     }
@@ -59,7 +62,7 @@ struct DetailsView: View {
                         Text("companies".localized())
                             .font(Fonts.overviewText)
                         //                            ParticipantScrollView(participants: viewModel.movie.companies)
-                        SideScrollView(contributors: viewModel.movie.companies, type: .company)
+                        SideScrollView(contributors: viewModel.mediaItem.companies, type: .company)
                         Text("cast".localized())
                             .font(Fonts.overviewText)
                         //                            ParticipantScrollView(participants: viewModel.cast)

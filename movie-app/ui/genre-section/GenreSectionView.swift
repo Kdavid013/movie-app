@@ -69,9 +69,9 @@ struct GenreSectionView: View {
         }
         .showAlert(model: $viewModel.alertModel)
         .onAppear{
+            viewModel.mediaItemsByGenre.removeAll()
             viewModel.loadGenres()
             viewModel.genreAppeared()
-            
         }
     }
 }

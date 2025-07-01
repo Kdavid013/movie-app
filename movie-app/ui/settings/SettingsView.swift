@@ -20,23 +20,17 @@ struct SettingsView: View {
                 HStack(spacing: 12) {
                     ButtonLabel(style: viewModel.selectedLanguage == "en" ? .filled : .outlined, title: "settings.lang.english".localized(), action: .simple)
                         .font(Fonts.detailsButton)
-                        .lineLimit(1)
-                        .fixedSize()
                         .onTapGesture {
                             viewModel.changeSelectedLanguge("en")
                             
                         }
                     ButtonLabel(style: viewModel.selectedLanguage == "de" ? .filled : .outlined, title: "settings.lang.german".localized(), action: .simple)
                         .font(Fonts.detailsButton)
-                        .lineLimit(1)
-                        .fixedSize()
                         .onTapGesture {
                             viewModel.changeSelectedLanguge("de")
                         }
                     ButtonLabel(style: viewModel.selectedLanguage == "hu" ? .filled : .outlined, title: "settings.lang.hungarian".localized(), action: .simple)
                         .font(Fonts.detailsButton)
-                        .lineLimit(1)
-                        .fixedSize()
                         .onTapGesture {
                             viewModel.changeSelectedLanguge("hu")
                         }
@@ -49,14 +43,12 @@ struct SettingsView: View {
                 HStack(spacing: 12) {
                     ButtonLabel(style: viewModel.selectedTheme == .light ? .filled : .outlined, title: "settings.theme.light".localized(), action: .simple)
                         .font(Fonts.detailsButton)
-                        .lineLimit(1)
                         .frame(maxWidth: .infinity)
                         .onTapGesture {
                             viewModel.changeTheme(.light)
                         }
                     ButtonLabel(style: viewModel.selectedTheme == .dark ? .filled : .outlined, title: "settings.theme.dark".localized(), action: .simple)
                         .font(Fonts.detailsButton)
-                        .lineLimit(1)
                         .frame(maxWidth: .infinity)
                         .onTapGesture {
                             viewModel.changeTheme(.dark)
@@ -78,8 +70,8 @@ struct SettingsView: View {
                 }
                 Spacer()
                 VStack(spacing: LayoutConst.smallPadding) {
-                    Text("Version \(viewModel.appInfo)")
-                    Text("Created by Hell yeah")
+                    Text("version".localized() + ": \(viewModel.appInfo)")
+                    Text("created".localized())
                 }
                 .font(Fonts.subheading)
                 .frame(maxWidth: .infinity, alignment: .center)

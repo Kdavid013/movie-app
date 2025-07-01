@@ -11,6 +11,9 @@ import SwiftUI
 
 struct DetailLabel: View {
     
+    @EnvironmentObject
+    var languageManager: LanguageManager
+    
     var title: String
     var desc: String
     
@@ -18,7 +21,7 @@ struct DetailLabel: View {
     var body: some View {
                 
         VStack(alignment: .leading, spacing: LayoutConst.smallPadding) {
-            Text(LocalizedStringKey(title))
+            Text(title.localized())
                 .font(Fonts.caption)
             Text(desc)
                 .font(Fonts.paragraph)

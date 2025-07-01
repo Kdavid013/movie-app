@@ -96,7 +96,7 @@ struct MediaItem: Identifiable {
         let releaseDate: String? = dto.releaseDate ?? dto.firstAirDate
         let prefixedYear: Substring = releaseDate?.prefix(4) ?? "-"
         let year = String(prefixedYear)
-        let duration = "1h 25min"
+        let duration = "mediaItem.default.duration".localized()
         
         var imageUrl: URL? {
             dto.posterPath.flatMap {

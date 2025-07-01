@@ -7,6 +7,7 @@
 
 import Foundation
 import InjectPropertyWrapper
+import SwiftUICore
 
 protocol SettingsViewModelProtocol: ObservableObject {
     
@@ -15,6 +16,7 @@ protocol SettingsViewModelProtocol: ObservableObject {
 class SettingsViewModel: SettingsViewModelProtocol {
     @Published var selectedLanguage: String = Bundle.getLangCode()
     
+    private let languageManager = LanguageManager.shared
     private let themeKey = "color-scheme"
     
     @Inject
@@ -37,7 +39,7 @@ class SettingsViewModel: SettingsViewModelProtocol {
     
     func changeSelectedLanguge(_ language: String) {
             self.selectedLanguage = language
-            Bundle.setLanguage(lang: language)
+            languageManager.setLanguage(language)
         }
         
     

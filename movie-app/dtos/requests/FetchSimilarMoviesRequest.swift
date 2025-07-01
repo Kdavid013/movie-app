@@ -5,12 +5,12 @@
 //  Created by David Karacs on 2025. 06. 24..
 //
 
-struct FetchSimilarMoviesRequest {
+struct FetchSimilarMoviesRequest: LocalizedRequestable {
     let accessToken: String = Config.bearerToken
     let movieId: Int
     let page: Int
     
     func asRequestParams() -> [String: Any] {
-        return ["page": page]
+        return ["page": page] + languageParam
                 }
 }

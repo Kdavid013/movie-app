@@ -35,33 +35,39 @@ struct ButtonLabel: View{
                 Capsule()
                     .stroke(Color.primary, style: StrokeStyle(lineWidth: style == .outlined ? 1 : 0))
             )
-//            .frame(maxWidth: .infinity)
+        //            .frame(maxWidth: .infinity)
     }
-
-@ViewBuilder
-private var baseView: some View {
-    switch action {
-    case .simple:
-        Text(LocalizedStringKey(title))
-    case .link(let url):
-        if let url = url {
-            Link(LocalizedStringKey(title), destination: url)
-        } else {
+    
+    @ViewBuilder
+    private var baseView: some View {
+        switch action {
+        case .simple:
             Text(LocalizedStringKey(title))
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+        case .link(let url):
+            if let url = url {
+                Link(LocalizedStringKey(title), destination: url)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+            } else {
+                Text(LocalizedStringKey(title))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+            }
+            
         }
-        
     }
-}
-
-
-private var backgroundView: some View {
-    switch style {
-    case .filled:
-        return Color.primary
-    case .outlined:
-        return Color.main
+    
+    
+    private var backgroundView: some View {
+        switch style {
+        case .filled:
+            return Color.primary
+        case .outlined:
+            return Color.main
+        }
     }
-}
-
+    
 }
 

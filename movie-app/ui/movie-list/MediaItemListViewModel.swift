@@ -27,12 +27,17 @@ class MediaItemListViewModel: MediaItemListViewModelProtocol, ErrorPresentable {
     private var repository: MovieRepository
     
     let genreIdSubject = PassthroughSubject<Int, Never>()
+    let reachedButtomSubject= PassthroughSubject<Void, Never>()
     
     init(){
         
         print("<<< létrejött a MovieListViewModel")
         
         genreIdSubject
+            .handleEvents(receiveOutput: { [weak self] _ in
+                self?.mediaItems.removeAll()
+                self?.actualPage = 0
+            })
             .filter{[weak self] _ in
                 guard let self = self else {
                     preconditionFailure("There is no self")
@@ -48,7 +53,7 @@ class MediaItemListViewModel: MediaItemListViewModelProtocol, ErrorPresentable {
                     preconditionFailure("There is no self")
                 }
                 let request = FetchMoviesRequest(genreId: genreId, page: actualPage)
-                return /*Environments.name == tv. ? self.repository.fetchSeries(req: request)*/
+                return Environments.name == .tv ? self.repository.fetchSeries(req: request) :
                 self.repository.fetchMovies(req: request)
             }
             .delay(for: .seconds(2), scheduler: RunLoop.main)

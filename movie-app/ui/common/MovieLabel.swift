@@ -40,6 +40,8 @@ struct MovieLabel: View {
             Image(imageRes)
             Text(LocalizedStringKey(text))
                 .font(Fonts.labelBold)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
         }
         .padding(4)
         .background(Color.invertedMain.opacity(0.3))

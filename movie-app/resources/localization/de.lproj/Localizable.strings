@@ -39,6 +39,9 @@
 "cast" = "Besetzung";
 "review.title" = "Gib eine ehrliche Bewertung ab";
 
+"version" = "Version [DE]";
+"created" = "Created by Hell yeah [DE]";
+
 "settings.title" = "Einstellungen";
 "settings.chooseLanguage" = "Sprache auswählen";
 "settings.lang.english" = "Englisch";
