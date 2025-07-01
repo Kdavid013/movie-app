@@ -24,7 +24,7 @@ struct SearchView: View {
                         .frame(width: 24, height: 24)
                     TextField("",
                               text: $viewModel.searchText,
-                              prompt: Text("search.textfield.placeholder")
+                              prompt: Text("search.textfield.placeholder".localized())
                         .foregroundStyle(.invertedMain)
                     )
                     .textFieldStyle(PlainTextFieldStyle())
@@ -32,6 +32,7 @@ struct SearchView: View {
                     .foregroundColor(.invertedMain)
                     .onChange(of: viewModel.searchText) {
                         viewModel.startSearch.send(())
+                        isAnimated.removeAll()
                     }
                 }
                 .frame(height: 56)
@@ -40,14 +41,14 @@ struct SearchView: View {
                 .overlay(
                     RoundedRectangle(cornerRadius: 28)
                         .stroke(Color.invertedMain, lineWidth: 1)
-                    )
+                )
                 .cornerRadius(28)
                 .padding(.horizontal, LayoutConst.maxPadding)
                 
                 if viewModel.movies.isEmpty {
                     VStack{
                         Spacer()
-                        Text("search.empty.title")
+                        Text("search.empty.title".localized())
                             .multilineTextAlignment(.center)
                             .font(Fonts.emptyStateText)
                             .foregroundColor(.invertedMain)
@@ -57,7 +58,7 @@ struct SearchView: View {
                     ScrollView{
                         LazyVStack(spacing: LayoutConst.normalPadding){
                             ForEach(Array(viewModel.movies.enumerated()), id: \.1.id){ index, movie in
-                                NavigationLink(destination: DetailsView(mediaItemId: movie.id)){
+                                NavigationLink(destination: DetailsView(mediaItem: movie)){
                                     MediaItemCell(movie: movie)
                                         .frame(height: 277)
                                         .offset(x: isAnimated.contains(movie.id) ? 0 : 200 )
@@ -67,7 +68,7 @@ struct SearchView: View {
                                                 isAnimated.append(movie.id)
                                             }
                                         }
-                                        
+                                    
                                 }
                                 .foregroundColor(.invertedMain)
                             }
@@ -79,5 +80,5 @@ struct SearchView: View {
                 }
             }
         }
-        }
     }
+}

@@ -27,7 +27,9 @@ extension MediaItemEntity {
             duration: duration,            
             imageUrl: imageUrlString.flatMap(URL.init(string:)),
             rating: rating,
-            voteCount: voteCount
+            voteCount: voteCount,
+            type: .movie
+            
         )
     }
     
@@ -36,7 +38,7 @@ extension MediaItemEntity {
         self.id = domains.id
         self.title = domains.title
         self.duration = domains.duration
-        self.year = domains.year
+        self.year = domains.year ?? ""
         self.imageUrlString = domains.imageUrl.map(\.absoluteString)
         self.rating = domains.rating
         self.voteCount = domains.voteCount

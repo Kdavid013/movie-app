@@ -13,6 +13,7 @@ struct MediaItemDetail: Identifiable {
     let year: String
     let runtime: Int
     let imageUrl: URL?
+//    let imdbUrl: URL?
     let rating: Double
     let voteCount: Int
     let overview: String
@@ -21,6 +22,7 @@ struct MediaItemDetail: Identifiable {
     let adult: Bool
     let spokenLanguages: String
     let companies: [Contributors]
+    let type: MediaItemType
     
     init() {
         self.id = 0
@@ -28,6 +30,7 @@ struct MediaItemDetail: Identifiable {
         self.year = ""
         self.runtime = 0
         self.imageUrl = nil
+//        self.imdbUrl = URL(string: "")
         self.rating = 0
         self.voteCount = 0
         self.overview = ""
@@ -36,12 +39,15 @@ struct MediaItemDetail: Identifiable {
         self.adult = false
         self.spokenLanguages = ""
         self.companies = []
+        self.type = .movie
     }
+    
     init(id: Int,
          title: String,
          year: String,
          runtime: Int,
          imageUrl: URL?,
+//         imdbUrl: URL?,
          rating: Double,
          voteCount: Int,
          overview: String,
@@ -49,13 +55,15 @@ struct MediaItemDetail: Identifiable {
          genres: [String],
          adult: Bool,
          spokenLanguages: String,
-         companies: [Contributors]
+         companies: [Contributors],
+         type: MediaItemType
     ) {
         self.id = id
         self.title = title
         self.year = year
         self.runtime = runtime
         self.imageUrl = imageUrl
+//        self.imdbUrl = imdbUrl
         self.rating = rating
         self.voteCount = voteCount
         self.overview = overview
@@ -64,6 +72,7 @@ struct MediaItemDetail: Identifiable {
         self.adult = adult
         self.spokenLanguages = spokenLanguages
         self.companies = companies
+        self.type = type
     }
     
     init(dto: MovieDetailResponse) {
@@ -86,8 +95,35 @@ struct MediaItemDetail: Identifiable {
         self.adult = dto.adult
         self.spokenLanguages = dto.spokenLanguages.map({$0.englishName}).joined(separator: ", ")
         self.companies = dto.companies.map(Contributors.init)
+        self.type = .movie
+//        self.imdbUrl = URL(string: "https://www.imdb.com/title/\(dto.imdbId)/")
     }
     var genreList: String {
         genres.joined(separator: ", ")
     }
+    
+    init(dto: SeriesDetailResponse) {
+        let year = String(dto.firstAirDate.prefix(4))
+        let imageUrl: URL? = dto.posterPath.flatMap {
+            URL(string: "https://image.tmdb.org/t/p/w500\($0)")
+        }
+        let duration = 40
+
+        self.id = dto.id
+        self.title = dto.name
+        self.year = year
+        self.runtime = duration
+        self.imageUrl = imageUrl
+        self.rating = dto.voteAverage
+        self.voteCount = dto.voteCount
+        self.overview = dto.overview
+        self.popularity = dto.popularity
+        self.genres = dto.genres.map(\.name)
+//        self.adult = dto.adult
+        self.spokenLanguages = dto.spokenLanguages.map(\.englishName).joined(separator: ", ")
+        self.companies = dto.productionCompanies.map(Contributors.init)
+        self.type = .tv
+        self.adult = false
+    }
+
 }

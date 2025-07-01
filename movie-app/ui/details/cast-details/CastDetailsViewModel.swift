@@ -27,6 +27,7 @@ class CastDetailsViewModel: ObservableObject, ErrorPresentable{
     @Published var castDetail: CastDetail = CastDetail()
     @Published var alertModel: AlertModel? = nil
     @Published var rating: Int = 0
+    @Published var combinedCredits: [MediaItem] = []
     
     let participantTypeSubject = PassthroughSubject<CastDetailType, Never>()
     
@@ -36,14 +37,25 @@ class CastDetailsViewModel: ObservableObject, ErrorPresentable{
     private var cancellables = Set<AnyCancellable>()
     
     init() {
-        participantTypeSubject
-            .print("<<< personIdSubject")
+        
+        let combinedCredits = participantTypeSubject
+            .flatMap { [weak self] participantType -> AnyPublisher<[MediaItem], MovieError> in
+                print(">>>Emitting participantType: \(participantType)")
+                guard let self = self else {
+                    return Fail(error: MovieError.unexpectedError).eraseToAnyPublisher()
+                    
+                }
+                let request = FetchDetailRequest(movieId: participantType.id)
+                
+                return self.repository.fetchCombinedCredits(req: request)
+            }
+        
+        let participantDetail = participantTypeSubject
             .flatMap { [weak self] participantType -> AnyPublisher<CastDetail, MovieError> in
                 guard let self = self else {
                     return Fail(error: MovieError.unexpectedError).eraseToAnyPublisher()
                 }
                 let request = FetchDetailRequest(movieId: participantType.id)
-//                return self.repository.fetchCastDetail(req: request)
                 
                 switch participantType {
                 case .castMember:
@@ -51,17 +63,38 @@ class CastDetailsViewModel: ObservableObject, ErrorPresentable{
                 case .company:
                     return self.repository.fetchCompanyDetail(req: request)
                 }
+                
             }
+        
+        combinedCredits
+            .sink(receiveCompletion: { [weak self] completion in
+                if case let .failure(error) = completion {
+                    self?.alertModel = self?.toAlertModel(error)
+                    print(">>>Error received: \(error)")
+                }
+            }, receiveValue: { [weak self] combinedCredits in
+                print(">>>Received combinedCredits: \(combinedCredits)")
+                self?.combinedCredits.append(contentsOf: combinedCredits)
+//                self?.castDetail = castDetail
+//                
+//                self?.rating = self?.calculateStarRating(for: castDetail.popularity) ?? 0
+            })
+            .store(in: &cancellables)
+        
+        participantDetail
             .receive(on: RunLoop.main)
             .sink(receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
                     self?.alertModel = self?.toAlertModel(error)
                 }
             }, receiveValue: { [weak self] castDetail in
+                print("<<<<",castDetail)
+//                self?.combinedCredits = combinedCredits
                 self?.castDetail = castDetail
                 self?.rating = self?.calculateStarRating(for: castDetail.popularity) ?? 0
             })
             .store(in: &cancellables)
+        
     }
     
     private func calculateStarRating(for popularity: Double?) -> Int {

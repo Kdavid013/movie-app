@@ -22,7 +22,7 @@ struct MoviePageResponse: Decodable {
 struct MovieResponse: Decodable {
     let id: Int
     let title: String
-    let releaseDate: String
+    let releaseDate: String?
     let posterPath: String?
     let voteAverage: Double
     let voteCount: Int

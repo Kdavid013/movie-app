@@ -19,7 +19,7 @@ struct MovieSideScrollView: View {
         ScrollView(.horizontal){
             LazyHStack(spacing: 20) {
                 ForEach(Array(mediaItems.enumerated()), id: \.element.id) {index, mediaItem in
-                    NavigationLink(destination: DetailsView(mediaItemId: mediaItem.id)) {
+                    NavigationLink(destination: DetailsView(mediaItem: mediaItem)) {
                         MediaItemCell(movie: mediaItem)
                             .frame(width: 200)
                             .onAppear {

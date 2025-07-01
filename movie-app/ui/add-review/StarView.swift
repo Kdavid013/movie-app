@@ -10,6 +10,7 @@ import SwiftUI
 struct StarView: View {
     let index: Int
     let isFilled: Bool
+    var size: CGFloat = 40.0
     let onTap: () -> Void
 
     var body: some View {

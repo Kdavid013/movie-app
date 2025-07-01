@@ -15,6 +15,11 @@ struct CastDetailsView: View {
     
     @StateObject private var viewModel = CastDetailsViewModel()
     
+    let columns = [
+        GridItem(.flexible(), spacing: 16),
+        GridItem(.flexible(), spacing: 16)
+    ]
+    
     var body: some View {
         ZStack(alignment: .topTrailing){
             HStack{
@@ -32,21 +37,34 @@ struct CastDetailsView: View {
                     Text(viewModel.castDetail.name)
                         .font(Fonts.detailTitle)
                     HStack{
-                        DetailLabel(title: "detail.label.birthYear", desc: viewModel.castDetail.birthYear)
-                        DetailLabel(title: "detail.label.birthPlace", desc: viewModel.castDetail.originPlace ?? "")
+                        DetailLabel(title: "detail.label.birthYear".localized(), desc: viewModel.castDetail.birthYear)
+                        DetailLabel(title: "detail.label.birthPlace".localized(), desc: viewModel.castDetail.originPlace ?? "")
                     }
                     VStack(alignment: .leading,spacing: 12){
-                        Text(LocalizedStringKey("detail.bio"))
+                        Text(LocalizedStringKey("detail.bio".localized()))
                             .font(Fonts.overviewText)
                         Text(viewModel.castDetail.biography ?? "")
                             .font(Fonts.paragraph)
                             .lineLimit(5)
                     }
-                    VStack{
-                        Text(LocalizedStringKey("detail.popularity"))
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("detail.lable.popularity".localized())
                             .font(Fonts.overviewText)
+                            .foregroundColor(Color.primary)
+                        HStack {
+                            Spacer()
+                            StarRatingView(rating: $viewModel.rating, starSize: 24)
+                            Spacer()
+                        }
                     }
-                    
+                    LazyVGrid(columns: columns, spacing: 24) {
+                        ForEach(viewModel.combinedCredits){ mediaItem in
+                            NavigationLink(destination: DetailsView(mediaItem: mediaItem)){
+                                MediaItemCell(movie: mediaItem)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                        }
+                    }
                 }
             }
             .padding(.horizontal,LayoutConst.maxPadding)

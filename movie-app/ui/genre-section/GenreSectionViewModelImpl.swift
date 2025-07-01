@@ -80,12 +80,15 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
     func loadMediaItems(genreId: Int) {
         
         useCase.loadMediaItems(genreId: genreId)
+            .map( { mediaItemPage in
+                Array(mediaItemPage.mediaItems.prefix(3))
+            })
             .sink { completion in
                 if case let .failure(error) = completion {
                     self.alertModel = self.toAlertModel(error)
                 }
-            } receiveValue: { mediaItemPage in
-                self.mediaItemsByGenre[genreId] = mediaItemPage.mediaItems
+            } receiveValue: { mediaItems in
+                self.mediaItemsByGenre[genreId] = mediaItems
             }
             .store(in: &cancellables)
     }
@@ -120,12 +123,12 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
                                 }
                             } receiveValue: { mediaItemDetail in
                                 self.motdMovies?.append(mediaItemDetail)
-                                print("<<debug receive", self.motdMovies?.count)
+//                                print("<<debug receive", self.motdMovies?.count)
                             }
                             .store(in: &self.cancellables)
                     }
                 }
-                print("<<debug", self.motdMovies?.count)
+//                print("<<debug", self.motdMovies?.count)
             }
             .store(in: &cancellables)
     }
@@ -133,7 +136,7 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
     func getRandomMovies2(genreId: Int?) {
         
 //        useCase.loadMediaItems(genreId: genreId)
-//            .flatMap({ mediaItemPage -> AnyPublisher<[MediaItemDetail], MovieError>in
+//            .flatMap({ mediaItemPage -> AnyPublisher<[MediaItemDetail], MovieError> in
 //                let randomMovies = mediaItemPage.mediaItems.shuffled().prefix(5)
 //                
 //               let collection = randomMovies.flatMap{ movie -> AnyPublisher<MediaItemDetail, MovieError> in
@@ -169,10 +172,7 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
                 }
             }, receiveValue: { [weak self] index in
                 
-                
                 self?.onScreenIndex = index
-                
-                print("<<<",index)
             })
             
     }

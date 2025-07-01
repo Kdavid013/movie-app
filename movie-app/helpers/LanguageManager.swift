@@ -1,8 +1,8 @@
 //
-//  BundleExtension.swift
+//  LanguageManager.swift
 //  movie-app
 //
-//  Created by David Karacs on 2025. 05. 27..
+//  Created by David Karacs on 2025. 07. 01..
 //
 
 import Foundation
@@ -12,12 +12,12 @@ extension Bundle {
     
     public static func localizedBundle() -> Bundle! {
         if bundle == nil {
-            let appLang = UserDefaults.standard.string(forKey: "app_lang") ?? "ru"
+            let appLang = UserDefaults.standard.string(forKey: "app_lang") ?? "en"
             let path = Bundle.main.path(forResource: appLang, ofType: "lproj")
             bundle = Bundle(path: path!)
         }
         
-        return bundle;
+        return bundle
     }
     
     public static func setLanguage(lang: String) {
@@ -25,6 +25,11 @@ extension Bundle {
         let path = Bundle.main.path(forResource: lang, ofType: "lproj")
         bundle = Bundle(path: path!)
     }
+    
+    static func getLangCode() -> String {
+        UserDefaults.standard.string(forKey: "app_lang") ?? "en"
+    }
+    
 }
 
 extension String {

@@ -1,0 +1,50 @@
+/* 
+  Localizable.strings
+  movie-app
+
+  Created by David Karacs on 2025. 04. 08..
+  
+*/
+
+"genreSection.title" = "Film App";
+"favorites.title" = "Favoriten";
+
+"search.textfield.placeholder" = "Filme, Regisseur, Schauspieler, Schauspielerin, usw.";
+"search.empty.title" = "Gib etwas ein, um zu suchen";
+
+"alert.api.title" = "API-Fehler";
+"alert.dismiss.button" = "Schließen";
+"alert.unexpected.title" = "Unerwarteter Fehler";
+"alert.unexpected.text" = "Etwas ist schiefgelaufen. Bitte versuche es später noch einmal.";
+
+"detail.label.date" = "Veröffentlichungsdatum";
+"detail.label.duration" = "Laufzeit";
+"detail.label.language" = "Sprache";
+"detail.label.birthYear" = "Geburtsjahr";
+"detail.label.birthPlace" = "Stadt";
+"detail.bio" = "Biografie";
+"detail.lable.popularity" = "Beliebtheit";
+"detail.similar.movies" = "Ähnliche Filme";
+
+"button.rate.title" = "Bewerte diesen Film";
+"button.imdb.title" = "Bei IMDb ansehen";
+"button.send.review" = "Meine Bewertung senden";
+
+"available" = "Verfügbar";
+"unavailable" = "Nicht verfügbar";
+
+"overview" = "Inhalt";
+"companies" = "Verlag und Unternehmen";
+
+"cast" = "Besetzung";
+"review.title" = "Gib eine ehrliche Bewertung ab";
+
+"settings.title" = "Einstellungen";
+"settings.chooseLanguage" = "Sprache auswählen";
+"settings.lang.english" = "Englisch";
+"settings.lang.german" = "Deutsch";
+"settings.lang.hungarian" = "Ungarisch";
+"settings.chooseTheme" = "Wähle die helle oder dunkle Seite";
+"settings.theme.light" = "Heller Modus";
+"settings.theme.dark" = "Dunkler Modus";
+

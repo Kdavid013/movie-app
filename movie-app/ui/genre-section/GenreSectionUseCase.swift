@@ -57,7 +57,7 @@ class GenreSectionUseCaseImpl: GenreSectionUseCase {
         
         let request = FetchMoviesRequest(genreId: genreId, page: 1)
         
-        return self.repository.fetchMovies(req: request)
+        return Environments.name == .tv ? self.repository.fetchSeries(req: request) : self.repository.fetchMovies(req: request)
     }
     
     func loadMotdMovie(movie: MediaItem) -> AnyPublisher<MediaItemDetail, MovieError>{
