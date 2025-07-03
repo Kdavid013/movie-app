@@ -124,10 +124,7 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
                             } receiveValue: { mediaItemDetail in
                                 self.motdMovies.append(mediaItemDetail)
                                 //                                print("<<debug receive", self.motdMovies?.count)
-                                if self.motdMovies.count == 5 {
-                                    self.indexChangerCancellable?.cancel()
-                                    self.indexChanger()
-                                }
+                                self.indexChanger()
                             }
                             .store(in: &self.cancellables)
                     }
