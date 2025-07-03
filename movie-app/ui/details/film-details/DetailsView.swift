@@ -68,11 +68,13 @@ struct DetailsView: View {
                         //                            ParticipantScrollView(participants: viewModel.cast)
                         SideScrollView(contributors: viewModel.cast, type: .cast)
                     }
+                    ReviewScrollView(reviews: viewModel.reviews)
                     Text("detail.similar.movies".localized())
                         .font(Fonts.title)
                     
                 }
                 .padding(.horizontal, LayoutConst.maxPadding)
+               
                 MovieSideScrollView(isLoading: viewModel.isLoading, mediaItems: viewModel.mediaItems,
                 lastIdAppeared: { _ in
                     viewModel.similarMovieIdSubject.send(mediaItem.id)
@@ -106,7 +108,7 @@ struct DetailsView: View {
         }
         .showAlert(model: $viewModel.alertModel)
         .onAppear {
-            viewModel.movieIdSubject.send(mediaItem)
+            viewModel.mediaItemSubject.send(mediaItem)
             viewModel.similarMovieIdSubject.send(mediaItem.id)
             viewModel.actualPage = 0
         }

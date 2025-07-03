@@ -68,6 +68,7 @@ struct CastDetailsView: View {
                     }
                 }
             }
+            .scrollIndicators(.hidden)
             .padding(.horizontal,LayoutConst.maxPadding)
         }
         .onAppear {

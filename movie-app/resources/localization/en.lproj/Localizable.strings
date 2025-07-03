@@ -25,6 +25,8 @@
 "detail.bio" = "Bio";
 "detail.lable.popularity" = "Popularity";
 "detail.similar.movies" = "Similar movies";
+"detail.topReviews" = "Top reviews";
+"detail.noReviews" = "No reviews";
 
 "button.rate.title" = "Rate this movie";
 "button.imdb.title" = "Visit at IMDB";

@@ -18,6 +18,7 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
     @Published var mediaItem: MediaItemDetail = MediaItemDetail()
     @Published var cast: [Contributors] = []
     @Published var mediaItems: [MediaItem] = []
+    @Published var reviews: [MediaItemReview] = []
     @Published var isLoading: Bool = false
     
     var isFavorite: Bool = false
@@ -25,7 +26,7 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
     var totalPages: Int = 500
     
     let favoriteButtonTapped = PassthroughSubject<Void, Never>()
-    let movieIdSubject = PassthroughSubject<MediaItem, Never>()
+    let mediaItemSubject = PassthroughSubject<MediaItem, Never>()
     let similarMovieIdSubject = PassthroughSubject<Int, Never>()
     
     @Published var alertModel: AlertModel? = nil
@@ -43,7 +44,7 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
     
     init() {
         
-        let details = movieIdSubject
+        let details = mediaItemSubject
             .flatMap { [weak self] movieId -> AnyPublisher<MediaItemDetail, MovieError> in
                 guard let self = self else {
                     preconditionFailure("There is no self")
@@ -62,7 +63,7 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
                 }
             }
         
-        let cast = movieIdSubject
+        let cast = mediaItemSubject
             .flatMap { [weak self] movieId -> AnyPublisher<[Contributors], MovieError> in
                 guard let self = self else {
                     preconditionFailure("There is no self")
@@ -81,17 +82,28 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
                 
             }
         
-        Publishers.CombineLatest(details, cast)
+        let reviews = mediaItemSubject
+            .flatMap { [weak self] mediaItem in
+                guard let self = self else {
+                    preconditionFailure("There is no self")
+                }
+                let request = FetchDetailRequest(movieId: mediaItem.id)
+                return mediaItem.type == .tv ? self.repository.fetchTvReviews(req: request) : self.repository.fetchMovieReviews(req: request)
+            }
+        
+        
+        Publishers.CombineLatest3(details, cast, reviews)
             .receive(on: RunLoop.main)
             .sink{ completion in
                 if case let .failure(error) = completion {
                     self.alertModel = self.toAlertModel(error)
                 }
                 
-            } receiveValue: { [weak self] mediaItem, cast in
+            } receiveValue: { [weak self] mediaItem, cast, reviews in
                 guard let self = self else {
                     preconditionFailure("There is no self")
                 }
+                self.reviews = reviews.prefix(4).map { $0 }
                 self.cast = cast
                 self.mediaItem = mediaItem
                 self.isFavorite = self.favoriteMediaStorage.isFavoriteMediaItem(withId: mediaItem.id)

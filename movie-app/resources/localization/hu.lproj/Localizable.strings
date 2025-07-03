@@ -24,6 +24,8 @@
 "detail.bio" = "Életrajz";
 "detail.lable.popularity" = "Népszerűség";
 "detail.similar.movies" = "Hasonló filmek";
+"detail.topReviews" = "Top értékelések";
+"detail.noReviews" = "Nincs értékelés";
 
 "button.rate.title" = "Értékeld a filmet";
 "button.imdb.title" = "Nézd meg IMDB-n";

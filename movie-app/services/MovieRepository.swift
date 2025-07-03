@@ -30,11 +30,12 @@ protocol MovieRepository {
     func fetchCombinedCredits(req: FetchDetailRequest) -> AnyPublisher<[MediaItem], MovieError>
     func fetchTvDetail(req: FetchDetailRequest) -> AnyPublisher<MediaItemDetail, MovieError>
     func fetchTvCredits(req: FetchDetailRequest) -> AnyPublisher<[Contributors], MovieError>
+    func fetchMovieReviews(req: FetchDetailRequest) -> AnyPublisher<[MediaItemReview], MovieError>
+    func fetchTvReviews(req: FetchDetailRequest) -> AnyPublisher<[MediaItemReview], MovieError>
 }
 
 class MovieRepositoryImpl: MovieRepository {
-    
-    
+
     @Inject
     var moya: MoyaProvider<MultiTarget>!
     
@@ -243,6 +244,39 @@ class MovieRepositoryImpl: MovieRepository {
         )
     }
     
+    func fetchMovieReviews(req: FetchDetailRequest) -> AnyPublisher<[MediaItemReview], MovieError> {
+        return networkMonitor.isConnected
+            .flatMap { isConnected -> AnyPublisher<[MediaItemReview], MovieError> in
+                if isConnected {
+                    return self.requestAndTransform(
+                        target: MultiTarget(MoviesApi.fetchMovieReviews(req: req)),
+                        decodeTo: MediaItemPageReviewResponse.self,
+                        transform: { dto in
+                            dto.results.map(MediaItemReview.init(dto:))
+                        }
+                    )
+                    .handleEvents(receiveOutput: { [weak self]reviews in
+                        // TODO: Save reviews to store
+                    })
+                    .eraseToAnyPublisher()
+                } else {
+                    // TODO: Fetch reviews from store
+                    return Fail(error: MovieError.unexpectedError).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchTvReviews(req: FetchDetailRequest) -> AnyPublisher<[MediaItemReview], MovieError> {
+            return self.requestAndTransform(
+                target: MultiTarget(MoviesApi.fetchTvReviews(req: req)),
+                decodeTo: MediaItemPageReviewResponse.self,
+                transform: { dto in
+                    dto.results.map(MediaItemReview.init(dto:))
+                }
+            )
+        }
+        
     
     private func requestAndTransform<ResponseType: Decodable, Output>(
         target: MultiTarget,

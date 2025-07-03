@@ -25,6 +25,8 @@
 "detail.bio" = "Biografie";
 "detail.lable.popularity" = "Beliebtheit";
 "detail.similar.movies" = "Ähnliche Filme";
+"detail.topReviews" = "Top reviews [DE]";
+"detail.noReviews" = "No reviews [DE]";
 
 "button.rate.title" = "Bewerte diesen Film";
 "button.imdb.title" = "Bei IMDb ansehen";
