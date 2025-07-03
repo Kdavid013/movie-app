@@ -43,7 +43,7 @@ struct MediaItemListView: View {
                             .opacity(isAnimated.contains(mediaItem.id) ? 1 : 0)
                             .onAppear {
                                 if viewModel.mediaItems.last?.id == mediaItem.id {
-                                    viewModel.genreIdSubject.send(genre.id)
+                                    viewModel.reachedBottomSubject.send()
                                 }
                                 withAnimation(.easeInOut(duration: 0.5).delay(Double(index) * 0.001)){
                                     isAnimated.append(mediaItem.id)
@@ -70,7 +70,6 @@ struct MediaItemListView: View {
             viewModel.mediaItems.removeAll()
             viewModel.actualPage = 0
             viewModel.genreIdSubject.send(genre.id)
-            viewModel.reachedButtomSubject.send()
         }
     }
 }

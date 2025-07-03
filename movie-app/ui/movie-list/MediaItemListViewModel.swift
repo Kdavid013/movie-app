@@ -27,17 +27,20 @@ class MediaItemListViewModel: MediaItemListViewModelProtocol, ErrorPresentable {
     private var repository: MovieRepository
     
     let genreIdSubject = PassthroughSubject<Int, Never>()
-    let reachedButtomSubject= PassthroughSubject<Void, Never>()
+    let reachedBottomSubject = CurrentValueSubject<Void, Never>(())
     
     init(){
         
         print("<<< létrejött a MovieListViewModel")
         
-        genreIdSubject
-            .handleEvents(receiveOutput: { [weak self] _ in
-                self?.mediaItems.removeAll()
-                self?.actualPage = 0
-            })
+        let genreIdNewValue = genreIdSubject.handleEvents(receiveOutput: { [weak self]_ in
+                   self?.mediaItems.removeAll()
+                   self?.actualPage = 0
+               })
+               .eraseToAnyPublisher()
+        
+        
+        Publishers.CombineLatest(reachedBottomSubject, genreIdNewValue)
             .filter{[weak self] _ in
                 guard let self = self else {
                     preconditionFailure("There is no self")
@@ -48,7 +51,7 @@ class MediaItemListViewModel: MediaItemListViewModelProtocol, ErrorPresentable {
                 self?.isLoading = true
                 self?.actualPage += 1
             })
-            .flatMap { [weak self] genreId -> AnyPublisher<MediaItemPage, MovieError> in
+            .flatMap { [weak self]_, genreId -> AnyPublisher<MediaItemPage, MovieError> in
                 guard let self = self else {
                     preconditionFailure("There is no self")
                 }
