@@ -11,8 +11,6 @@ import Lottie
 struct SplashScreen: View {
     
     @State var selectedTab: TabType = TabType.genre
-
-    
     @State var animationFinished: Bool = false
     
     var body: some View {

@@ -14,7 +14,7 @@
 
 "alert.api.title" = "API error";
 "alert.dismiss.button" = "Close";
-"alert.unexpected.title" = "Váraltahn hiba";
+"alert.unexpected.title" = "Váraltan hiba";
 "alert.unexpected.text" = "Something went wrong. Please try again later.";
 
 "detail.label.date" = "Release date";
@@ -32,9 +32,9 @@
 "button.imdb.title" = "Visit at IMDB";
 "button.send.review" = "Send my review";
 
-"available" = "Available";
-"unavailable" = "Unavailable";
-
+"adult.only" = "18+";
+"everyone" = "For everyone";
+ 
 "overview" = "Synopsis";
 "companies" = "Publisher and companies";
 
@@ -54,3 +54,7 @@
 "settings.chooseTheme" = "Choose the dark or light side";
 "settings.theme.light" = "Light mode";
 "settings.theme.dark" = "Dark mode";
+
+"appReview.title" = "Rate the App";
+"appReview.desc" = "It would mean a lot to us, if you could rate this App in the AppStore";
+"appReview.button.title" = "Ok";

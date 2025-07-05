@@ -32,8 +32,8 @@
 "button.send.review" = "Küld el az értékelésem";
 "button.watch.title" = "Nézd meg most";
 
-"available" = "Elérhető";
-"unavailable" = "Nem elérhető";
+"adult.only" = "Korhatáros";
+"everyone" = "Korhatár nélkül";
 
 "overview" = "Összefoglaló";
 "companies" = "Kiadó és gyártó";
@@ -54,4 +54,6 @@
 "settings.theme.light" = "Világos mód";
 "settings.theme.dark" = "Sötét mód";
 
-
+"appReview.title" = "Értékeld az App-ot";
+"appReview.desc" = "Nagyra értékeljük, ha az appban értékeled az alkmalazást!";
+"appReview.button.title" = "Ok";

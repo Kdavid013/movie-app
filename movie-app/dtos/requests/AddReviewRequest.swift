@@ -10,8 +10,8 @@ struct AddReviewBodyRequest: Encodable {
     let rating: Double
     
     enum CodingKeys: String, CodingKey {
-        case mediaId = "media_id"
-        case rating
+        case mediaId = "movie_id"
+        case rating = "value"
     }
 }
 

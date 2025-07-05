@@ -20,7 +20,7 @@ struct RootView: View {
             MainTabView(selectedTab: $selectedTab)
 
             if !viewModel.isConnected {
-                OfflineBannerView()
+//                OfflineBannerView()
             }
         }
     }

@@ -20,7 +20,7 @@ protocol MovieRepository {
     func fetchMovies(req: FetchMoviesRequest) -> AnyPublisher<MediaItemPage, MovieError>
     func fetchSeries(req: FetchMoviesRequest) -> AnyPublisher<MediaItemPage, MovieError>
     func fetchFavorites(req: FetchFavoritesRequest, fromLocal: Bool) -> AnyPublisher<[MediaItem], MovieError>
-    func editFavoriteMovie(req: EditFavoriteRequest) -> AnyPublisher<ModifyMediaResult, MovieError>
+    func editFavoriteMovie(req: EditFavoriteRequest) -> AnyPublisher<ModifyMediaResultResponse, MovieError>
     func fetchMovieDetail(req: FetchDetailRequest) -> AnyPublisher<MediaItemDetail, MovieError>
     func fetchMovieCredits(req: FetchDetailRequest) -> AnyPublisher<[Contributors], MovieError>
     func addReview(req: AddReviewRequest) -> AnyPublisher<ModifyMediaResult, MovieError>
@@ -50,6 +50,9 @@ class MovieRepositoryImpl: MovieRepository {
     
     @Inject
     private var castMemberStore: CastMemberStoreProtocol
+    
+    @Inject
+    private var reviewStore: ReviewStoreProtocol
     
     func fetchGenres(req: FetchGenreRequest) -> AnyPublisher<[Genre], MovieError> {
         requestAndTransform(
@@ -130,10 +133,10 @@ class MovieRepositoryImpl: MovieRepository {
             .eraseToAnyPublisher()
     }
     
-    func editFavoriteMovie(req: EditFavoriteRequest) -> AnyPublisher<ModifyMediaResult, MovieError> {
+    func editFavoriteMovie(req: EditFavoriteRequest) -> AnyPublisher<ModifyMediaResultResponse, MovieError> {
         requestAndTransform(
             target: MultiTarget(MoviesApi.editFavoriteMovie(req: req)),
-            decodeTo: ModifyMediaResult.self,
+            decodeTo: ModifyMediaResultResponse.self,
             transform: { response in response }
         )
     }
@@ -190,8 +193,9 @@ class MovieRepositoryImpl: MovieRepository {
     func addReview(req: AddReviewRequest) -> AnyPublisher<ModifyMediaResult, MovieError> {
         requestAndTransform(
             target: MultiTarget(MoviesApi.addReview(req: req)),
-            decodeTo: ModifyMediaResult.self,
-            transform: { response in response }
+            decodeTo: ModifyMediaResultResponse.self,
+            transform: { response in
+                ModifyMediaResult(dto: response)}
         )
     }
     
@@ -256,12 +260,11 @@ class MovieRepositoryImpl: MovieRepository {
                         }
                     )
                     .handleEvents(receiveOutput: { [weak self]reviews in
-                        // TODO: Save reviews to store
+                        self?.reviewStore.saveReviews(reviews, forMovieId: req.movieId)
                     })
                     .eraseToAnyPublisher()
                 } else {
-                    // TODO: Fetch reviews from store
-                    return Fail(error: MovieError.unexpectedError).eraseToAnyPublisher()
+                    return self.reviewStore.getReviews(fromMovieId: req.movieId)
                 }
             }
             .eraseToAnyPublisher()

@@ -17,16 +17,9 @@ struct GenreSectionView: View {
     var body: some View {
         NavigationView {
             ZStack(alignment: .topTrailing){
-                HStack{
-                    Spacer()
-                    VStack{
-                        Image(.circle)
-                            .ignoresSafeArea(edges: .top)
-                        Spacer()
-                    }
-                }
+                RightCornerCircle()
                 List{
-                    HStack{
+                    HStack(alignment: .center){
 //                        if let motd = viewModel.motdMovies {
                             GenreMotdCell(mediaItems: viewModel.motdMovies, onScreenIndex: viewModel.onScreenIndex)
                                 .animation(.spring(response: 1))

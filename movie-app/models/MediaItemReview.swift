@@ -28,4 +28,12 @@ struct MediaItemReview: Identifiable {
             }
         }
     }
+    
+    init(id: String, author: String, content: String, rating: Double?, avatarURL: URL?) {
+            self.id = id
+            self.author = author
+            self.content = content
+            self.rating = rating
+            self.avatarURL = avatarURL
+        }
 }

@@ -11,6 +11,7 @@ import InjectPropertyWrapper
 
 struct AddReviewView: View {
     
+    @Environment(\.dismiss) var dismiss
     let mediaItemDetail: MediaItemDetail
     
     @StateObject private var viewModel = AddReviewViewModel()
@@ -27,6 +28,9 @@ struct AddReviewView: View {
                 VStack(spacing: 72.0){
                     StarRatingView(rating: $viewModel.selectedRating)
                     ButtonLabel(style: .filled, title: "button.send.review".localized(), action: .simple)
+                        .onTapGesture {
+                            viewModel.ratingBtnSubject.send()
+                        }
                 }
                 Spacer()
             }
@@ -34,6 +38,10 @@ struct AddReviewView: View {
         .onAppear{
             viewModel.mediaDetailSubject.send(mediaItemDetail)
         }
+        .showAlert(model: $viewModel.alertModel)
         .padding(.horizontal, LayoutConst.maxPadding)
+        .onChange(of: viewModel.success) {
+            
+        }
     }
 }

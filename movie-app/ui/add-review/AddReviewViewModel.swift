@@ -21,10 +21,12 @@ class AddReviewViewModel: ObservableObject, ErrorPresentable {
     
     @Inject
     private var repository: MovieRepository
+    @Published var alertModel: AlertModel? = nil
     
     
     private var cancellables = Set<AnyCancellable>()
     @Published var selectedRating: Int = -1
+    @Published var success: Bool = false
     
     init(){
         mediaDetailSubject
@@ -38,16 +40,21 @@ class AddReviewViewModel: ObservableObject, ErrorPresentable {
                 guard let self = self else {
                     preconditionFailure("There is no self")
                 }
-                let rating = Double(self.selectedRating)
+                let rating = Double(self.selectedRating + 1)
                 let request = AddReviewRequest(mediaId: mediaItemDetail.id, rating: rating)
                 
                 return self.repository.addReview(req: request)
             }
-            .sink(receiveCompletion: { _ in
-                
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .failure(let error):
+                    self.alertModel = self.toAlertModel(error)
+                case .finished:
+                    break
+                }
             }
-            , receiveValue: { result in
-                
+            , receiveValue: { [weak self] result in
+                print(result)
             })
             .store(in: &cancellables)
     }

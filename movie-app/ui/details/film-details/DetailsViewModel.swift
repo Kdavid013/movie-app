@@ -143,7 +143,7 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
         
         
         favoriteButtonTapped
-            .flatMap { [weak self] _ -> AnyPublisher<(ModifyMediaResult, Bool), MovieError> in
+            .flatMap { [weak self] _ -> AnyPublisher<(ModifyMediaResultResponse, Bool), MovieError> in
                 guard let self = self else {
                     preconditionFailure("There is no self")
                 }
@@ -164,6 +164,7 @@ class DetailsViewModel: DetailsViewModelProtocol, ErrorPresentable {
                     preconditionFailure("There is no self")
                 }
                 if result.success {
+                    self.isFavorite = isFavorite
                     if isFavorite{
                         self.favoriteMediaStorage.addFavoriteMediaItem(MediaItem(detail: self.mediaItem))
                     } else {

@@ -58,14 +58,16 @@ struct CastDetailsView: View {
                             Spacer()
                         }
                     }
-                    LazyVGrid(columns: columns, spacing: 24) {
-                        ForEach(viewModel.combinedCredits){ mediaItem in
-                            NavigationLink(destination: DetailsView(mediaItem: mediaItem)){
-                                MediaItemCell(movie: mediaItem)
+//                    if {
+                        LazyVGrid(columns: columns, spacing: 24) {
+                            ForEach(viewModel.combinedCredits){ mediaItem in
+                                NavigationLink(destination: DetailsView(mediaItem: mediaItem)){
+                                    MediaItemCell(movie: mediaItem)
+                                }
+                                .buttonStyle(PlainButtonStyle())
                             }
-                            .buttonStyle(PlainButtonStyle())
                         }
-                    }
+//                    }
                 }
             }
             .scrollIndicators(.hidden)

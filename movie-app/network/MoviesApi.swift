@@ -62,7 +62,7 @@ extension MoviesApi: TargetType {
         case let .fetchMovieCredits(req:  req):
             return "/movie/\(req.movieId)/credits"
         case let .addReview(req: req):
-            return "account/\(req.mediaId)/rating"
+            return "movie/\(req.mediaId)/rating"
         case let .fetchCastDetail(req: req):
             return "/person/\(req.movieId)"
         case let .fetchCompanyDetail(req: req):
@@ -118,7 +118,7 @@ extension MoviesApi: TargetType {
             return .requestParameters(parameters: req.asRequestParams(), encoding: URLEncoding.queryString)
         case let .addReview(req):
 //            return .requestParameters(parameters: req.asRequestParams(), encoding: URLEncoding.queryString)
-            let request = AddReviewRequest(mediaId: req.mediaId, rating: req.rating)
+            let request = AddReviewBodyRequest(mediaId: req.mediaId, rating: req.rating)
                        return .requestJSONEncodable(request)
         case let .fetchCastDetail(req):
             return .requestParameters(parameters: req.asRequestParams(), encoding: URLEncoding.queryString)
