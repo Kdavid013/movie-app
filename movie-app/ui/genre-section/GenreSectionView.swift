@@ -23,11 +23,11 @@ struct GenreSectionView: View {
 //                        if let motd = viewModel.motdMovies {
                             GenreMotdCell(mediaItems: viewModel.motdMovies, onScreenIndex: viewModel.onScreenIndex)
                                 .animation(.spring(response: 1))
-                                .onAppear {
-                                    
+                                .onAppear(){
+                                    viewModel.indexChanger(state: true)
                                 }
                                 .onDisappear {
-                                    
+                                    viewModel.stopIndexChanger()
                                 }
 //                        }
                     }
@@ -62,12 +62,7 @@ struct GenreSectionView: View {
         }
         .showAlert(model: $viewModel.alertModel)
         .onAppear{
-            viewModel.mediaItemsByGenre.removeAll()
-            viewModel.loadGenres()
-            viewModel.genreAppeared()
-            viewModel.motdMovies.removeAll()
-            viewModel.getMotdMovies()
-            viewModel.indexChanger(state: true)
+            viewModel.reappearChanges()
         }
         .onDisappear {
             viewModel.stopIndexChanger()

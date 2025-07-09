@@ -99,7 +99,7 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
         return self.mediaItemsByGenre[genreId] ?? Array(repeating: MediaItem(), count: 5)
     }
     
-        func getMotdMovies(){
+    func getMotdMovies(){
         for i in 0..<5{
             getRandomMovies(genreId: nil)
         }
@@ -109,8 +109,8 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
         useCase.loadMediaItems(genreId: genreId)
             .flatMap { mediaItemPage -> AnyPublisher<MediaItemDetail, MovieError> in
                 guard let randomMovie = mediaItemPage.mediaItems.shuffled().first else{
-                    return Fail(error: MovieError.clientError)  // or .network, etc.
-                                       .eraseToAnyPublisher()
+                    return Fail(error: MovieError.clientError)
+                        .eraseToAnyPublisher()
                 }
                 return self.useCase.loadMotdMovie(movie: randomMovie)
             }
@@ -121,13 +121,12 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
                 }
             } receiveValue: { item in
                 self.motdMovies.append(item)
-
-                // Optional: restart indexChanger
+                
                 self.indexChanger(state: true)
             }
             .store(in: &cancellables)
     }
-
+    
     
     func indexChanger(state: Bool = false){
         
@@ -150,7 +149,15 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
                 
                 self?.onScreenIndex = index
             })
-        
+    }
+    
+    func reappearChanges(){
+        self.mediaItemsByGenre.removeAll()
+        self.loadGenres()
+        self.genreAppeared()
+        self.motdMovies.removeAll()
+        self.getMotdMovies()
+       
     }
     
     func stopIndexChanger(){
