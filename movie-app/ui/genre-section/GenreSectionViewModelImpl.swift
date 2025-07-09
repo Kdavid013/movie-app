@@ -100,7 +100,7 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
     }
     
     func getMotdMovies(){
-        for i in 0..<5{
+        for _ in 0..<5{
             getRandomMovies(genreId: nil)
         }
     }
