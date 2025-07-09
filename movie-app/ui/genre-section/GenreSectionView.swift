@@ -24,10 +24,10 @@ struct GenreSectionView: View {
                             GenreMotdCell(mediaItems: viewModel.motdMovies, onScreenIndex: viewModel.onScreenIndex)
                                 .animation(.spring(response: 1))
                                 .onAppear {
-                                    viewModel.indexChanger(state: true)
+                                    
                                 }
                                 .onDisappear {
-                                    viewModel.stopIndexChanger()
+                                    
                                 }
 //                        }
                     }
@@ -65,6 +65,12 @@ struct GenreSectionView: View {
             viewModel.mediaItemsByGenre.removeAll()
             viewModel.loadGenres()
             viewModel.genreAppeared()
+            viewModel.motdMovies.removeAll()
+            viewModel.getMotdMovies()
+            viewModel.indexChanger(state: true)
+        }
+        .onDisappear {
+            viewModel.stopIndexChanger()
         }
     }
 }

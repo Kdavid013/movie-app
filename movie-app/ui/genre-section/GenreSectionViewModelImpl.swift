@@ -25,6 +25,7 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
     var onScreenIndex: Int = 0
     
     private var cancellables = Set<AnyCancellable>()
+    @Published var motdMovie: MediaItemDetail = MediaItemDetail()
     @Published var motdMovies: [MediaItemDetail] = []
     
     //    @Published var onScreenIndex: Int = 0
@@ -51,10 +52,6 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
                 self?.alertModel = alertModel
             }
             .store(in: &cancellables)
-        
-        self.getRandomMovies(genreId: nil)
-        
-        self.indexChanger()
     }
     
     func loadGenres() {
@@ -102,90 +99,34 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
         return self.mediaItemsByGenre[genreId] ?? Array(repeating: MediaItem(), count: 5)
     }
     
+        func getMotdMovies(){
+        for i in 0..<5{
+            getRandomMovies(genreId: nil)
+        }
+    }
+    
     func getRandomMovies(genreId: Int?) {
-        
         useCase.loadMediaItems(genreId: genreId)
-            .delay(for: .seconds(2), scheduler: RunLoop.main)
+            .flatMap { mediaItemPage -> AnyPublisher<MediaItemDetail, MovieError> in
+                guard let randomMovie = mediaItemPage.mediaItems.shuffled().first else{
+                    return Fail(error: MovieError.clientError)  // or .network, etc.
+                                       .eraseToAnyPublisher()
+                }
+                return self.useCase.loadMotdMovie(movie: randomMovie)
+            }
             .sink { completion in
+                print("Completion: \(completion)")
                 if case let .failure(error) = completion {
                     self.alertModel = self.toAlertModel(error)
                 }
-            } receiveValue: { mediaItemPage in
-                
-                if self.motdMovies.count < 5{
-                    let randomMovies = mediaItemPage.mediaItems.shuffled().prefix(5)
-                    
-                    randomMovies.flatMap{ mediaItem in
-                        self.useCase.loadMotdMovie(movie: mediaItem)
-                            .sink { completion in
-                                if case let .failure(error) = completion {
-                                    self.alertModel = self.toAlertModel(error)
-                                }
-                            } receiveValue: { mediaItemDetail in
-                                self.motdMovies.append(mediaItemDetail)
-                                //                                print("<<debug receive", self.motdMovies?.count)
-                                self.indexChanger()
-                            }
-                            .store(in: &self.cancellables)
-                    }
-                }
-                //                print("<<debug", self.motdMovies?.count)
+            } receiveValue: { item in
+                self.motdMovies.append(item)
+
+                // Optional: restart indexChanger
+                self.indexChanger(state: true)
             }
-        
             .store(in: &cancellables)
     }
-    
-//    func getRandomMovies2(genreId: Int?) {
-//        
-//                useCase.loadMediaItems(genreId: genreId)
-//                    .flatMap({ mediaItemPage -> AnyPublisher<[MediaItemDetail], MovieError> in
-//                        let randomMovies = mediaItemPage.mediaItems.shuffled().prefix(5)
-//        
-//                     let collection = randomMovies.flatMap{ movie -> AnyPublisher<MediaItemDetail, MovieError> in
-//                           self.useCase.loadMotdMovie(movie: movie)
-//        
-//                        }
-//                        
-//                    })
-//                    .collect()
-//                    .sink { completion in
-//                        if case let .failure(error) = completion {
-//                            self.alertModel = self.toAlertModel(error)
-//                        }
-//                    } receiveValue: { items in
-//                        let array = items.flatMap { $0 }
-//                        self.motdMovies.append(contentsOf: array)
-//                    }
-//                    .store(in: &cancellables)
-//    }
-    
-//    func getRandomMovies3(genreId: Int?) {
-//        useCase.loadMediaItems(genreId: genreId)
-//            .flatMap { mediaItemPage -> AnyPublisher<[MediaItemDetail], MovieError> in
-//                let randomMovies = mediaItemPage.mediaItems.shuffled().prefix(5)
-//                let publishers = randomMovies.map { movie in
-//                    self.useCase.loadMotdMovie(movie: movie)
-//                }
-//
-//                // Merge all the individual publishers and collect their results
-//                return Publishers.MergeMany(publishers)
-//                    .collect()
-//                    .eraseToAnyPublisher()
-//            }
-//            .sink { completion in
-//                print("Completion: \(completion)")
-//                if case let .failure(error) = completion {
-//                    self.alertModel = self.toAlertModel(error)
-//                }
-//            } receiveValue: { items in
-//                self.motdMovies.append(contentsOf: items)
-//
-//                // Optional: restart indexChanger
-//                self.indexChangerCancellable?.cancel()
-//                self.indexChanger()
-//            }
-//            .store(in: &cancellables)
-//    }
 
     
     func indexChanger(state: Bool = false){
@@ -198,6 +139,7 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
         indexChangerCancellable = Array(0..<movieCount).publisher
             .flatMap(maxPublishers: .max(1)) {
                 Just($0).delay(for: .seconds(2), scheduler: RunLoop.main)
+                
             }
             .sink (receiveCompletion: { completion in
                 if case .finished = completion {

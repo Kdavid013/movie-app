@@ -12,16 +12,14 @@ import Lottie
 struct RootView: View {
     @State var selectedTab: TabType = TabType.genre
     @StateObject private var viewModel = RootViewModel()
-
+    
     var body: some View {
         
-      
+        
         ZStack(alignment: .top) {
             MainTabView(selectedTab: $selectedTab)
-
-            if !viewModel.isConnected {
-//                OfflineBannerView()
-            }
+            OfflineBannerView()
+                .padding(viewModel.isBannerAppear ? 0.0 : -200)
         }
     }
 }

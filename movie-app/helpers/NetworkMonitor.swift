@@ -19,7 +19,7 @@ class NewNetworkMonitor: NetworkMonitorProtocol {
     }
     
     var isConnected: AnyPublisher<Bool, Never>{
-        Just(false)
+        Just(true)
             .eraseToAnyPublisher()
     }
     
