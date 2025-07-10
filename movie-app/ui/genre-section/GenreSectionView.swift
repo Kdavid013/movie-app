@@ -21,14 +21,7 @@ struct GenreSectionView: View {
                 List{
                     HStack(alignment: .center){
 //                        if let motd = viewModel.motdMovies {
-                            GenreMotdCell(mediaItems: viewModel.motdMovies, onScreenIndex: viewModel.onScreenIndex)
-                                .animation(.spring(response: 1))
-                                .onAppear(){
-                                    viewModel.indexChanger(state: true)
-                                }
-                                .onDisappear {
-                                    viewModel.stopIndexChanger()
-                                }
+                            GenreMotdCell(mediaItem: viewModel.motdMovie)
 //                        }
                     }
                     .listRowBackground(Color.clear)
@@ -63,9 +56,6 @@ struct GenreSectionView: View {
         .showAlert(model: $viewModel.alertModel)
         .onAppear{
             viewModel.reappearChanges()
-        }
-        .onDisappear {
-            viewModel.stopIndexChanger()
         }
     }
 }

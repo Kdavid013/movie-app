@@ -52,6 +52,8 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
                 self?.alertModel = alertModel
             }
             .store(in: &cancellables)
+        
+        self.getRandomMovie(genreId: nil)
     }
     
     func loadGenres() {
@@ -99,13 +101,7 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
         return self.mediaItemsByGenre[genreId] ?? Array(repeating: MediaItem(), count: 5)
     }
     
-    func getMotdMovies(){
-        for _ in 0..<5{
-            getRandomMovies(genreId: nil)
-        }
-    }
-    
-    func getRandomMovies(genreId: Int?) {
+    func getRandomMovie(genreId: Int?) {
         useCase.loadMediaItems(genreId: genreId)
             .flatMap { mediaItemPage -> AnyPublisher<MediaItemDetail, MovieError> in
                 guard let randomMovie = mediaItemPage.mediaItems.shuffled().first else{
@@ -120,35 +116,10 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
                     self.alertModel = self.toAlertModel(error)
                 }
             } receiveValue: { item in
-                self.motdMovies.append(item)
+                self.motdMovie = item
                 
-                self.indexChanger(state: true)
             }
             .store(in: &cancellables)
-    }
-    
-    
-    func indexChanger(state: Bool = false){
-        
-        guard indexChangerCancellable == nil else { return }
-        
-        let movieCount = motdMovies.count
-        guard movieCount > 0 else { return }
-        
-        indexChangerCancellable = Array(0..<movieCount).publisher
-            .flatMap(maxPublishers: .max(1)) {
-                Just($0).delay(for: .seconds(2), scheduler: RunLoop.main)
-                
-            }
-            .sink (receiveCompletion: { completion in
-                if case .finished = completion {
-                    self.indexChangerCancellable = nil
-                    self.indexChanger()
-                }
-            }, receiveValue: { [weak self] index in
-                
-                self?.onScreenIndex = index
-            })
     }
     
     func reappearChanges(){
@@ -156,12 +127,8 @@ class GenreSectionViewModelImpl: GenreSectionViewModel, ErrorViewModelProtocol, 
         self.loadGenres()
         self.genreAppeared()
         self.motdMovies.removeAll()
-        self.getMotdMovies()
+        self.getRandomMovie(genreId: nil)
        
     }
     
-    func stopIndexChanger(){
-        indexChangerCancellable?.cancel()
-        indexChangerCancellable = nil
-    }
 }
