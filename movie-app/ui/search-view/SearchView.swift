@@ -13,6 +13,9 @@ struct SearchView: View {
     @StateObject
     private var viewModel = SearchViewModel()
     
+    @EnvironmentObject
+    var languageManager: LanguageManager
+    
     @State
     private var isAnimated: [Int] = []
     
@@ -57,15 +60,15 @@ struct SearchView: View {
                 }else{
                     ScrollView{
                         LazyVStack(spacing: LayoutConst.normalPadding){
-                            ForEach(Array(viewModel.movies.enumerated()), id: \.1.id){ index, movie in
-                                NavigationLink(destination: DetailsView(mediaItem: movie)){
-                                    MediaItemCell(movie: movie)
+                            ForEach(Array(viewModel.movies.enumerated()), id: \.1.id){ index, mediaItem in
+                                NavigationLink(destination: DetailsView(mediaItem: mediaItem)){
+                                    MediaItemCell(movie: mediaItem)
                                         .frame(height: 277)
-                                        .offset(x: isAnimated.contains(movie.id) ? 0 : 200 )
-                                        .opacity(isAnimated.contains(movie.id) ? 1 : 0)
+                                        .offset(x: isAnimated.contains(mediaItem.id) ? 0 : 200 )
+                                        .opacity(isAnimated.contains(mediaItem.id) ? 1 : 0)
                                         .onAppear {
                                             withAnimation(.easeInOut(duration: 0.5).delay(Double(index) * 0.02)){
-                                                isAnimated.append(movie.id)
+                                                isAnimated.append(mediaItem.id)
                                             }
                                         }
                                     

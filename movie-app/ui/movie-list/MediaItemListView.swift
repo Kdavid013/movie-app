@@ -13,6 +13,9 @@ struct MediaItemListView: View {
     
     let genre: Genre
     
+    @EnvironmentObject
+    var languageManager: LanguageManager
+    
     @StateObject private var viewModel = MediaItemListViewModel()
     //    csak genreval fog tud dolgozni
     
@@ -29,45 +32,49 @@ struct MediaItemListView: View {
     //    ]
     
     var body: some View {
-        ScrollView {
-            //            pár cellát tart mindig a memóriába, csak annyit amennyi a képernyőn látszik
-            //            columns - array amibe grid itemek kerülnek
-            LazyVGrid(columns: columns, spacing: 24) {
-                ForEach(Array(viewModel.mediaItems.enumerated()), id: \.1.id ) {index, movie in
-                    NavigationLink(destination: DetailsView(mediaItem: movie)){
-                        MediaItemCell(movie: movie)
-                            .offset(y: isAnimated.contains(movie.id) ? 0 : 200 )
-                            .opacity(isAnimated.contains(movie.id) ? 1 : 0)
-                            .onAppear {
-                                if viewModel.mediaItems.last?.id == movie.id {
-                                    viewModel.genreIdSubject.send(genre.id)
+        ZStack(alignment: .topTrailing){
+            RightCornerCircle()
+            ScrollView {
+                //            pár cellát tart mindig a memóriába, csak annyit amennyi a képernyőn látszik
+                //            columns - array amibe grid itemek kerülnek
+                LazyVGrid(columns: columns, spacing: 24) {
+                    ForEach(Array(viewModel.mediaItems.enumerated()), id: \.1.id ) {index, mediaItem in
+                        NavigationLink(destination: DetailsView(mediaItem: mediaItem)){
+                            MediaItemCell(movie: mediaItem)
+                                .offset(y: isAnimated.contains(mediaItem.id) ? 0 : 200 )
+                                .opacity(isAnimated.contains(mediaItem.id) ? 1 : 0)
+                                .onAppear {
+                                    if viewModel.mediaItems.last?.id == mediaItem.id {
+                                        viewModel.reachedBottomSubject.send()
+                                    }
+                                    withAnimation(.easeInOut(duration: 0.5).delay(Double(index) * 0.001)){
+                                        isAnimated.append(mediaItem.id)
+                                    }
                                 }
-                                withAnimation(.easeInOut(duration: 0.5).delay(Double(index) * 0.001)){
-                                    isAnimated.append(movie.id)
-                                }
-                            }
+                        }
+                        .buttonStyle(PlainButtonStyle())
                     }
-                    .buttonStyle(PlainButtonStyle())
+                }
+                .padding(.horizontal, LayoutConst.normalPadding)
+                .padding(.top, LayoutConst.normalPadding)
+                
+                if viewModel.isLoading{
+                    LottieView(animation: .named("loading"))
+                        .playing(loopMode: .loop)
                 }
             }
-            .padding(.horizontal, LayoutConst.normalPadding)
-            .padding(.top, LayoutConst.normalPadding)
-            
-            if viewModel.isLoading{
-                LottieView(animation: .named("loading"))
-                    .playing(loopMode: .loop)
+            .navigationTitle(genre.name)
+            .onAppear {
+                viewModel.genreIdSubject.send(genre.id)
+            }
+            .refreshable {
+                isAnimated = []
+                viewModel.mediaItems.removeAll()
+                viewModel.actualPage = 0
+                viewModel.genreIdSubject.send(genre.id)
             }
         }
-        .navigationTitle(genre.name)
-        .onAppear {
-            viewModel.genreIdSubject.send(genre.id)
-        }
-        .refreshable {
-            isAnimated = []
-            viewModel.mediaItems.removeAll()
-            viewModel.actualPage = 0
-            viewModel.genreIdSubject.send(genre.id)
-        }
+        
     }
 }
 

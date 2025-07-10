@@ -14,7 +14,7 @@
 
 "alert.api.title" = "API error";
 "alert.dismiss.button" = "Close";
-"alert.unexpected.title" = "Váraltahn hiba";
+"alert.unexpected.title" = "Váraltan hiba";
 "alert.unexpected.text" = "Something went wrong. Please try again later.";
 
 "detail.label.date" = "Release date";
@@ -25,19 +25,26 @@
 "detail.bio" = "Bio";
 "detail.lable.popularity" = "Popularity";
 "detail.similar.movies" = "Similar movies";
+"detail.topReviews" = "Top reviews";
+"detail.noReviews" = "No reviews";
 
 "button.rate.title" = "Rate this movie";
 "button.imdb.title" = "Visit at IMDB";
 "button.send.review" = "Send my review";
 
-"available" = "Available";
-"unavailable" = "Unavailable";
-
+"adult.only" = "18+";
+"everyone" = "For everyone";
+ 
 "overview" = "Synopsis";
 "companies" = "Publisher and companies";
 
 "cast" = "Cast";
 "review.title" = "Give it a honest review";
+
+"mediaItem.default.duration"  = "1h 25min";
+
+"version" = "Version";
+"created" = "Created by Hell yeah";
 
 "settings.title" = "Settings";
 "settings.chooseLanguage" = "Choose a language";
@@ -47,3 +54,7 @@
 "settings.chooseTheme" = "Choose the dark or light side";
 "settings.theme.light" = "Light mode";
 "settings.theme.dark" = "Dark mode";
+
+"appReview.title" = "Rate the App";
+"appReview.desc" = "It would mean a lot to us, if you could rate this App in the AppStore";
+"appReview.button.title" = "Ok";

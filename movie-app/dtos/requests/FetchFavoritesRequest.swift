@@ -5,11 +5,11 @@
 //  Created by David Karacs on 2025. 05. 03..
 //
 
-struct FetchFavoritesRequest {
+struct FetchFavoritesRequest: LocalizedRequestable {
     let accessToken: String = Config.bearerToken
-    let accountId: Int = 21889570
+    let accountId: String = Config.accountId
     
     func asRequestParams() -> [String: Any] {
-        return [:]
+        return [:] + languageParam
     }
 }

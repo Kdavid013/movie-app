@@ -17,26 +17,19 @@ struct GenreSectionView: View {
     var body: some View {
         NavigationView {
             ZStack(alignment: .topTrailing){
-                HStack{
-                    Spacer()
-                    VStack{
-                        Image(.circle)
-                            .ignoresSafeArea(edges: .top)
-                        Spacer()
-                    }
-                }
+                RightCornerCircle()
                 List{
-                    HStack{
-                        if let motd = viewModel.motdMovies {
-                            GenreMotdCell(mediaItems: motd, onScreenIndex: viewModel.onScreenIndex)
+                    HStack(alignment: .center){
+//                        if let motd = viewModel.motdMovies {
+                            GenreMotdCell(mediaItems: viewModel.motdMovies, onScreenIndex: viewModel.onScreenIndex)
                                 .animation(.spring(response: 1))
-                                .onAppear {
+                                .onAppear(){
                                     viewModel.indexChanger(state: true)
                                 }
                                 .onDisappear {
                                     viewModel.stopIndexChanger()
                                 }
-                        }
+//                        }
                     }
                     .listRowBackground(Color.clear)
                     .listRowSeparator(.hidden)
@@ -69,9 +62,10 @@ struct GenreSectionView: View {
         }
         .showAlert(model: $viewModel.alertModel)
         .onAppear{
-            viewModel.loadGenres()
-            viewModel.genreAppeared()
-            
+            viewModel.reappearChanges()
+        }
+        .onDisappear {
+            viewModel.stopIndexChanger()
         }
     }
 }

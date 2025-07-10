@@ -9,7 +9,7 @@ import Moya
 import Foundation
 
 class ServiceAssembly: Assembly {
-
+    
     func assemble(container: Container) {
         container.register(MoyaProvider<MultiTarget>.self) { _ in
             let configuration = URLSessionConfiguration.ephemeral
@@ -23,7 +23,7 @@ class ServiceAssembly: Assembly {
                         configuration: NetworkLoggerPlugin.Configuration(
                             output: { _, items in
                                 items.forEach { item in
-                                    print("Response: \(item)")
+                                    print("Response \(item)")
                                 }
                             },
                             logOptions: [.verbose, .requestBody]))
@@ -32,7 +32,7 @@ class ServiceAssembly: Assembly {
         
         container.register(MovieServiceProtocol.self) { _ in
             return MovieService()
-//            return MockMoviesService()
+            //            return MockMoviesService()
         }.inObjectScope(.container)
         
         container.register(MovieRepository.self) { _ in
@@ -68,7 +68,11 @@ class ServiceAssembly: Assembly {
         }.inObjectScope(.container)
         
         container.register(AppVersionProviderProtocol.self) { _ in
-                    return AppVersionProvider()
-                }.inObjectScope(.container)
+            return AppVersionProvider()
+        }.inObjectScope(.container)
+        
+        container.register(ReviewStoreProtocol.self) { _ in
+            return ReviewStore()
+        }.inObjectScope(.container)
     }
 }

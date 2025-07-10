@@ -25,19 +25,24 @@
 "detail.bio" = "Biografie";
 "detail.lable.popularity" = "Beliebtheit";
 "detail.similar.movies" = "Ähnliche Filme";
+"detail.topReviews" = "Top reviews [DE]";
+"detail.noReviews" = "No reviews [DE]";
 
 "button.rate.title" = "Bewerte diesen Film";
 "button.imdb.title" = "Bei IMDb ansehen";
 "button.send.review" = "Meine Bewertung senden";
 
-"available" = "Verfügbar";
-"unavailable" = "Nicht verfügbar";
+"adult.only" = "18+ [DE]";
+"everyone" = "For everyone [DE]";
 
 "overview" = "Inhalt";
 "companies" = "Verlag und Unternehmen";
 
-"cast" = "Besetzung";
+"cast" = "Besetzung";í
 "review.title" = "Gib eine ehrliche Bewertung ab";
+
+"version" = "Version [DE]";
+"created" = "Created by Hell yeah [DE]";
 
 "settings.title" = "Einstellungen";
 "settings.chooseLanguage" = "Sprache auswählen";
@@ -48,3 +53,6 @@
 "settings.theme.light" = "Heller Modus";
 "settings.theme.dark" = "Dunkler Modus";
 
+"appReview.title" = "Rate the App [DE]";
+"appReview.desc" = "It would mean a lot to us, if you could rate this App in the AppStore [DE]";
+"appReview.button.title" = "Ok [DE]";

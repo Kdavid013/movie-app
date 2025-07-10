@@ -32,7 +32,7 @@ struct MovieLabel: View {
             text = "\(count)"
             imageRes = .person
         case .captions(let captions):
-            text =  captions ? "available".localized() : "unavailable".localized()
+            text =  captions ? "adult.only".localized() : "everyone".localized()
             imageRes = .caption
         }
         
@@ -40,6 +40,8 @@ struct MovieLabel: View {
             Image(imageRes)
             Text(LocalizedStringKey(text))
                 .font(Fonts.labelBold)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
         }
         .padding(4)
         .background(Color.invertedMain.opacity(0.3))

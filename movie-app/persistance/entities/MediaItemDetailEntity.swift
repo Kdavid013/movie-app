@@ -22,7 +22,7 @@ class MediaItemDetailEntity: Object {
     @Persisted var adult: Bool
     @Persisted var genres: List<String>
     @Persisted var spokenLanguages: String
-//    @Persisted var imdbUrl: String?
+    @Persisted var imdbUrl: String?
     @Persisted var companies: List<ProductionCompanyEntity>
 
     convenience init(from model: MediaItemDetail) {
@@ -39,7 +39,7 @@ class MediaItemDetailEntity: Object {
         self.adult = model.adult
         self.genres.append(objectsIn: model.genres)
         self.spokenLanguages = model.spokenLanguages
-//        self.imdbUrl = model.imdbUrl?.absoluteString
+        self.imdbUrl = model.imdbUrl?.absoluteString
         self.companies.append(objectsIn: model.companies.map(ProductionCompanyEntity.init))
     }
 
@@ -50,7 +50,7 @@ class MediaItemDetailEntity: Object {
             year: year,
             runtime: runtime,
             imageUrl: imageUrl.flatMap(URL.init),
-//            imdbUrl: imdbUrl.flatMap(URL.init),
+            imdbUrl: imdbUrl.flatMap(URL.init),
             rating: rating,
             voteCount: voteCount,
             overview: overview,

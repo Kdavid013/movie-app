@@ -14,7 +14,7 @@ struct StarView: View {
     let onTap: () -> Void
 
     var body: some View {
-        Image(systemName: isFilled ? "star.fill" : "star")
+        Image(isFilled ? .starFilled : .starUnfilled)
             .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(width: 40, height: 40)
