@@ -20,9 +20,9 @@ struct GenreSectionView: View {
                 RightCornerCircle()
                 List{
                     HStack(alignment: .center){
-//                        if let motd = viewModel.motdMovies {
+                        NavigationLink(destination: DetailsView(mediaItem: MediaItem(detail: viewModel.motdMovie))){
                             GenreMotdCell(mediaItem: viewModel.motdMovie)
-//                        }
+                        }
                     }
                     .listRowBackground(Color.clear)
                     .listRowSeparator(.hidden)

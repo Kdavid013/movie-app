@@ -6,53 +6,55 @@
   
 */
 
-"genreSection.title" = "Film App";
+"genreSection.title" = "Film-App";
 "favorites.title" = "Favoriten";
 
-"search.textfield.placeholder" = "Filme, Regisseur, Schauspieler, Schauspielerin, usw.";
-"search.empty.title" = "Gib etwas ein, um zu suchen";
+"search.textfield.placeholder" = "Filme, Regisseur, Schauspieler, Schauspielerin usw.";
+"search.empty.title" = "Gib etwas zum Suchen ein";
 
 "alert.api.title" = "API-Fehler";
 "alert.dismiss.button" = "Schließen";
 "alert.unexpected.title" = "Unerwarteter Fehler";
-"alert.unexpected.text" = "Etwas ist schiefgelaufen. Bitte versuche es später noch einmal.";
+"alert.unexpected.text" = "Etwas ist schiefgelaufen. Bitte versuche es später erneut.";
 
 "detail.label.date" = "Veröffentlichungsdatum";
 "detail.label.duration" = "Laufzeit";
 "detail.label.language" = "Sprache";
 "detail.label.birthYear" = "Geburtsjahr";
-"detail.label.birthPlace" = "Stadt";
+"detail.label.birthPlace" = "Geburtsort";
 "detail.bio" = "Biografie";
 "detail.lable.popularity" = "Beliebtheit";
 "detail.similar.movies" = "Ähnliche Filme";
-"detail.topReviews" = "Top reviews [DE]";
-"detail.noReviews" = "No reviews [DE]";
+"detail.topReviews" = "Top-Bewertungen";
+"detail.noReviews" = "Keine Bewertungen";
 
-"button.rate.title" = "Bewerte diesen Film";
-"button.imdb.title" = "Bei IMDb ansehen";
+"button.rate.title" = "Diesen Film bewerten";
+"button.imdb.title" = "Auf IMDB ansehen";
 "button.send.review" = "Meine Bewertung senden";
 
-"adult.only" = "18+ [DE]";
-"everyone" = "For everyone [DE]";
+"adult.only" = "Ab 18";
+"everyone" = "Für alle geeignet";
 
-"overview" = "Inhalt";
-"companies" = "Verlag und Unternehmen";
+"overview" = "Zusammenfassung";
+"companies" = "Veröffentlichung und Firmen";
 
-"cast" = "Besetzung";í
+"cast" = "Besetzung";
 "review.title" = "Gib eine ehrliche Bewertung ab";
 
-"version" = "Version [DE]";
-"created" = "Created by Hell yeah [DE]";
+"mediaItem.default.duration" = "1 Std. 25 Min.";
+
+"version" = "Version";
+"created" = "Erstellt von Hell yeah";
 
 "settings.title" = "Einstellungen";
-"settings.chooseLanguage" = "Sprache auswählen";
+"settings.chooseLanguage" = "Sprache wählen";
 "settings.lang.english" = "Englisch";
 "settings.lang.german" = "Deutsch";
 "settings.lang.hungarian" = "Ungarisch";
-"settings.chooseTheme" = "Wähle die helle oder dunkle Seite";
+"settings.chooseTheme" = "Wähle zwischen Licht und Dunkel";
 "settings.theme.light" = "Heller Modus";
 "settings.theme.dark" = "Dunkler Modus";
 
-"appReview.title" = "Rate the App [DE]";
-"appReview.desc" = "It would mean a lot to us, if you could rate this App in the AppStore [DE]";
-"appReview.button.title" = "Ok [DE]";
+"appReview.title" = "App bewerten";
+"appReview.desc" = "Es würde uns sehr freuen, wenn du die App im AppStore bewerten würdest";
+"appReview.button.title" = "Ok";
